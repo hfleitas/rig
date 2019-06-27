@@ -6,14 +6,6 @@
 			"type": "string",
 			"metadata": "Data Factory Name",
 			"defaultValue": "rig"
-		},
-		"dw_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'dw'"
-		},
-		"hiram_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'hiram'"
 		}
 	},
 	"variables": {
@@ -31,7 +23,6 @@
 						"name": "etl",
 						"description": "copy",
 						"type": "Copy",
-						"dependsOn": [],
 						"policy": {
 							"timeout": "7.00:00:00",
 							"retry": 0,
@@ -39,7 +30,6 @@
 							"secureOutput": false,
 							"secureInput": false
 						},
-						"userProperties": [],
 						"typeProperties": {
 							"source": {
 								"type": "SqlServerSource"
@@ -61,21 +51,18 @@
 						"inputs": [
 							{
 								"referenceName": "localhost",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						],
 						"outputs": [
 							{
 								"referenceName": "dw",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						]
 					}
 				],
-				"concurrency": 1,
-				"annotations": []
+				"concurrency": 1
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/localhost')]",
@@ -92,7 +79,6 @@
 					"referenceName": "dw",
 					"type": "LinkedServiceReference"
 				},
-				"annotations": [],
 				"type": "AzureSqlTable",
 				"structure": [
 					{
@@ -107,10 +93,7 @@
 				"typeProperties": {
 					"tableName": "[[dbo].[rigone]"
 				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/dw')]"
-			]
+			}
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/localhost')]",
@@ -122,7 +105,6 @@
 					"referenceName": "hiram",
 					"type": "LinkedServiceReference"
 				},
-				"annotations": [],
 				"type": "SqlServerTable",
 				"structure": [
 					{
@@ -137,53 +119,7 @@
 				"typeProperties": {
 					"tableName": "[[dbo].[one]"
 				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiram')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dw')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"connectionString": "[parameters('dw_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hiram')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "localhost",
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"connectionString": "[parameters('hiram_connectionString')]"
-				},
-				"connectVia": {
-					"referenceName": "hiram",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/hiram')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hiram')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {}
-			},
-			"dependsOn": []
+			}
 		}
 	]
 }

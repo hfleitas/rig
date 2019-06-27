@@ -55,6 +55,16 @@
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
+				"structure": [
+					{
+						"name": "dt",
+						"type": "DateTime"
+					},
+					{
+						"name": "n",
+						"type": "Int32"
+					}
+				],
 				"typeProperties": {
 					"tableName": "[[dbo].[rigone]"
 				}
@@ -95,6 +105,16 @@
 				},
 				"annotations": [],
 				"type": "SqlServerTable",
+				"structure": [
+					{
+						"name": "dt",
+						"type": "DateTime"
+					},
+					{
+						"name": "n",
+						"type": "Int32"
+					}
+				],
 				"typeProperties": {
 					"tableName": "[[dbo].[one]"
 				}
@@ -111,8 +131,8 @@
 				"description": "hiram to dw",
 				"activities": [
 					{
-						"name": "SQL_to_SQLAzure",
-						"description": "Copy data from SQL server to SQL Azure",
+						"name": "etl",
+						"description": "copy",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
@@ -125,14 +145,21 @@
 						"userProperties": [],
 						"typeProperties": {
 							"source": {
-								"type": "SqlSource"
+								"type": "SqlServerSource"
 							},
 							"sink": {
 								"type": "SqlSink",
 								"writeBatchSize": 10000
 							},
 							"enableStaging": false,
-							"dataIntegrationUnits": 0
+							"dataIntegrationUnits": 0,
+							"translator": {
+								"type": "TabularTranslator",
+								"columnMappings": {
+									"dt": "dt",
+									"n": "n"
+								}
+							}
 						},
 						"inputs": [
 							{
