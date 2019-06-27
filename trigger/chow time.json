@@ -1,0 +1,24 @@
+{
+	"name": "chow time",
+	"properties": {
+		"runtimeState": "Started",
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2019-06-27T22:25:00.000Z",
+				"endTime": "2019-06-28T22:25:00.000Z",
+				"timeZone": "UTC",
+				"schedule": {
+					"minutes": [
+						28
+					],
+					"hours": [
+						22
+					]
+				}
+			}
+		}
+	}
+}
