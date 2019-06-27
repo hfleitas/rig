@@ -1,7 +1,7 @@
 {
 	"name": "every 15 minutes",
 	"properties": {
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"type": "TumblingWindowTrigger",
 		"typeProperties": {
 			"frequency": "Minute",
