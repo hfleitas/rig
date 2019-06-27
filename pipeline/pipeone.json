@@ -4,8 +4,8 @@
 		"description": "hiram to dw",
 		"activities": [
 			{
-				"name": "SQL_to_SQLAzure",
-				"description": "Copy data from SQL server to SQL Azure",
+				"name": "etl",
+				"description": "copy",
 				"type": "Copy",
 				"policy": {
 					"timeout": "7.00:00:00",
@@ -16,14 +16,21 @@
 				},
 				"typeProperties": {
 					"source": {
-						"type": "SqlSource"
+						"type": "SqlServerSource"
 					},
 					"sink": {
 						"type": "SqlSink",
 						"writeBatchSize": 10000
 					},
 					"enableStaging": false,
-					"dataIntegrationUnits": 0
+					"dataIntegrationUnits": 0,
+					"translator": {
+						"type": "TabularTranslator",
+						"columnMappings": {
+							"dt": "dt",
+							"n": "n"
+						}
+					}
 				},
 				"inputs": [
 					{

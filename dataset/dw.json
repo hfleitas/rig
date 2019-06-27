@@ -7,6 +7,16 @@
 			"type": "LinkedServiceReference"
 		},
 		"type": "AzureSqlTable",
+		"structure": [
+			{
+				"name": "dt",
+				"type": "DateTime"
+			},
+			{
+				"name": "n",
+				"type": "Int32"
+			}
+		],
 		"typeProperties": {
 			"tableName": "[dbo].[rigone]"
 		}
