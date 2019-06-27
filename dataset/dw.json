@@ -1,0 +1,15 @@
+{
+	"name": "dw",
+	"properties": {
+		"description": "asdw",
+		"linkedServiceName": {
+			"referenceName": "dw",
+			"type": "LinkedServiceReference"
+		},
+		"type": "AzureSqlTable",
+		"typeProperties": {
+			"tableName": "[dbo].[rigone]"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

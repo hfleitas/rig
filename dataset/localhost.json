@@ -1,0 +1,15 @@
+{
+	"name": "localhost",
+	"properties": {
+		"description": "hiram wks",
+		"linkedServiceName": {
+			"referenceName": "hiram",
+			"type": "LinkedServiceReference"
+		},
+		"type": "SqlServerTable",
+		"typeProperties": {
+			"tableName": "[dbo].[one]"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
