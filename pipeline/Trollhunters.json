@@ -15,8 +15,17 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource"
+					},
 					"enableStaging": false
-				}
+				},
+				"inputs": [
+					{
+						"referenceName": "localhost",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"annotations": []
