@@ -18,11 +18,20 @@
 					"source": {
 						"type": "SqlServerSource"
 					},
+					"sink": {
+						"type": "AzureSqlSink"
+					},
 					"enableStaging": false
 				},
 				"inputs": [
 					{
 						"referenceName": "localhost",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "dw",
 						"type": "DatasetReference"
 					}
 				]
