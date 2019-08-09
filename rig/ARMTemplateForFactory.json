@@ -295,7 +295,8 @@
 											"type": "Int32"
 										},
 										"sink": {
-											"name": "CustomerId"
+											"name": "CustomerId",
+											"type": "Int32"
 										}
 									},
 									{
@@ -304,7 +305,8 @@
 											"type": "String"
 										},
 										"sink": {
-											"name": "Name"
+											"name": "Name",
+											"type": "String"
 										}
 									},
 									{
@@ -313,7 +315,8 @@
 											"type": "String"
 										},
 										"sink": {
-											"name": "Email"
+											"name": "Email",
+											"type": "String"
 										}
 									}
 								]
@@ -338,7 +341,14 @@
 						"name": "CustomerAccount",
 						"description": "copy",
 						"type": "Copy",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "Customer",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
 						"policy": {
 							"timeout": "7.00:00:00",
 							"retry": 0,
@@ -374,29 +384,32 @@
 								"mappings": [
 									{
 										"source": {
+											"name": "CustomerAccountId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "CustomerAccountId",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
 											"name": "CustomerId",
 											"type": "Int32"
 										},
 										"sink": {
-											"name": "CustomerId"
+											"name": "CustomerId",
+											"type": "Int32"
 										}
 									},
 									{
 										"source": {
-											"name": "Name",
-											"type": "String"
+											"name": "AcctNumEnding",
+											"type": "Int32"
 										},
 										"sink": {
-											"name": "Name"
-										}
-									},
-									{
-										"source": {
-											"name": "Email",
-											"type": "String"
-										},
-										"sink": {
-											"name": "Email"
+											"name": "AcctNumEnding",
+											"type": "Int32"
 										}
 									}
 								]
