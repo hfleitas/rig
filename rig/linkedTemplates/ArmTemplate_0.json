@@ -11,9 +11,29 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'dw'"
 		},
+		"hiramdw_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'hiramdw'"
+		},
+		"sqlva4onabrnvvfrkw_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'sqlva4onabrnvvfrkw'"
+		},
 		"hiram_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'hiram'"
+		},
+		"hf0524_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'hf0524'"
+		},
+		"hf0524_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'hf0524'"
+		},
+		"hf0524_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "UPCIC\\HFleitas"
 		}
 	},
 	"variables": {
@@ -25,6 +45,7 @@
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
+				"description": "hiramdw.database.windows.net",
 				"annotations": [],
 				"type": "AzureSqlDatabase",
 				"typeProperties": {
@@ -78,34 +99,40 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/dw')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
+			"name": "[concat(parameters('factoryName'), '/hf0524')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"description": "asdw",
-				"linkedServiceName": {
-					"referenceName": "dw",
-					"type": "LinkedServiceReference"
-				},
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hiramdw')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
 				"annotations": [],
-				"type": "AzureSqlTable",
-				"structure": [
-					{
-						"name": "dt",
-						"type": "DateTime"
-					},
-					{
-						"name": "n",
-						"type": "Int32"
-					}
-				],
+				"type": "AzureSqlDW",
 				"typeProperties": {
-					"tableName": "[[dbo].[rigone]"
+					"connectionString": "[parameters('hiramdw_connectionString')]"
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/dw')]"
-			]
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sqlva4onabrnvvfrkw')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('sqlva4onabrnvvfrkw_connectionString')]"
+				}
+			},
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/hiram')]",
@@ -125,6 +152,187 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/integrationRuntimes/hiram')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hf0524')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "desktop",
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('hf0524_connectionString')]",
+					"userName": "[parameters('hf0524_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('hf0524_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "hf0524",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/hf0524')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dwCustomer')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "hiramdw",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "CustomerId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Email",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Customer"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hiramdw')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dwCustomerAccount')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "hiramdw",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "CustomerAccountId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CustomerId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "AcctNumEnding",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "CustomerAccount"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hiramdw')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dwCharacter')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "hiramdw",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "CharacterId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "FullName",
+						"type": "varchar"
+					},
+					{
+						"name": "Affiliation",
+						"type": "varchar"
+					},
+					{
+						"name": "Category",
+						"type": "varchar"
+					},
+					{
+						"name": "Aka",
+						"type": "varchar"
+					},
+					{
+						"name": "Status",
+						"type": "varchar"
+					},
+					{
+						"name": "Race",
+						"type": "varchar"
+					},
+					{
+						"name": "Age",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Home",
+						"type": "varchar"
+					},
+					{
+						"name": "Relatives",
+						"type": "varchar"
+					},
+					{
+						"name": "Weapons",
+						"type": "varchar"
+					},
+					{
+						"name": "EyeColor",
+						"type": "varchar"
+					},
+					{
+						"name": "HairColor",
+						"type": "varchar"
+					},
+					{
+						"name": "Minions",
+						"type": "varchar"
+					},
+					{
+						"name": "VoicedBy",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Character"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hiramdw')]"
 			]
 		},
 		{
@@ -158,65 +366,75 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/pipeone')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
+			"name": "[concat(parameters('factoryName'), '/sqlCustomer')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"description": "hiram to dw",
-				"activities": [
+				"linkedServiceName": {
+					"referenceName": "hf0524",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
 					{
-						"name": "etl",
-						"description": "copy",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlServerSource"
-							},
-							"sink": {
-								"type": "SqlSink",
-								"writeBatchSize": 10000
-							},
-							"enableStaging": false,
-							"dataIntegrationUnits": 0,
-							"translator": {
-								"type": "TabularTranslator",
-								"columnMappings": {
-									"dt": "dt",
-									"n": "n"
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "localhost",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "dw",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
+						"name": "CustomerId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Email",
+						"type": "varchar"
 					}
 				],
-				"concurrency": 1,
-				"annotations": []
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Customer"
+				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/localhost')]",
-				"[concat(variables('factoryId'), '/datasets/dw')]"
+				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sqlCustomerAccount')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "hf0524",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "CustomerAccountId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CustomerId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "AcctNumEnding",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "CustomerAccount"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
 			]
 		},
 		{
@@ -242,9 +460,22 @@
 								"type": "SqlServerSource"
 							},
 							"sink": {
-								"type": "AzureSqlSink"
+								"type": "SqlDWSink",
+								"allowPolyBase": true,
+								"polyBaseSettings": {
+									"rejectValue": 0,
+									"rejectType": "value",
+									"useTypeDefault": true
+								}
 							},
-							"enableStaging": false
+							"enableStaging": true,
+							"stagingSettings": {
+								"linkedServiceName": {
+									"referenceName": "sqlva4onabrnvvfrkw",
+									"type": "LinkedServiceReference"
+								},
+								"path": "adfstaging"
+							}
 						},
 						"inputs": [
 							{
@@ -255,7 +486,7 @@
 						],
 						"outputs": [
 							{
-								"referenceName": "dw",
+								"referenceName": "dwCharacter",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -266,7 +497,192 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/localhost')]",
-				"[concat(variables('factoryId'), '/datasets/dw')]"
+				"[concat(variables('factoryId'), '/datasets/dwCharacter')]",
+				"[concat(variables('factoryId'), '/linkedServices/sqlva4onabrnvvfrkw')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Leads')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "hf0524 to dw",
+				"activities": [
+					{
+						"name": "Customer",
+						"description": "copy",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource"
+							},
+							"sink": {
+								"type": "SqlDWSink",
+								"allowPolyBase": true,
+								"polyBaseSettings": {
+									"rejectValue": 0,
+									"rejectType": "value",
+									"useTypeDefault": true
+								}
+							},
+							"enableStaging": true,
+							"stagingSettings": {
+								"linkedServiceName": {
+									"referenceName": "sqlva4onabrnvvfrkw",
+									"type": "LinkedServiceReference"
+								},
+								"path": "adfstaging"
+							},
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "CustomerId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "CustomerId"
+										}
+									},
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name"
+										}
+									},
+									{
+										"source": {
+											"name": "Email",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Email"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "sqlCustomer",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "dwCustomer",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "CustomerAccount",
+						"description": "copy",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource"
+							},
+							"sink": {
+								"type": "SqlDWSink",
+								"allowPolyBase": true,
+								"polyBaseSettings": {
+									"rejectValue": 0,
+									"rejectType": "value",
+									"useTypeDefault": true
+								}
+							},
+							"enableStaging": true,
+							"stagingSettings": {
+								"linkedServiceName": {
+									"referenceName": "sqlva4onabrnvvfrkw",
+									"type": "LinkedServiceReference"
+								},
+								"path": "adfstaging"
+							},
+							"dataIntegrationUnits": 0,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "CustomerId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "CustomerId"
+										}
+									},
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name"
+										}
+									},
+									{
+										"source": {
+											"name": "Email",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Email"
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "sqlCustomerAccount",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "dwCustomerAccount",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"concurrency": 1,
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/sqlCustomer')]",
+				"[concat(variables('factoryId'), '/datasets/dwCustomer')]",
+				"[concat(variables('factoryId'), '/datasets/sqlCustomerAccount')]",
+				"[concat(variables('factoryId'), '/datasets/dwCustomerAccount')]",
+				"[concat(variables('factoryId'), '/linkedServices/sqlva4onabrnvvfrkw')]"
 			]
 		}
 	]

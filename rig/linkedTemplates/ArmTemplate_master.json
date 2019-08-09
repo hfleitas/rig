@@ -15,6 +15,26 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'hiram'"
 		},
+		"hf0524_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'hf0524'"
+		},
+		"hf0524_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'hf0524'"
+		},
+		"hiramdw_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'hiramdw'"
+		},
+		"sqlva4onabrnvvfrkw_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'sqlva4onabrnvvfrkw'"
+		},
+		"hf0524_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "UPCIC\\HFleitas"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -45,8 +65,23 @@
 					"dw_connectionString": {
 						"value": "[parameters('dw_connectionString')]"
 					},
+					"hiramdw_connectionString": {
+						"value": "[parameters('hiramdw_connectionString')]"
+					},
+					"sqlva4onabrnvvfrkw_connectionString": {
+						"value": "[parameters('sqlva4onabrnvvfrkw_connectionString')]"
+					},
 					"hiram_connectionString": {
 						"value": "[parameters('hiram_connectionString')]"
+					},
+					"hf0524_connectionString": {
+						"value": "[parameters('hf0524_connectionString')]"
+					},
+					"hf0524_password": {
+						"value": "[parameters('hf0524_password')]"
+					},
+					"hf0524_properties_typeProperties_userName": {
+						"value": "[parameters('hf0524_properties_typeProperties_userName')]"
 					}
 				}
 			},

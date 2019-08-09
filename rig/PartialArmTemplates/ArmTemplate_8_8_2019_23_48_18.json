@@ -6,34 +6,6 @@
 			"type": "string",
 			"metadata": "Data Factory Name",
 			"defaultValue": "rig"
-		},
-		"dw_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'dw'"
-		},
-		"hiram_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'hiram'"
-		},
-		"hf0524_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'hf0524'"
-		},
-		"hf0524_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'hf0524'"
-		},
-		"hiramdw_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'hiramdw'"
-		},
-		"sqlva4onabrnvvfrkw_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'sqlva4onabrnvvfrkw'"
-		},
-		"hf0524_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "UPCIC\\HFleitas"
 		}
 	},
 	"variables": {
@@ -83,15 +55,13 @@
 						"inputs": [
 							{
 								"referenceName": "localhost",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						],
 						"outputs": [
 							{
 								"referenceName": "dwCharacter",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						]
 					}
@@ -99,9 +69,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/localhost')]",
-				"[concat(variables('factoryId'), '/datasets/dwCharacter')]",
-				"[concat(variables('factoryId'), '/linkedServices/sqlva4onabrnvvfrkw')]"
+				"[concat(variables('factoryId'), '/datasets/dwCharacter')]"
 			]
 		},
 		{
@@ -181,15 +149,13 @@
 						"inputs": [
 							{
 								"referenceName": "sqlCustomer",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						],
 						"outputs": [
 							{
 								"referenceName": "dwCustomer",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						]
 					},
@@ -264,15 +230,13 @@
 						"inputs": [
 							{
 								"referenceName": "sqlCustomerAccount",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						],
 						"outputs": [
 							{
 								"referenceName": "dwCustomerAccount",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						]
 					}
@@ -284,151 +248,7 @@
 				"[concat(variables('factoryId'), '/datasets/sqlCustomer')]",
 				"[concat(variables('factoryId'), '/datasets/dwCustomer')]",
 				"[concat(variables('factoryId'), '/datasets/sqlCustomerAccount')]",
-				"[concat(variables('factoryId'), '/datasets/dwCustomerAccount')]",
-				"[concat(variables('factoryId'), '/linkedServices/sqlva4onabrnvvfrkw')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/localhost')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "hiram wks",
-				"linkedServiceName": {
-					"referenceName": "hiram",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "SqlServerTable",
-				"structure": [
-					{
-						"name": "dt",
-						"type": "DateTime"
-					},
-					{
-						"name": "n",
-						"type": "Int32"
-					}
-				],
-				"typeProperties": {
-					"tableName": "[[dbo].[one]"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiram')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dw')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "hiramdw.database.windows.net",
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"connectionString": "[parameters('dw_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hiram')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "localhost",
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"connectionString": "[parameters('hiram_connectionString')]"
-				},
-				"connectVia": {
-					"referenceName": "hiram",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/hiram')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/every 15 minutes')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Stopped",
-				"type": "TumblingWindowTrigger",
-				"typeProperties": {
-					"frequency": "Minute",
-					"interval": 15,
-					"startTime": "2019-06-27T22:28:00.000Z",
-					"endTime": "2019-06-28T01:00:00.000Z",
-					"delay": "00:00:00",
-					"maxConcurrency": 50,
-					"retryPolicy": {
-						"intervalInSeconds": 30
-					},
-					"dependsOn": []
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hiram')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/laptop')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"description": "R90GTU6N",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hf0524')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hf0524')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "desktop",
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"connectionString": "[parameters('hf0524_connectionString')]",
-					"userName": "[parameters('hf0524_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('hf0524_password')]"
-					}
-				},
-				"connectVia": {
-					"referenceName": "hf0524",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/hf0524')]"
+				"[concat(variables('factoryId'), '/datasets/dwCustomerAccount')]"
 			]
 		},
 		{
@@ -462,9 +282,7 @@
 					"table": "Customer"
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/sqlCustomerAccount')]",
@@ -497,21 +315,6 @@
 				"typeProperties": {
 					"schema": "dbo",
 					"table": "CustomerAccount"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hiramdw')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDW",
-				"typeProperties": {
-					"connectionString": "[parameters('hiramdw_connectionString')]"
 				}
 			},
 			"dependsOn": []
@@ -547,9 +350,7 @@
 					"table": "Customer"
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiramdw')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/dwCustomerAccount')]",
@@ -582,21 +383,6 @@
 				"typeProperties": {
 					"schema": "dbo",
 					"table": "CustomerAccount"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiramdw')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/sqlva4onabrnvvfrkw')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('sqlva4onabrnvvfrkw_connectionString')]"
 				}
 			},
 			"dependsOn": []
@@ -681,9 +467,7 @@
 					"table": "Character"
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiramdw')]"
-			]
+			"dependsOn": []
 		}
 	]
 }
