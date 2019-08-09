@@ -1,12 +1,13 @@
 {
-	"name": "pipeone",
+	"name": "pipeLeads",
 	"properties": {
-		"description": "hiram to dw",
+		"description": "hf0524 to dw",
 		"activities": [
 			{
-				"name": "etl",
+				"name": "Customer",
 				"description": "copy",
 				"type": "Copy",
+				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -14,39 +15,145 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
+				"userProperties": [],
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource"
 					},
 					"sink": {
-						"type": "SqlSink",
-						"writeBatchSize": 10000
+						"type": "SqlDWSink",
+						"allowPolyBase": true,
+						"polyBaseSettings": {
+							"rejectValue": 0,
+							"rejectType": "value",
+							"useTypeDefault": true
+						}
 					},
 					"enableStaging": false,
 					"dataIntegrationUnits": 0,
 					"translator": {
 						"type": "TabularTranslator",
-						"columnMappings": {
-							"dt": "dt",
-							"n": "n"
-						}
+						"mappings": [
+							{
+								"source": {
+									"name": "CustomerId",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "CustomerId"
+								}
+							},
+							{
+								"source": {
+									"name": "Name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Name"
+								}
+							},
+							{
+								"source": {
+									"name": "Email",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Email"
+								}
+							}
+						]
 					}
 				},
 				"inputs": [
 					{
-						"referenceName": "localhost",
+						"referenceName": "sqlCustomer",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "dw",
+						"referenceName": "dwCustomer",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "CustomerAccount",
+				"description": "copy",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource"
+					},
+					"sink": {
+						"type": "SqlDWSink",
+						"allowPolyBase": true,
+						"polyBaseSettings": {
+							"rejectValue": 0,
+							"rejectType": "value",
+							"useTypeDefault": true
+						}
+					},
+					"enableStaging": false,
+					"dataIntegrationUnits": 0,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "CustomerId",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "CustomerId"
+								}
+							},
+							{
+								"source": {
+									"name": "Name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Name"
+								}
+							},
+							{
+								"source": {
+									"name": "Email",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Email"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "sqlCustomerAccount",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "dwCustomerAccount",
 						"type": "DatasetReference"
 					}
 				]
 			}
 		],
-		"concurrency": 1
+		"concurrency": 1,
+		"annotations": []
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }
