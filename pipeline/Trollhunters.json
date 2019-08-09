@@ -19,9 +19,22 @@
 						"type": "SqlServerSource"
 					},
 					"sink": {
-						"type": "AzureSqlSink"
+						"type": "SqlDWSink",
+						"allowPolyBase": true,
+						"polyBaseSettings": {
+							"rejectValue": 0,
+							"rejectType": "value",
+							"useTypeDefault": true
+						}
 					},
-					"enableStaging": false
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "sqlva4onabrnvvfrkw",
+							"type": "LinkedServiceReference"
+						},
+						"path": "adfstaging"
+					}
 				},
 				"inputs": [
 					{
@@ -31,7 +44,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "dwCustomer",
+						"referenceName": "dwCharacter",
 						"type": "DatasetReference"
 					}
 				]
