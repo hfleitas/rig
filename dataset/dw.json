@@ -6,6 +6,7 @@
 			"referenceName": "dw",
 			"type": "LinkedServiceReference"
 		},
+		"annotations": [],
 		"type": "AzureSqlTable",
 		"structure": [
 			{
@@ -16,10 +17,7 @@
 				"name": "n",
 				"type": "Int32"
 			}
-		],
-		"typeProperties": {
-			"tableName": "[dbo].[rigone]"
-		}
+		]
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
 }
