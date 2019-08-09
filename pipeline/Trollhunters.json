@@ -211,7 +211,8 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "SqlServerSource"
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "select * from [ᕙ༼,இܫஇ,༽ᕗ].dbo.Quotes"
 					},
 					"sink": {
 						"type": "SqlDWSink",
