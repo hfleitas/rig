@@ -10,12 +10,64 @@
 		"type": "SqlServerTable",
 		"structure": [
 			{
-				"name": "dt",
-				"type": "DateTime"
+				"name": "CharacterId",
+				"type": "Int32"
 			},
 			{
-				"name": "n",
+				"name": "FullName",
+				"type": "String"
+			},
+			{
+				"name": "Affiliation",
+				"type": "String"
+			},
+			{
+				"name": "Category",
+				"type": "String"
+			},
+			{
+				"name": "Aka",
+				"type": "String"
+			},
+			{
+				"name": "Status",
+				"type": "String"
+			},
+			{
+				"name": "Race",
+				"type": "String"
+			},
+			{
+				"name": "Age",
 				"type": "Int32"
+			},
+			{
+				"name": "Home",
+				"type": "String"
+			},
+			{
+				"name": "Relatives",
+				"type": "String"
+			},
+			{
+				"name": "Weapons",
+				"type": "String"
+			},
+			{
+				"name": "EyeColor",
+				"type": "String"
+			},
+			{
+				"name": "HairColor",
+				"type": "String"
+			},
+			{
+				"name": "Minions",
+				"type": "String"
+			},
+			{
+				"name": "VoicedBy",
+				"type": "String"
 			}
 		]
 	},

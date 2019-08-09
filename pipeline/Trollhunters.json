@@ -16,7 +16,8 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "SqlServerSource"
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "select * from [ᕙ༼,இܫஇ,༽ᕗ].dbo.Character"
 					},
 					"sink": {
 						"type": "SqlDWSink",
@@ -34,6 +35,146 @@
 							"type": "LinkedServiceReference"
 						},
 						"path": "adfstaging"
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "CharacterId"
+								},
+								"sink": {
+									"name": "CharacterId",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "FullName"
+								},
+								"sink": {
+									"name": "FullName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Affiliation"
+								},
+								"sink": {
+									"name": "Affiliation",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Category"
+								},
+								"sink": {
+									"name": "Category",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Aka"
+								},
+								"sink": {
+									"name": "Aka",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Status"
+								},
+								"sink": {
+									"name": "Status",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Race"
+								},
+								"sink": {
+									"name": "Race",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Age"
+								},
+								"sink": {
+									"name": "Age",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Home"
+								},
+								"sink": {
+									"name": "Home",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Relatives"
+								},
+								"sink": {
+									"name": "Relatives",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Weapons"
+								},
+								"sink": {
+									"name": "Weapons",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "EyeColor"
+								},
+								"sink": {
+									"name": "EyeColor",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HairColor"
+								},
+								"sink": {
+									"name": "HairColor",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Minions"
+								},
+								"sink": {
+									"name": "Minions",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "VoicedBy"
+								},
+								"sink": {
+									"name": "VoicedBy",
+									"type": "String"
+								}
+							}
+						]
 					}
 				},
 				"inputs": [
