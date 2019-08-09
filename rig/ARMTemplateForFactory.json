@@ -235,6 +235,62 @@
 								"parameters": {}
 							}
 						]
+					},
+					{
+						"name": "Quotes",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Characters",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource"
+							},
+							"sink": {
+								"type": "SqlDWSink",
+								"allowPolyBase": true,
+								"polyBaseSettings": {
+									"rejectValue": 0,
+									"rejectType": "value",
+									"useTypeDefault": true
+								}
+							},
+							"enableStaging": true,
+							"stagingSettings": {
+								"linkedServiceName": {
+									"referenceName": "sqlva4onabrnvvfrkw",
+									"type": "LinkedServiceReference"
+								},
+								"path": "adfstaging"
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "sqlQuotes",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "dwQuotes",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
 					}
 				],
 				"annotations": []
@@ -242,6 +298,8 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/sqlCharacter')]",
 				"[concat(variables('factoryId'), '/datasets/dwCharacter')]",
+				"[concat(variables('factoryId'), '/datasets/sqlQuotes')]",
+				"[concat(variables('factoryId'), '/datasets/dwQuotes')]",
 				"[concat(variables('factoryId'), '/linkedServices/sqlva4onabrnvvfrkw')]"
 			]
 		},
@@ -883,6 +941,86 @@
 				"typeProperties": {
 					"schema": "dbo",
 					"table": "Character"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hiramdw')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sqlQuotes')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "hf0524",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "quoteid",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "character",
+						"type": "varchar"
+					},
+					{
+						"name": "quote",
+						"type": "nvarchar"
+					},
+					{
+						"name": "sentiment",
+						"type": "float",
+						"precision": 15
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "quotes"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dwQuotes')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "hiramdw",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "quoteid",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "character",
+						"type": "varchar"
+					},
+					{
+						"name": "quote",
+						"type": "nvarchar"
+					},
+					{
+						"name": "sentiment",
+						"type": "float",
+						"precision": 15
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "quotes"
 				}
 			},
 			"dependsOn": [
