@@ -230,6 +230,47 @@
 							"type": "LinkedServiceReference"
 						},
 						"path": "adfstaging"
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "quoteid"
+								},
+								"sink": {
+									"name": "quoteid",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "character"
+								},
+								"sink": {
+									"name": "character",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "quote"
+								},
+								"sink": {
+									"name": "quote",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "sentiment"
+								},
+								"sink": {
+									"name": "sentiment",
+									"type": "Single"
+								}
+							}
+						]
 					}
 				},
 				"inputs": [
