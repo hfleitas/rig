@@ -1,0 +1,18 @@
+{
+	"name": "hf0524",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "desktop",
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "integrated security=True;data source=hf0524;initial catalog=FleitasArts",
+			"userName": "UPCIC\\HFleitas",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI1MjkyNjgyNy02YmMyLTQ4ZmEtYjRmOS00NTlmNTQyZGM1ZDEiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "hf0524",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
