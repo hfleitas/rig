@@ -212,7 +212,7 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "select * from [ᕙ༼,இܫஇ,༽ᕗ].dbo.Quotes"
+						"sqlReaderQuery": "select * from [tpcxbb_1gb].[dbo].[Quotes]"
 					},
 					"sink": {
 						"type": "SqlDWSink",
@@ -234,7 +234,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "sqlQuotes",
+						"referenceName": "sqlCharacter",
 						"type": "DatasetReference"
 					}
 				],
