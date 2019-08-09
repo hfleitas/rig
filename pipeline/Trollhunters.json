@@ -38,7 +38,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "localhost",
+						"referenceName": "sqlCharacter",
 						"type": "DatasetReference"
 					}
 				],

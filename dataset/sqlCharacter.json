@@ -1,11 +1,12 @@
 {
-	"name": "localhost",
+	"name": "sqlCharacter",
 	"properties": {
-		"description": "hiram wks",
+		"description": "hf0524.",
 		"linkedServiceName": {
-			"referenceName": "hiram",
+			"referenceName": "hf0524",
 			"type": "LinkedServiceReference"
 		},
+		"annotations": [],
 		"type": "SqlServerTable",
 		"structure": [
 			{
@@ -16,10 +17,7 @@
 				"name": "n",
 				"type": "Int32"
 			}
-		],
-		"typeProperties": {
-			"tableName": "[dbo].[one]"
-		}
+		]
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
 }
