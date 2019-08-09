@@ -10,64 +10,20 @@
 		"type": "SqlServerTable",
 		"structure": [
 			{
-				"name": "CharacterId",
+				"name": "quoteid",
 				"type": "Int32"
 			},
 			{
-				"name": "FullName",
+				"name": "character",
 				"type": "String"
 			},
 			{
-				"name": "Affiliation",
+				"name": "quote",
 				"type": "String"
 			},
 			{
-				"name": "Category",
-				"type": "String"
-			},
-			{
-				"name": "Aka",
-				"type": "String"
-			},
-			{
-				"name": "Status",
-				"type": "String"
-			},
-			{
-				"name": "Race",
-				"type": "String"
-			},
-			{
-				"name": "Age",
-				"type": "Int32"
-			},
-			{
-				"name": "Home",
-				"type": "String"
-			},
-			{
-				"name": "Relatives",
-				"type": "String"
-			},
-			{
-				"name": "Weapons",
-				"type": "String"
-			},
-			{
-				"name": "EyeColor",
-				"type": "String"
-			},
-			{
-				"name": "HairColor",
-				"type": "String"
-			},
-			{
-				"name": "Minions",
-				"type": "String"
-			},
-			{
-				"name": "VoicedBy",
-				"type": "String"
+				"name": "sentiment",
+				"type": "Double"
 			}
 		]
 	},
