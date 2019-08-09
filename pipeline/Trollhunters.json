@@ -31,7 +31,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "dw",
+						"referenceName": "dwCustomer",
 						"type": "DatasetReference"
 					}
 				]
