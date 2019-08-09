@@ -60,7 +60,8 @@
 						"userProperties": [],
 						"typeProperties": {
 							"source": {
-								"type": "SqlServerSource"
+								"type": "SqlServerSource",
+								"sqlReaderQuery": "select * from [ᕙ༼,இܫஇ,༽ᕗ].dbo.Character"
 							},
 							"sink": {
 								"type": "SqlDWSink",
@@ -78,11 +79,151 @@
 									"type": "LinkedServiceReference"
 								},
 								"path": "adfstaging"
+							},
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "CharacterId"
+										},
+										"sink": {
+											"name": "CharacterId",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "FullName"
+										},
+										"sink": {
+											"name": "FullName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Affiliation"
+										},
+										"sink": {
+											"name": "Affiliation",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Category"
+										},
+										"sink": {
+											"name": "Category",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Aka"
+										},
+										"sink": {
+											"name": "Aka",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Status"
+										},
+										"sink": {
+											"name": "Status",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Race"
+										},
+										"sink": {
+											"name": "Race",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Age"
+										},
+										"sink": {
+											"name": "Age",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Home"
+										},
+										"sink": {
+											"name": "Home",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Relatives"
+										},
+										"sink": {
+											"name": "Relatives",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Weapons"
+										},
+										"sink": {
+											"name": "Weapons",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "EyeColor"
+										},
+										"sink": {
+											"name": "EyeColor",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "HairColor"
+										},
+										"sink": {
+											"name": "HairColor",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Minions"
+										},
+										"sink": {
+											"name": "Minions",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "VoicedBy"
+										},
+										"sink": {
+											"name": "VoicedBy",
+											"type": "String"
+										}
+									}
+								]
 							}
 						},
 						"inputs": [
 							{
-								"referenceName": "localhost",
+								"referenceName": "sqlCharacter",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -99,7 +240,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/localhost')]",
+				"[concat(variables('factoryId'), '/datasets/sqlCharacter')]",
 				"[concat(variables('factoryId'), '/datasets/dwCharacter')]",
 				"[concat(variables('factoryId'), '/linkedServices/sqlva4onabrnvvfrkw')]"
 			]
@@ -289,33 +430,83 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/localhost')]",
+			"name": "[concat(parameters('factoryName'), '/sqlCharacter')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"description": "hiram wks",
+				"description": "hf0524.",
 				"linkedServiceName": {
-					"referenceName": "hiram",
+					"referenceName": "hf0524",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
 				"type": "SqlServerTable",
 				"structure": [
 					{
-						"name": "dt",
-						"type": "DateTime"
+						"name": "CharacterId",
+						"type": "Int32"
 					},
 					{
-						"name": "n",
+						"name": "FullName",
+						"type": "String"
+					},
+					{
+						"name": "Affiliation",
+						"type": "String"
+					},
+					{
+						"name": "Category",
+						"type": "String"
+					},
+					{
+						"name": "Aka",
+						"type": "String"
+					},
+					{
+						"name": "Status",
+						"type": "String"
+					},
+					{
+						"name": "Race",
+						"type": "String"
+					},
+					{
+						"name": "Age",
 						"type": "Int32"
+					},
+					{
+						"name": "Home",
+						"type": "String"
+					},
+					{
+						"name": "Relatives",
+						"type": "String"
+					},
+					{
+						"name": "Weapons",
+						"type": "String"
+					},
+					{
+						"name": "EyeColor",
+						"type": "String"
+					},
+					{
+						"name": "HairColor",
+						"type": "String"
+					},
+					{
+						"name": "Minions",
+						"type": "String"
+					},
+					{
+						"name": "VoicedBy",
+						"type": "String"
 					}
 				],
-				"typeProperties": {
-					"tableName": "[[dbo].[one]"
-				}
+				"typeProperties": {}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiram')]"
+				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
 			]
 		},
 		{
