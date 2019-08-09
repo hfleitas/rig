@@ -10,14 +10,21 @@
 		"type": "AzureSqlTable",
 		"structure": [
 			{
-				"name": "dt",
-				"type": "DateTime"
+				"name": "CustomerId",
+				"type": "Int32"
 			},
 			{
-				"name": "n",
-				"type": "Int32"
+				"name": "Name",
+				"type": "String"
+			},
+			{
+				"name": "Email",
+				"type": "String"
 			}
-		]
+		],
+		"typeProperties": {
+			"tableName": "[dbo].[Customer]"
+		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
 }
