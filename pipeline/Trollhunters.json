@@ -222,7 +222,14 @@
 							"useTypeDefault": true
 						}
 					},
-					"enableStaging": false
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "sqlva4onabrnvvfrkw",
+							"type": "LinkedServiceReference"
+						},
+						"path": "adfstaging"
+					}
 				},
 				"inputs": [
 					{
