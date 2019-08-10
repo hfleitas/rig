@@ -25,6 +25,24 @@
 				}
 			}
 		],
+		"parameters": {
+			"SubscriptionID": {
+				"type": "string",
+				"defaultValue": "eaab21d5-8ecd-4ef0-a0c4-92fac2e22875"
+			},
+			"ResourceGroup": {
+				"type": "string",
+				"defaultValue": "dw"
+			},
+			"Server": {
+				"type": "string",
+				"defaultValue": "hiramdw"
+			},
+			"DW": {
+				"type": "string",
+				"defaultValue": "dw"
+			}
+		},
 		"annotations": []
 	}
 }
