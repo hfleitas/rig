@@ -20,10 +20,10 @@
 		"hiramdw_connectionString": {
 			"value": ""
 		},
-		"sqlva4onabrnvvfrkw_connectionString": {
+		"hiscale_connectionString": {
 			"value": ""
 		},
-		"hiscale_connectionString": {
+		"sqlva4onabrnvvfrkw_connectionString": {
 			"value": ""
 		},
 		"hf0524_properties_typeProperties_userName": {

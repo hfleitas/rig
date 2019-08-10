@@ -27,13 +27,13 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'hiramdw'"
 		},
-		"sqlva4onabrnvvfrkw_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'sqlva4onabrnvvfrkw'"
-		},
 		"hiscale_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'hiscale'"
+		},
+		"sqlva4onabrnvvfrkw_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'sqlva4onabrnvvfrkw'"
 		},
 		"hf0524_properties_typeProperties_userName": {
 			"type": "string",
@@ -415,6 +415,170 @@
 				"[concat(variables('factoryId'), '/datasets/hsCustomerAccount')]",
 				"[concat(variables('factoryId'), '/linkedServices/sqlva4onabrnvvfrkw')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Primer')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "IfPaused",
+						"type": "IfCondition",
+						"dependsOn": [
+							{
+								"activity": "GetStatus",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@not(equals('Online',string(activity('GetStatus').output.properties.status)))",
+								"type": "Expression"
+							},
+							"ifTrueActivities": [
+								{
+									"name": "Resume",
+									"description": "Start",
+									"type": "WebActivity",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": {
+											"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'/resume?api-version=2018-06-01-preview')",
+											"type": "Expression"
+										},
+										"method": "POST",
+										"headers": {},
+										"body": {
+											"value": "@string('')",
+											"type": "Expression"
+										},
+										"authentication": {
+											"type": "MSI",
+											"resource": "https://management.core.windows.net/"
+										}
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "GetStatus",
+						"description": "Start",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": {
+								"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'?api-version=2018-06-01-preview')",
+								"type": "Expression"
+							},
+							"method": "GET",
+							"headers": {},
+							"body": {
+								"value": "@string('')",
+								"type": "Expression"
+							},
+							"authentication": {
+								"type": "MSI",
+								"resource": "https://management.core.windows.net/"
+							}
+						}
+					},
+					{
+						"name": "UntilOnline",
+						"type": "Until",
+						"dependsOn": [
+							{
+								"activity": "IfPaused",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@equals('Online',string(activity('GetStatusOnline').output.properties.status))\n",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "GetStatusOnline",
+									"description": "Start",
+									"type": "WebActivity",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": {
+											"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'?api-version=2018-06-01-preview')",
+											"type": "Expression"
+										},
+										"method": "GET",
+										"headers": {},
+										"body": {
+											"value": "@string('')",
+											"type": "Expression"
+										},
+										"linkedServices": [],
+										"datasets": [],
+										"authentication": {
+											"type": "MSI",
+											"resource": "https://management.core.windows.net/"
+										}
+									}
+								}
+							],
+							"timeout": "7.00:00:00"
+						}
+					}
+				],
+				"parameters": {
+					"SubscriptionID": {
+						"type": "string",
+						"defaultValue": "eaab21d5-8ecd-4ef0-a0c4-92fac2e22875"
+					},
+					"ResourceGroup": {
+						"type": "string",
+						"defaultValue": "dw"
+					},
+					"Server": {
+						"type": "string",
+						"defaultValue": "hiramdw"
+					},
+					"DW": {
+						"type": "string",
+						"defaultValue": "dw"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Trollhunters')]",
@@ -840,6 +1004,202 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/hsCharacter')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "hiscale",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "CharacterId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "FullName",
+						"type": "varchar"
+					},
+					{
+						"name": "Affiliation",
+						"type": "varchar"
+					},
+					{
+						"name": "Category",
+						"type": "varchar"
+					},
+					{
+						"name": "Aka",
+						"type": "varchar"
+					},
+					{
+						"name": "Status",
+						"type": "varchar"
+					},
+					{
+						"name": "Race",
+						"type": "varchar"
+					},
+					{
+						"name": "Age",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Home",
+						"type": "varchar"
+					},
+					{
+						"name": "Relatives",
+						"type": "varchar"
+					},
+					{
+						"name": "Weapons",
+						"type": "varchar"
+					},
+					{
+						"name": "EyeColor",
+						"type": "varchar"
+					},
+					{
+						"name": "HairColor",
+						"type": "varchar"
+					},
+					{
+						"name": "Minions",
+						"type": "varchar"
+					},
+					{
+						"name": "VoicedBy",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Character"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hiscale')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hsCustomer')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "hiscale",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "CustomerId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Email",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Customer"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hiscale')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hsCustomerAccount')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "hiscale",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "CustomerAccountId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CustomerId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "AcctNumEnding",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "CustomerAccount"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hiscale')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hsQuotes')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "hiscale",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "quoteid",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "character",
+						"type": "varchar"
+					},
+					{
+						"name": "quote",
+						"type": "nvarchar"
+					},
+					{
+						"name": "sentiment",
+						"type": "float",
+						"precision": 15
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "quotes"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hiscale')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/sqlCharacter')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1020,6 +1380,19 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/hiscale')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('hiscale_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/sqlva4onabrnvvfrkw')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -1083,363 +1456,6 @@
 				"type": "SelfHosted",
 				"description": "R90GTU6N",
 				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hiscale')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"connectionString": "[parameters('hiscale_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hsCharacter')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "hiscale",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "CharacterId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "FullName",
-						"type": "varchar"
-					},
-					{
-						"name": "Affiliation",
-						"type": "varchar"
-					},
-					{
-						"name": "Category",
-						"type": "varchar"
-					},
-					{
-						"name": "Aka",
-						"type": "varchar"
-					},
-					{
-						"name": "Status",
-						"type": "varchar"
-					},
-					{
-						"name": "Race",
-						"type": "varchar"
-					},
-					{
-						"name": "Age",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Home",
-						"type": "varchar"
-					},
-					{
-						"name": "Relatives",
-						"type": "varchar"
-					},
-					{
-						"name": "Weapons",
-						"type": "varchar"
-					},
-					{
-						"name": "EyeColor",
-						"type": "varchar"
-					},
-					{
-						"name": "HairColor",
-						"type": "varchar"
-					},
-					{
-						"name": "Minions",
-						"type": "varchar"
-					},
-					{
-						"name": "VoicedBy",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Character"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiscale')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hsQuotes')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "hiscale",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "quoteid",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "character",
-						"type": "varchar"
-					},
-					{
-						"name": "quote",
-						"type": "nvarchar"
-					},
-					{
-						"name": "sentiment",
-						"type": "float",
-						"precision": 15
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "quotes"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiscale')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hsCustomer')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "hiscale",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "CustomerId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Name",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Email",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Customer"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiscale')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hsCustomerAccount')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "hiscale",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "CustomerAccountId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "CustomerId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "AcctNumEnding",
-						"type": "int",
-						"precision": 10
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "CustomerAccount"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiscale')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Primer')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "IfPaused",
-						"type": "IfCondition",
-						"dependsOn": [
-							{
-								"activity": "GetStatus",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"expression": {
-								"value": "@not(equals('Online',string(activity('GetStatus').output.properties.status)))",
-								"type": "Expression"
-							},
-							"ifTrueActivities": [
-								{
-									"name": "Resume",
-									"description": "Start",
-									"type": "WebActivity",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "7.00:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"url": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'/resume?api-version=2018-06-01-preview')",
-										"method": "GET",
-										"headers": {},
-										"body": "@string('')",
-										"linkedServices": [],
-										"datasets": [],
-										"authentication": {
-											"type": "MSI",
-											"resource": "https://management.core.windows.net/"
-										}
-									}
-								}
-							]
-						}
-					},
-					{
-						"name": "GetStatus",
-						"description": "Start",
-						"type": "WebActivity",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'?api-version=2018-06-01-preview')",
-							"method": "GET",
-							"headers": {},
-							"body": "@string('')",
-							"authentication": {
-								"type": "MSI",
-								"resource": "https://management.core.windows.net/"
-							}
-						}
-					},
-					{
-						"name": "UntilOnline",
-						"type": "Until",
-						"dependsOn": [
-							{
-								"activity": "IfPaused",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"expression": {
-								"value": "@equals('Online',string(activity('GetStatus').output.properties.status))",
-								"type": "Expression"
-							},
-							"activities": [
-								{
-									"name": "GetStatusOnline",
-									"description": "Start",
-									"type": "WebActivity",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "7.00:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"url": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'?api-version=2018-06-01-preview')",
-										"method": "GET",
-										"headers": {},
-										"body": "@string('')",
-										"linkedServices": [],
-										"datasets": [],
-										"authentication": {
-											"type": "MSI",
-											"resource": "https://management.core.windows.net/"
-										}
-									}
-								}
-							],
-							"timeout": "7.00:00:00"
-						}
-					}
-				],
-				"parameters": {
-					"SubscriptionID": {
-						"type": "string",
-						"defaultValue": "eaab21d5-8ecd-4ef0-a0c4-92fac2e22875"
-					},
-					"ResourceGroup": {
-						"type": "string",
-						"defaultValue": "dw"
-					},
-					"Server": {
-						"type": "string",
-						"defaultValue": "hiramdw"
-					},
-					"DW": {
-						"type": "string",
-						"defaultValue": "dw"
-					}
-				},
-				"annotations": []
 			},
 			"dependsOn": []
 		}

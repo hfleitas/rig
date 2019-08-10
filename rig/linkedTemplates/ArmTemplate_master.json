@@ -27,13 +27,13 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'hiramdw'"
 		},
-		"sqlva4onabrnvvfrkw_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'sqlva4onabrnvvfrkw'"
-		},
 		"hiscale_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'hiscale'"
+		},
+		"sqlva4onabrnvvfrkw_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'sqlva4onabrnvvfrkw'"
 		},
 		"hf0524_properties_typeProperties_userName": {
 			"type": "string",
@@ -72,11 +72,11 @@
 					"hiramdw_connectionString": {
 						"value": "[parameters('hiramdw_connectionString')]"
 					},
-					"sqlva4onabrnvvfrkw_connectionString": {
-						"value": "[parameters('sqlva4onabrnvvfrkw_connectionString')]"
-					},
 					"hiscale_connectionString": {
 						"value": "[parameters('hiscale_connectionString')]"
+					},
+					"sqlva4onabrnvvfrkw_connectionString": {
+						"value": "[parameters('sqlva4onabrnvvfrkw_connectionString')]"
 					},
 					"hf0524_connectionString": {
 						"value": "[parameters('hf0524_connectionString')]"
