@@ -1315,7 +1315,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"url": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'?api-version=2019-08-01')",
-							"method": "POST",
+							"method": "GET",
 							"headers": {},
 							"body": "@string('')",
 							"authentication": {
