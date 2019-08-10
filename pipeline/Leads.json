@@ -4,7 +4,7 @@
 		"description": "hf0524 to dw",
 		"activities": [
 			{
-				"name": "Customer",
+				"name": "dwCustomer",
 				"description": "copy",
 				"type": "Copy",
 				"dependsOn": [],
@@ -87,12 +87,12 @@
 				]
 			},
 			{
-				"name": "CustomerAccount",
+				"name": "dwCustomerAccount",
 				"description": "copy",
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Customer",
+						"activity": "dwCustomer",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -173,6 +173,175 @@
 				"outputs": [
 					{
 						"referenceName": "dwCustomerAccount",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "hsCustomer",
+				"description": "copy",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "dwCustomerAccount",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource"
+					},
+					"sink": {
+						"type": "AzureSqlSink"
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "sqlva4onabrnvvfrkw",
+							"type": "LinkedServiceReference"
+						},
+						"path": "adfstaging"
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "CustomerId",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "CustomerId",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "Name",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Name",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Email",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Email",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "sqlCustomer",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "hsCustomer",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "hsCustomerAccount",
+				"description": "copy",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "hsCustomer",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource"
+					},
+					"sink": {
+						"type": "AzureSqlSink"
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "sqlva4onabrnvvfrkw",
+							"type": "LinkedServiceReference"
+						},
+						"path": "adfstaging"
+					},
+					"dataIntegrationUnits": 0,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "CustomerAccountId",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "CustomerAccountId",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "CustomerId",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "CustomerId",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "AcctNumEnding",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "AcctNumEnding",
+									"type": "Int32"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "sqlCustomerAccount",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "hsCustomerAccount",
 						"type": "DatasetReference"
 					}
 				]
