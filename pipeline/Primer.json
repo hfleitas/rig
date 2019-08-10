@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "GetStatus",
+				"name": "GetDWStatus",
 				"type": "WebActivity",
 				"dependsOn": [],
 				"policy": {
