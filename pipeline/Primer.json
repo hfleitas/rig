@@ -35,7 +35,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"url": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'/resume?api-version=2018-06-01-preview')",
-								"method": "GET",
+								"method": "POST",
 								"body": "@string('')",
 								"linkedServices": [],
 								"datasets": [],
