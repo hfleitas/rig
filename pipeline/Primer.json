@@ -90,7 +90,7 @@
 					},
 					"activities": [
 						{
-							"name": "GetStatus",
+							"name": "GetStatusOnline",
 							"description": "Start",
 							"type": "WebActivity",
 							"dependsOn": [],
