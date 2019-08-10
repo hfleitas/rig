@@ -1,0 +1,161 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory Name",
+			"defaultValue": "rig"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/Primer')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "IfPaused",
+						"type": "IfCondition",
+						"dependsOn": [
+							{
+								"activity": "GetStatus",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@not(equals('Online',string(activity('GetStatus').output.properties.status)))",
+								"type": "Expression"
+							},
+							"ifTrueActivities": [
+								{
+									"name": "Resume",
+									"description": "Start",
+									"type": "WebActivity",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'/resume?api-version=2018-06-01-preview')",
+										"method": "GET",
+										"body": "@string('')",
+										"linkedServices": [],
+										"datasets": [],
+										"authentication": {
+											"type": "MSI",
+											"resource": "https://management.core.windows.net/"
+										}
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "GetStatus",
+						"description": "Start",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'?api-version=2018-06-01-preview')",
+							"method": "GET",
+							"body": "@string('')",
+							"authentication": {
+								"type": "MSI",
+								"resource": "https://management.core.windows.net/"
+							}
+						}
+					},
+					{
+						"name": "UntilOnline",
+						"type": "Until",
+						"dependsOn": [
+							{
+								"activity": "IfPaused",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@equals('Online',string(activity('GetStatus').output.properties.status))",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "GetStatusOnline",
+									"description": "Start",
+									"type": "WebActivity",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'?api-version=2018-06-01-preview')",
+										"method": "GET",
+										"body": "@string('')",
+										"linkedServices": [],
+										"datasets": [],
+										"authentication": {
+											"type": "MSI",
+											"resource": "https://management.core.windows.net/"
+										}
+									}
+								}
+							],
+							"timeout": "7.00:00:00"
+						}
+					}
+				],
+				"parameters": {
+					"SubscriptionID": {
+						"type": "string",
+						"defaultValue": "eaab21d5-8ecd-4ef0-a0c4-92fac2e22875"
+					},
+					"ResourceGroup": {
+						"type": "string",
+						"defaultValue": "dw"
+					},
+					"Server": {
+						"type": "string",
+						"defaultValue": "hiramdw"
+					},
+					"DW": {
+						"type": "string",
+						"defaultValue": "dw"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		}
+	]
+}
