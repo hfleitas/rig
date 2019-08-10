@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "IfSqlDwPaused",
+				"name": "GetStatus",
 				"type": "WebActivity",
 				"dependsOn": [],
 				"policy": {
@@ -20,7 +20,7 @@
 					"body": "@string('')",
 					"authentication": {
 						"type": "MSI",
-						"resource": "89fe7de8-d222-4197-a607-476862080cc9"
+						"resource": "https://management.core.windows.net/"
 					}
 				}
 			}
