@@ -545,8 +545,6 @@
 											"value": "@string('')",
 											"type": "Expression"
 										},
-										"linkedServices": [],
-										"datasets": [],
 										"authentication": {
 											"type": "MSI",
 											"resource": "https://management.core.windows.net/"
@@ -555,6 +553,102 @@
 								}
 							],
 							"timeout": "7.00:00:00"
+						}
+					},
+					{
+						"name": "wipeDW",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "UntilOnline",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[wipe]"
+						},
+						"linkedServiceName": {
+							"referenceName": "hiramdw",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "execLeads",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "wipeHS",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "Leads",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "wipeHS",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "wipeDW",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[wipe]"
+						},
+						"linkedServiceName": {
+							"referenceName": "hiscale",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "execTrollhunters",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "wipeHS",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "Trollhunters",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
 						}
 					}
 				],
@@ -578,7 +672,12 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hiramdw')]",
+				"[concat(variables('factoryId'), '/pipelines/Leads')]",
+				"[concat(variables('factoryId'), '/linkedServices/hiscale')]",
+				"[concat(variables('factoryId'), '/pipelines/Trollhunters')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Trollhunters')]",
