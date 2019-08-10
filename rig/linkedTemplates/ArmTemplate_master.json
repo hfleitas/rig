@@ -11,10 +11,6 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'dw'"
 		},
-		"hiram_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'hiram'"
-		},
 		"hf0524_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'hf0524'"
@@ -23,6 +19,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'hf0524'"
 		},
+		"hiram_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'hiram'"
+		},
 		"hiramdw_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'hiramdw'"
@@ -30,6 +30,10 @@
 		"sqlva4onabrnvvfrkw_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'sqlva4onabrnvvfrkw'"
+		},
+		"hiscale_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'hiscale'"
 		},
 		"hf0524_properties_typeProperties_userName": {
 			"type": "string",
@@ -71,8 +75,8 @@
 					"sqlva4onabrnvvfrkw_connectionString": {
 						"value": "[parameters('sqlva4onabrnvvfrkw_connectionString')]"
 					},
-					"hiram_connectionString": {
-						"value": "[parameters('hiram_connectionString')]"
+					"hiscale_connectionString": {
+						"value": "[parameters('hiscale_connectionString')]"
 					},
 					"hf0524_connectionString": {
 						"value": "[parameters('hf0524_connectionString')]"
@@ -80,12 +84,35 @@
 					"hf0524_password": {
 						"value": "[parameters('hf0524_password')]"
 					},
+					"hiram_connectionString": {
+						"value": "[parameters('hiram_connectionString')]"
+					},
 					"hf0524_properties_typeProperties_userName": {
 						"value": "[parameters('hf0524_properties_typeProperties_userName')]"
 					}
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'ArmTemplate_0')]"
+			]
 		}
 	]
 }

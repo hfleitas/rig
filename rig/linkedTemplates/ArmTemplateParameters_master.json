@@ -8,19 +8,22 @@
 		"dw_connectionString": {
 			"value": ""
 		},
-		"hiram_connectionString": {
-			"value": ""
-		},
 		"hf0524_connectionString": {
 			"value": ""
 		},
 		"hf0524_password": {
 			"value": ""
 		},
+		"hiram_connectionString": {
+			"value": ""
+		},
 		"hiramdw_connectionString": {
 			"value": ""
 		},
 		"sqlva4onabrnvvfrkw_connectionString": {
+			"value": ""
+		},
+		"hiscale_connectionString": {
 			"value": ""
 		},
 		"hf0524_properties_typeProperties_userName": {
