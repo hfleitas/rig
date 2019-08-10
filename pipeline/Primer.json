@@ -19,7 +19,8 @@
 					"method": "POST",
 					"body": "@string('')",
 					"authentication": {
-						"type": "MSI"
+						"type": "MSI",
+						"resource": "89fe7de8-d222-4197-a607-476862080cc9"
 					}
 				}
 			}
