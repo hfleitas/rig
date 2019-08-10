@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "IfPaused",
+				"name": "IfPausedThenOnline",
 				"type": "IfCondition",
 				"dependsOn": [
 					{
@@ -86,7 +86,7 @@
 				"type": "Until",
 				"dependsOn": [
 					{
-						"activity": "IfPaused",
+						"activity": "IfPausedThenOnline",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -227,7 +227,7 @@
 				}
 			},
 			{
-				"name": "IfOnline",
+				"name": "IfOnlineThenPause",
 				"type": "IfCondition",
 				"dependsOn": [
 					{
@@ -267,8 +267,6 @@
 									"value": "@string('')",
 									"type": "Expression"
 								},
-								"linkedServices": [],
-								"datasets": [],
 								"authentication": {
 									"type": "MSI",
 									"resource": "https://management.core.windows.net/"
