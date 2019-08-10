@@ -1,0 +1,79 @@
+{
+	"name": "hsCharacter",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "hiscale",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "CharacterId",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FullName",
+				"type": "varchar"
+			},
+			{
+				"name": "Affiliation",
+				"type": "varchar"
+			},
+			{
+				"name": "Category",
+				"type": "varchar"
+			},
+			{
+				"name": "Aka",
+				"type": "varchar"
+			},
+			{
+				"name": "Status",
+				"type": "varchar"
+			},
+			{
+				"name": "Race",
+				"type": "varchar"
+			},
+			{
+				"name": "Age",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Home",
+				"type": "varchar"
+			},
+			{
+				"name": "Relatives",
+				"type": "varchar"
+			},
+			{
+				"name": "Weapons",
+				"type": "varchar"
+			},
+			{
+				"name": "EyeColor",
+				"type": "varchar"
+			},
+			{
+				"name": "HairColor",
+				"type": "varchar"
+			},
+			{
+				"name": "Minions",
+				"type": "varchar"
+			},
+			{
+				"name": "VoicedBy",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Character"
+		}
+	}
+}

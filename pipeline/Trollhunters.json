@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Characters",
+				"name": "dwCharacters",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -51,11 +51,11 @@
 				]
 			},
 			{
-				"name": "Quotes",
+				"name": "dwQuotes",
 				"type": "Copy",
 				"dependsOn": [
 					{
-						"activity": "Characters",
+						"activity": "dwCharacters",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -101,6 +101,104 @@
 				"outputs": [
 					{
 						"referenceName": "dwQuotes",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "hsCharacaters",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "dwQuotes",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "select * from [ᕙ༼,இܫஇ,༽ᕗ].dbo.Character"
+					},
+					"sink": {
+						"type": "AzureSqlSink"
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "sqlva4onabrnvvfrkw",
+							"type": "LinkedServiceReference"
+						},
+						"path": "adfstaging"
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "sqlCharacter",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "hsCharacter",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "hsQuotes",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "hsCharacaters",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "select * from [tpcxbb_1gb].[dbo].[Quotes]"
+					},
+					"sink": {
+						"type": "AzureSqlSink"
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "sqlva4onabrnvvfrkw",
+							"type": "LinkedServiceReference"
+						},
+						"path": "adfstaging"
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "sqlCharacter",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "hsQuotes",
 						"type": "DatasetReference"
 					}
 				]
