@@ -670,7 +670,7 @@
 							},
 							"ifTrueActivities": [
 								{
-									"name": "Suspend",
+									"name": "Pause",
 									"description": "Pause",
 									"type": "WebActivity",
 									"dependsOn": [],
@@ -684,7 +684,7 @@
 									"userProperties": [],
 									"typeProperties": {
 										"url": {
-											"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'/suspend?api-version=2018-06-01-preview')",
+											"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'/pause?api-version=2018-06-01-preview')",
 											"type": "Expression"
 										},
 										"method": "POST",
