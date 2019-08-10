@@ -158,6 +158,26 @@
 					"referenceName": "hiramdw",
 					"type": "LinkedServiceReference"
 				}
+			},
+			{
+				"name": "execLeads",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "wipeDW",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Leads",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
 			}
 		],
 		"parameters": {
