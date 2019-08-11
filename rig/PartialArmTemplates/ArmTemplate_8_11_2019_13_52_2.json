@@ -6,38 +6,6 @@
 			"type": "string",
 			"metadata": "Data Factory Name",
 			"defaultValue": "rig"
-		},
-		"dw_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'dw'"
-		},
-		"hf0524_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'hf0524'"
-		},
-		"hf0524_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'hf0524'"
-		},
-		"hiram_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'hiram'"
-		},
-		"hiramdw_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'hiramdw'"
-		},
-		"hiscale_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'hiscale'"
-		},
-		"sqlva4onabrnvvfrkw_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'sqlva4onabrnvvfrkw'"
-		},
-		"hf0524_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "UPCIC\\HFleitas"
 		}
 	},
 	"variables": {
@@ -124,15 +92,13 @@
 						"inputs": [
 							{
 								"referenceName": "sqlCustomer",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						],
 						"outputs": [
 							{
 								"referenceName": "dwCustomer",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						]
 					},
@@ -217,15 +183,13 @@
 						"inputs": [
 							{
 								"referenceName": "sqlCustomerAccount",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						],
 						"outputs": [
 							{
 								"referenceName": "dwCustomerAccount",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						]
 					},
@@ -303,15 +267,13 @@
 						"inputs": [
 							{
 								"referenceName": "sqlCustomer",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						],
 						"outputs": [
 							{
 								"referenceName": "hsCustomer",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						]
 					},
@@ -390,15 +352,13 @@
 						"inputs": [
 							{
 								"referenceName": "sqlCustomerAccount",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						],
 						"outputs": [
 							{
 								"referenceName": "hsCustomerAccount",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						]
 					}
@@ -406,15 +366,7 @@
 				"concurrency": 1,
 				"annotations": []
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/sqlCustomer')]",
-				"[concat(variables('factoryId'), '/datasets/dwCustomer')]",
-				"[concat(variables('factoryId'), '/datasets/sqlCustomerAccount')]",
-				"[concat(variables('factoryId'), '/datasets/dwCustomerAccount')]",
-				"[concat(variables('factoryId'), '/datasets/hsCustomer')]",
-				"[concat(variables('factoryId'), '/datasets/hsCustomerAccount')]",
-				"[concat(variables('factoryId'), '/linkedServices/sqlva4onabrnvvfrkw')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Primer')]",
@@ -459,7 +411,6 @@
 											"type": "Expression"
 										},
 										"method": "POST",
-										"headers": {},
 										"body": {
 											"value": "@string('')",
 											"type": "Expression"
@@ -492,7 +443,6 @@
 								"type": "Expression"
 							},
 							"method": "GET",
-							"headers": {},
 							"body": {
 								"value": "@string('')",
 								"type": "Expression"
@@ -540,7 +490,6 @@
 											"type": "Expression"
 										},
 										"method": "GET",
-										"headers": {},
 										"body": {
 											"value": "@string('')",
 											"type": "Expression"
@@ -599,8 +548,7 @@
 								"referenceName": "Leads",
 								"type": "PipelineReference"
 							},
-							"waitOnCompletion": true,
-							"parameters": {}
+							"waitOnCompletion": true
 						}
 					},
 					{
@@ -648,8 +596,7 @@
 								"referenceName": "Trollhunters",
 								"type": "PipelineReference"
 							},
-							"waitOnCompletion": true,
-							"parameters": {}
+							"waitOnCompletion": true
 						}
 					},
 					{
@@ -689,7 +636,6 @@
 											"type": "Expression"
 										},
 										"method": "POST",
-										"headers": {},
 										"body": {
 											"value": "@string('')",
 											"type": "Expression"
@@ -725,9 +671,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiramdw')]",
 				"[concat(variables('factoryId'), '/pipelines/Leads')]",
-				"[concat(variables('factoryId'), '/linkedServices/hiscale')]",
 				"[concat(variables('factoryId'), '/pipelines/Trollhunters')]"
 			]
 		},
@@ -776,15 +720,13 @@
 						"inputs": [
 							{
 								"referenceName": "sqlCharacter",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						],
 						"outputs": [
 							{
 								"referenceName": "dwCharacter",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						]
 					},
@@ -833,15 +775,13 @@
 						"inputs": [
 							{
 								"referenceName": "sqlCharacter",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						],
 						"outputs": [
 							{
 								"referenceName": "dwQuotes",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						]
 					},
@@ -884,15 +824,13 @@
 						"inputs": [
 							{
 								"referenceName": "sqlCharacter",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						],
 						"outputs": [
 							{
 								"referenceName": "hsCharacter",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						]
 					},
@@ -935,679 +873,18 @@
 						"inputs": [
 							{
 								"referenceName": "sqlCharacter",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						],
 						"outputs": [
 							{
 								"referenceName": "hsQuotes",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						]
 					}
 				],
 				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/sqlCharacter')]",
-				"[concat(variables('factoryId'), '/datasets/dwCharacter')]",
-				"[concat(variables('factoryId'), '/datasets/dwQuotes')]",
-				"[concat(variables('factoryId'), '/datasets/hsCharacter')]",
-				"[concat(variables('factoryId'), '/datasets/hsQuotes')]",
-				"[concat(variables('factoryId'), '/linkedServices/sqlva4onabrnvvfrkw')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dwCharacter')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "hiramdw",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlDWTable",
-				"schema": [
-					{
-						"name": "CharacterId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "FullName",
-						"type": "varchar"
-					},
-					{
-						"name": "Affiliation",
-						"type": "varchar"
-					},
-					{
-						"name": "Category",
-						"type": "varchar"
-					},
-					{
-						"name": "Aka",
-						"type": "varchar"
-					},
-					{
-						"name": "Status",
-						"type": "varchar"
-					},
-					{
-						"name": "Race",
-						"type": "varchar"
-					},
-					{
-						"name": "Age",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Home",
-						"type": "varchar"
-					},
-					{
-						"name": "Relatives",
-						"type": "varchar"
-					},
-					{
-						"name": "Weapons",
-						"type": "varchar"
-					},
-					{
-						"name": "EyeColor",
-						"type": "varchar"
-					},
-					{
-						"name": "HairColor",
-						"type": "varchar"
-					},
-					{
-						"name": "Minions",
-						"type": "varchar"
-					},
-					{
-						"name": "VoicedBy",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Character"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiramdw')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dwCustomer')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "hiramdw",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlDWTable",
-				"schema": [
-					{
-						"name": "CustomerId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Name",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Email",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Customer"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiramdw')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dwCustomerAccount')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "hiramdw",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlDWTable",
-				"schema": [
-					{
-						"name": "CustomerAccountId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "CustomerId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "AcctNumEnding",
-						"type": "int",
-						"precision": 10
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "CustomerAccount"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiramdw')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dwQuotes')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "hiramdw",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlDWTable",
-				"schema": [
-					{
-						"name": "quoteid",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "character",
-						"type": "varchar"
-					},
-					{
-						"name": "quote",
-						"type": "nvarchar"
-					},
-					{
-						"name": "sentiment",
-						"type": "float",
-						"precision": 15
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "quotes"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiramdw')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hsCharacter')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "hiscale",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "CharacterId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "FullName",
-						"type": "varchar"
-					},
-					{
-						"name": "Affiliation",
-						"type": "varchar"
-					},
-					{
-						"name": "Category",
-						"type": "varchar"
-					},
-					{
-						"name": "Aka",
-						"type": "varchar"
-					},
-					{
-						"name": "Status",
-						"type": "varchar"
-					},
-					{
-						"name": "Race",
-						"type": "varchar"
-					},
-					{
-						"name": "Age",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Home",
-						"type": "varchar"
-					},
-					{
-						"name": "Relatives",
-						"type": "varchar"
-					},
-					{
-						"name": "Weapons",
-						"type": "varchar"
-					},
-					{
-						"name": "EyeColor",
-						"type": "varchar"
-					},
-					{
-						"name": "HairColor",
-						"type": "varchar"
-					},
-					{
-						"name": "Minions",
-						"type": "varchar"
-					},
-					{
-						"name": "VoicedBy",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Character"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiscale')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hsCustomer')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "hiscale",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "CustomerId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Name",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Email",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Customer"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiscale')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hsCustomerAccount')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "hiscale",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "CustomerAccountId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "CustomerId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "AcctNumEnding",
-						"type": "int",
-						"precision": 10
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "CustomerAccount"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiscale')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hsQuotes')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "hiscale",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "quoteid",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "character",
-						"type": "varchar"
-					},
-					{
-						"name": "quote",
-						"type": "nvarchar"
-					},
-					{
-						"name": "sentiment",
-						"type": "float",
-						"precision": 15
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "quotes"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiscale')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/sqlCharacter')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "hf0524.",
-				"linkedServiceName": {
-					"referenceName": "hf0524",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "SqlServerTable",
-				"structure": [
-					{
-						"name": "quoteid",
-						"type": "Int32"
-					},
-					{
-						"name": "character",
-						"type": "String"
-					},
-					{
-						"name": "quote",
-						"type": "String"
-					},
-					{
-						"name": "sentiment",
-						"type": "Double"
-					}
-				],
-				"typeProperties": {}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/sqlCustomer')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "hf0524",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "SqlServerTable",
-				"schema": [
-					{
-						"name": "CustomerId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Name",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Email",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Customer"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/sqlCustomerAccount')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "hf0524",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "SqlServerTable",
-				"schema": [
-					{
-						"name": "CustomerAccountId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "CustomerId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "AcctNumEnding",
-						"type": "int",
-						"precision": 10
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "CustomerAccount"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dw')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "hiramdw.database.windows.net",
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"connectionString": "[parameters('dw_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hf0524')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "desktop",
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"connectionString": "[parameters('hf0524_connectionString')]",
-					"userName": "[parameters('hf0524_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('hf0524_password')]"
-					}
-				},
-				"connectVia": {
-					"referenceName": "hf0524",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/hf0524')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hiram')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "localhost",
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"connectionString": "[parameters('hiram_connectionString')]"
-				},
-				"connectVia": {
-					"referenceName": "hiram",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/hiram')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hiramdw')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDW",
-				"typeProperties": {
-					"connectionString": "[parameters('hiramdw_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hiscale')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"connectionString": "[parameters('hiscale_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/sqlva4onabrnvvfrkw')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('sqlva4onabrnvvfrkw_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/every 15 minutes')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Stopped",
-				"type": "TumblingWindowTrigger",
-				"typeProperties": {
-					"frequency": "Minute",
-					"interval": 15,
-					"startTime": "2019-06-27T22:28:00.000Z",
-					"endTime": "2019-06-28T01:00:00.000Z",
-					"delay": "00:00:00",
-					"maxConcurrency": 50,
-					"retryPolicy": {
-						"intervalInSeconds": 30
-					},
-					"dependsOn": []
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hf0524')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hiram')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/laptop')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"description": "R90GTU6N",
-				"typeProperties": {}
 			},
 			"dependsOn": []
 		}

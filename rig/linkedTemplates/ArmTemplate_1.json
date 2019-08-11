@@ -52,7 +52,7 @@
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"description": "hf0524 to dw",
+				"description": "hf0524 to dw ",
 				"activities": [
 					{
 						"name": "dwCustomer",
@@ -418,6 +418,7 @@
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
+				"description": " ",
 				"activities": [
 					{
 						"name": "dwCharacters",
@@ -822,6 +823,7 @@
 					},
 					{
 						"name": "wipeHS",
+						"description": " ",
 						"type": "SqlServerStoredProcedure",
 						"dependsOn": [
 							{
