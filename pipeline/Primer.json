@@ -156,10 +156,10 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"storedProcedureName": "[dbo].[wipe]"
+					"storedProcedureName": "dbo.wipe"
 				},
 				"linkedServiceName": {
-					"referenceName": "hiramdw",
+					"referenceName": "dw",
 					"type": "LinkedServiceReference"
 				}
 			},
@@ -272,6 +272,8 @@
 									"value": "@string('')",
 									"type": "Expression"
 								},
+								"linkedServices": [],
+								"datasets": [],
 								"authentication": {
 									"type": "MSI",
 									"resource": "https://management.core.windows.net/"
