@@ -1,2 +1,2 @@
 # rig
-![adf](https://www.attunity.com/wp-content/uploads/2018/07/data-factory-diagram-1.png)
+![cover](https://github.com/hfleitas/rig/blob/master/PASSInsights201908-DBA/cover.png)
