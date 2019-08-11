@@ -1,4 +1,3 @@
-
 drop proc if exists wipe;
 go
 create or alter proc dbo.wipe
