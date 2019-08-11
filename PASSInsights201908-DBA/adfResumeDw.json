@@ -1,13 +1,13 @@
 {
-    "name": "ResumeAzureSQLDW",
+    "name": "Prime",
     "properties": {
         "activities": [
             {
-                "name": "IfSqlDwPaused",
+                "name": "IfPausedThenOnline",
                 "type": "IfCondition",
                 "dependsOn": [
                     {
-                        "activity": "CheckIfSqlDwPaused",
+                        "activity": "GetStatus",
                         "dependencyConditions": [
                             "Succeeded"
                         ]
@@ -15,7 +15,7 @@
                 ],
                 "typeProperties": {
                     "expression": {
-                        "value": "@not(equals('Online',string(activity('CheckIfSqlDwPaused').output.properties.status)))",
+                        "value": "@not(equals('Online',string(activity('GetStatus').output.properties.status)))",
                         "type": "Expression"
                     },
                     "ifTrueActivities": [
@@ -48,7 +48,7 @@
                 }
             },
             {
-                "name": "CheckIfSqlDwPaused",
+                "name": "GetStatus",
                 "type": "WebActivity",
                 "policy": {
                     "timeout": "7.00:00:00",
@@ -69,11 +69,11 @@
                 }
             },
             {
-                "name": "UntilSqlDwResumed",
+                "name": "UntilOnline",
                 "type": "Until",
                 "dependsOn": [
                     {
-                        "activity": "IfSqlDwPaused",
+                        "activity": "IfPausedThenOnline",
                         "dependencyConditions": [
                             "Succeeded"
                         ]
@@ -81,12 +81,12 @@
                 ],
                 "typeProperties": {
                     "expression": {
-                        "value": "@equals('Online',string(activity('CheckSqlDwStatus').output.properties.status))",
+                        "value": "@equals('Online',string(activity('GetStatusOnline').output.properties.status))",
                         "type": "Expression"
                     },
                     "activities": [
                         {
-                            "name": "CheckSqlDwStatus",
+                            "name": "GetStatusOnline",
                             "type": "WebActivity",
                             "policy": {
                                 "timeout": "7.00:00:00",
