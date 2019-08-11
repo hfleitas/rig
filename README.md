@@ -5,7 +5,6 @@
 
 * [http://fleitasarts.com](http://fleitasarts.com)
 * [netflix.com/trollhunters](netflix.com/trollhunters)
-* Data Factory: My [Rig](github.com/hfleitas/rig)
 * Data Factory: [GitHub Integration](https://azure.microsoft.com/en-us/blog/azure-data-factory-visual-tools-now-supports-github-integration/)
 * Data Factory: [Documentation](https://docs.microsoft.com/en-us/azure/data-factory/)
 * Data Factory: [Copy Activity Performance](https://docs.microsoft.com/en-us/azure/data-factory/copy-activity-performance)
