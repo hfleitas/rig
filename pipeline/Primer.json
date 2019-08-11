@@ -43,6 +43,8 @@
 									"value": "@string('')",
 									"type": "Expression"
 								},
+								"linkedServices": [],
+								"datasets": [],
 								"authentication": {
 									"type": "MSI",
 									"resource": "https://management.core.windows.net/"
@@ -122,6 +124,8 @@
 									"value": "@string('')",
 									"type": "Expression"
 								},
+								"linkedServices": [],
+								"datasets": [],
 								"authentication": {
 									"type": "MSI",
 									"resource": "https://management.core.windows.net/"
@@ -181,6 +185,7 @@
 			},
 			{
 				"name": "wipeHS",
+				"description": " ",
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{

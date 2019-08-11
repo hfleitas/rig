@@ -1,7 +1,7 @@
 {
 	"name": "Leads",
 	"properties": {
-		"description": "hf0524 to dw",
+		"description": "hf0524 to dw ",
 		"activities": [
 			{
 				"name": "dwCustomer",
