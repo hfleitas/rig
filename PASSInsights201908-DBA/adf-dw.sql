@@ -93,25 +93,3 @@ select * from dbo.Quotes
 
 select * from dbo.Customer
 select * from dbo.CustomerAccount
-
--- Res: 
--- https://docs.microsoft.com/en-us/azure/data-factory/copy-activity-performance
--- https://docs.microsoft.com/en-us/azure/data-factory/connector-azure-sql-data-warehouse
--- https://docs.microsoft.com/en-us/azure/data-factory/connector-sql-server#append-data
-
--- https://docs.microsoft.com/en-us/azure/data-factory/control-flow-expression-language-functions
-
-/*
-https://www.youtube.com/watch?v=bBi1bll2928
-@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'?api-version=2019-08-01')
-
-https://management.azure.com/subscriptions/eaab21d5-8ecd-4ef0-a0c4-92fac2e22875/resourceGroups/dw/providers/Microsoft.Sql/servers/hiramdw/databases/dw?api-version=2019-08-01
-https://portal.azure.com/#@fleitasarts.com/resource/subscriptions/eaab21d5-8ecd-4ef0-a0c4-92fac2e22875/resourceGroups/dw/providers/Microsoft.Sql/servers/hiramdw/overview
-
-https://aka.ms/azuremsi
-1. create user assigned msi called hiramMI.
-2. under IAM add role assignment, rig contributor.
-3. under dw server IAM, add role assignment, rig(adf) contributor and hiramMI(msi) contributor.
-
-https://github.com/furmangg/automating-azure-sql-dw
-*/
