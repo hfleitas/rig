@@ -1,0 +1,1733 @@
+MIME-Version: 1.0
+Date: Wed, 14 Aug 2019 08:01:59 -0400
+From: PASS HQ <hq@pass.org>
+Subject: PASS Insights: Azure Data Factory, T-SQL, Transaction Log, and More
+Thread-Topic: PASS Insights: Azure Data Factory, T-SQL, Transaction Log,
+ and More
+To: "hiramfleitas@hotmail.com" <hiramfleitas@hotmail.com>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset="utf-8"
+
+<!doctype html>
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8">
+<title>Insights [DBA]</title>
+<!--
+
+    An email present from your friends at Litmus (@litmusapp)
+
+    Email is surprisingly hard. While this has been thoroughly tested, your=
+ mileage may vary.
+    It's highly recommended that you test using a servimce like Litmus (htt=
+p://litmus.com) and your own devices.
+
+    Enjoy!
+
+ -->
+</head>
+<body style=3D"margin: 0 !important; padding: 0 !important;">
+<style type=3D"text/css">div#emailPreHeader{ display: none !important; }</s=
+tyle>
+<div id=3D"emailPreHeader" style=3D"mso-hide:all; visibility:hidden; opacit=
+y:0; color:transparent; mso-line-height-rule:exactly; line-height:0; font-s=
+ize:0px; overflow:hidden; border-width:0; display:none !important;">
+Stay up-to-date on all of the latest DBA-focused education, technology, and=
+ industry content!</div>
+<meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=3D1"=
+>
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+<style type=3D"text/css">
+    /* CLIENT-SPECIFIC STYLES */
+    body, table, td, a{-webkit-text-size-adjust: 100%; -ms-text-size-adjust=
+: 100%;} /* Prevent WebKit and Windows mobile changing default text sizes *=
+/
+    table, td{mso-table-lspace: 0pt; mso-table-rspace: 0pt;} /* Remove spac=
+ing between tables in Outlook 2007 and up */
+    img{-ms-interpolation-mode: bicubic;} /* Allow smoother rendering of re=
+sized image in Internet Explorer */
+
+    /* RESET STYLES */
+    img{border: 0; height: auto; line-height: 100%; outline: none; text-dec=
+oration: none;}
+    table{border-collapse: collapse !important;}
+    body{height: 100% !important; margin: 0 !important; padding: 0 !importa=
+nt; width: 100% !important;}
+
+    /* iOS BLUE LINKS */
+    a[x-apple-data-detectors] {
+        color: inherit !important;
+        text-decoration: none !important;
+        font-size: inherit !important;
+        font-family: inherit !important;
+        font-weight: inherit !important;
+        line-height: inherit !important;
+    }
+
+    /* MOBILE STYLES */
+    @media screen and (max-width: 525px) {
+
+        /* ALLOWS FOR FLUID TABLES */
+        .wrapper {
+          width: 100% !important;
+        	max-width: 100% !important;
+        }
+
+        /* ADJUSTS LAYOUT OF LOGO IMAGE */
+        .logo img {
+          margin: 0 auto !important;
+        }
+
+        /* USE THESE CLASSES TO HIDE CONTENT ON MOBILE */
+        .mobile-hide {
+          display: none !important;
+        }
+
+        .img-max {
+          max-width: 100% !important;
+          width: 100% !important;
+          height: auto !important;
+        }
+
+        /* FULL-WIDTH TABLES */
+        .responsive-table {
+          width: 100% !important;
+        }
+
+        /* UTILITY CLASSES FOR ADJUSTING PADDING ON MOBILE */
+        .padding {
+          padding: 10px 5% 15px 5% !important;
+        }
+
+        .padding-meta {
+          padding: 30px 5% 0px 5% !important;
+          text-align: center;
+        }
+
+        .no-padding {
+          padding: 0 !important;
+        }
+
+        .section-padding {
+          padding: 50px 15px 50px 15px !important;
+        }
+
+        /* ADJUST BUTTONS ON MOBILE */
+        .mobile-button-container {
+            margin: 0 auto;
+            width: 100% !important;
+        }
+
+        .mobile-button {
+            padding: 15px !important;
+            border: 0 !important;
+            font-size: 16px !important;
+            display: block !important;
+        }
+
+    }
+
+    /* ANDROID CENTER FIX */
+    div[style*=3D"margin: 16px 0;"] { margin: 0 !important; }
+</style><link rel=3D"stylesheet" type=3D"text/css" href=3D"https://cloud.ty=
+pography.com/7758934/7848352/css/fonts.css"><!-- HEADER -->
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%">
+<tbody>
+<tr>
+<td bgcolor=3D"#FFF" style=3D"border-bottom: 1px solid #efebdc" align=3D"ce=
+nter"><!--[if (gte mso 9)|(IE)]>
+            <table align=3D"center" border=3D"0" cellspacing=3D"0" cellpadd=
+ing=3D"0" width=3D"600">
+            <tr>
+            <td align=3D"center" valign=3D"top" width=3D"600">
+            <![endif]-->
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" styl=
+e=3D"max-width: 600px;" class=3D"wrapper">
+<tbody>
+<tr>
+<td align=3D"center" valign=3D"top" style=3D"padding: 30px 0;" class=3D"log=
+o"><a href=3D"http://go2.pass.org/Hywu10N0pq000m050f55QH000hrU0" style=3D"t=
+ext-decoration: none; display: block;">
+<h1 style=3D"font-family: arial, helvetica; font-size: 32px; line-height: 3=
+6px; color: #414a54; text-transform: uppercase; font-weight: 300; margin: 0=
+; padding: 0;">
+<img src=3D"http://go.pass.org/rs/369-QUH-984/images/pass-ba-insights.png" =
+style=3D"display: inline-block; vertical-align: middle;"></h1>
+</a></td>
+</tr>
+</tbody>
+</table>
+<!--[if (gte mso 9)|(IE)]>
+            </td>
+            </tr>
+            </table>
+            <![endif]--></td>
+</tr>
+<tr class=3D"mainbody">
+<td bgcolor=3D"#FFFFFF" align=3D"center" style=3D"padding: 45px 15px;" clas=
+s=3D"section-padding">
+<!--[if (gte mso 9)|(IE)]>
+            <table align=3D"center" border=3D"0" cellspacing=3D"0" cellpadd=
+ing=3D"0" width=3D"600">
+            <tr>
+            <td align=3D"center" valign=3D"top" width=3D"600">
+            <![endif]-->
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" styl=
+e=3D"padding-bottom: 20px; max-width: 600px;" class=3D"responsive-table">
+<tbody class=3D"mktoContainer" id=3D"mkto-container">
+<tr class=3D"mktoModule connector-article" id=3D"mkto-article6dab37de-e217-=
+48bc-bf56-2411d96cb46e0c1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b=
+0-89b8-e0a94297d8af8424ae5c-20a7-45d9-962d-6de58d2441b6">
+<td align=3D"center" height=3D"100%" valign=3D"top" width=3D"100%" colspan=
+=3D"2" style=3D"padding-bottom: 60px;">
+<!--[if (gte mso 9)|(IE)]>
+                        <table align=3D"center" border=3D"0" cellspacing=3D=
+"0" cellpadding=3D"0" width=3D"600">
+                        <tr>
+                        <td align=3D"center" valign=3D"top" width=3D"600">
+                        <![endif]-->
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"100%" style=3D"max-width:600;">
+<tbody>
+<tr>
+<td align=3D"center" valign=3D"top">
+<table align=3D"center" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" wi=
+dth=3D"600">
+<tbody>
+<tr>
+<td align=3D"left" valign=3D"top">
+<div style=3D"display:inline-block; margin: 0 -2px;vertical-align:top; widt=
+h:100%;">
+<table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" widt=
+h=3D"100%">
+<tbody>
+<tr>
+<td class=3D"article-image" style=3D"padding: 0 30px 0 0;" valign=3D"top">
+<div class=3D"mktoImg" id=3D"artimage16dab37de-e217-48bc-bf56-2411d96cb46e0=
+c1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b0-89b8-e0a94297d8af8424=
+ae5c-20a7-45d9-962d-6de58d2441b6" mktolockimgsize=3D"true">
+<a href=3D"http://go2.pass.org/Vq0mh060U0050s5pQ00w10yfu0H0N" target=3D"_bl=
+ank"><img src=3D"http://go.pass.org/rs/369-QUH-984/images/Item-1-DBA-081420=
+19-2.jpg" style=3D"" alt=3D"Item-1-DBA-08142019-2.jpg">
+</a></div>
+</td>
+<td style=3D"padding: 0 0 15px 0;" class=3D"no-padding"><!-- ARTICLE -->
+<table border=3D"0" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%">
+<tbody>
+<tr>
+<td align=3D"left" style=3D"padding: 10px 0; font-size: 16px; line-height: =
+24px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class=3D"=
+">
+<div class=3D"mktEditable" id=3D"Art16dab37de-e217-48bc-bf56-2411d96cb46e0c=
+1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b0-89b8-e0a94297d8af8424a=
+e5c-20a7-45d9-962d-6de58d2441b6">
+<h3 style=3D"font-size: 22px; font-family: Helvetica, Arial, sans-serif; fo=
+nt-weight: normal; color: #293338; margin: 0 0 15px 0; padding: 0; line-hei=
+ght: 28px;">
+Copy from On-Prem to Azure SQL with Azure Data Factory</h3>
+<div style=3D"font-size: 14px; line-height: 20px; font-family: Helvetica, A=
+rial, sans-serif; font-weight: normal; color: #293338; margin: 0px 0px 15px=
+; padding: 0px; text-align: left;">
+In this short video, Hiram Fleitas demonstrates how to copy data or multipl=
+e tables from an on-prem SQL Server, through a self-hosted runtime integrat=
+ion to Azure SQL DB Hyperscale and/or Azure SQL Data Warehouse with Azure D=
+ata Factory.
+</div>
+<div style=3D"font-size: 14px; line-height: 20px; font-family: Helvetica, A=
+rial, sans-serif; font-weight: normal; color: #293338; margin: 0px 0px 15px=
+; padding: 0px; text-align: left;">
+He will also show you how to automate tasks like Resuming or Pausing your A=
+zure SQL Data Warehouse before or after your pipeline ETL runs. Bonus resou=
+rces included.
+<br>
+</div>
+</div>
+<div class=3D"read-more-link">
+<div class=3D"mktEditable" id=3D"Art1Link6dab37de-e217-48bc-bf56-2411d96cb4=
+6e0c1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b0-89b8-e0a94297d8af8=
+424ae5c-20a7-45d9-962d-6de58d2441b6">
+<div><a href=3D"http://go2.pass.org/Vq0mh060U0050s5pQ00w10yfu0H0N" style=3D=
+"color: #ef4b41; font-weight: bold; text-decoration: none;" target=3D"_blan=
+k">WATCH NOW =E2=86=92</a>
+</div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<!--[if (gte mso 9)|(IE)]>
+                        </td>
+                        </tr>
+                        </table>
+                        <![endif]--></td>
+</tr>
+<tr class=3D"mktoModule connector-article" id=3D"mkto-article6dab37de-e217-=
+48bc-bf56-2411d96cb46e0c1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b=
+0-89b8-e0a94297d8af8424ae5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8=
+152-8c5b54057b79">
+<td align=3D"center" height=3D"100%" valign=3D"top" width=3D"100%" colspan=
+=3D"2" style=3D"padding-bottom: 60px;">
+<!--[if (gte mso 9)|(IE)]>
+                        <table align=3D"center" border=3D"0" cellspacing=3D=
+"0" cellpadding=3D"0" width=3D"600">
+                        <tr>
+                        <td align=3D"center" valign=3D"top" width=3D"600">
+                        <![endif]-->
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"100%" style=3D"max-width:600;">
+<tbody>
+<tr>
+<td align=3D"center" valign=3D"top">
+<table align=3D"center" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" wi=
+dth=3D"600">
+<tbody>
+<tr>
+<td align=3D"left" valign=3D"top">
+<div style=3D"display:inline-block; margin: 0 -2px;vertical-align:top; widt=
+h:100%;">
+<table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" widt=
+h=3D"100%">
+<tbody>
+<tr>
+<td class=3D"article-image" style=3D"padding: 0 30px 0 0;" valign=3D"top">
+<div class=3D"mktoImg" id=3D"artimage16dab37de-e217-48bc-bf56-2411d96cb46e0=
+c1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b0-89b8-e0a94297d8af8424=
+ae5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8152-8c5b54057b79" mktol=
+ockimgsize=3D"true">
+<a href=3D"http://go2.pass.org/u00hH0tw5u7UmfNQ0105y000p000q" target=3D"_bl=
+ank"><img src=3D"http://go.pass.org/rs/369-QUH-984/images/Item 2.jpg" style=
+=3D"" alt=3D"Item 2.jpg">
+</a></div>
+</td>
+<td style=3D"padding: 0 0 15px 0;" class=3D"no-padding"><!-- ARTICLE -->
+<table border=3D"0" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%">
+<tbody>
+<tr>
+<td align=3D"left" style=3D"padding: 10px 0; font-size: 16px; line-height: =
+24px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class=3D"=
+">
+<div class=3D"mktEditable" id=3D"Art16dab37de-e217-48bc-bf56-2411d96cb46e0c=
+1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b0-89b8-e0a94297d8af8424a=
+e5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8152-8c5b54057b79">
+<h3 style=3D"font-size: 22px; font-family: Helvetica, Arial, sans-serif; fo=
+nt-weight: normal; color: #293338; margin: 0 0 15px 0; padding: 0; line-hei=
+ght: 28px;">
+Discover the On-Demand T-SQL Fundamentals Course by Itzik Ben-Gan</h3>
+<div style=3D"font-size: 14px; line-height: 20px; font-family: Helvetica, A=
+rial, sans-serif; font-weight: normal; color: #293338; margin: 0px 0px 15px=
+; padding: 0px; text-align: left;">
+Itzik Ben-Gan is arguably the world=E2=80=99s best T-SQL expert. Get Itzik=
+=E2=80=99s video lessons, demos, labs, and scripts. Study when you want, wh=
+erever you want. Powered by SolidQ.
+<br>
+</div>
+</div>
+<div class=3D"read-more-link">
+<div class=3D"mktEditable" id=3D"Art1Link6dab37de-e217-48bc-bf56-2411d96cb4=
+6e0c1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b0-89b8-e0a94297d8af8=
+424ae5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8152-8c5b54057b79">
+<div><a href=3D"http://go2.pass.org/u00hH0tw5u7UmfNQ0105y000p000q" style=3D=
+"color: #ef4b41; font-weight: bold; text-decoration: none;" target=3D"_blan=
+k">LEARN MORE =E2=86=92</a>
+</div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<!--[if (gte mso 9)|(IE)]>
+                        </td>
+                        </tr>
+                        </table>
+                        <![endif]--></td>
+</tr>
+<tr class=3D"mktoModule connector-article" id=3D"mkto-article6dab37de-e217-=
+48bc-bf56-2411d96cb46e0c1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b=
+0-89b8-e0a94297d8af8424ae5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8=
+152-8c5b54057b790814c4a8-112f-4c99-9ec9-cb4928f33498">
+<td align=3D"center" height=3D"100%" valign=3D"top" width=3D"100%" colspan=
+=3D"2" style=3D"padding-bottom: 60px;">
+<!--[if (gte mso 9)|(IE)]>
+                        <table align=3D"center" border=3D"0" cellspacing=3D=
+"0" cellpadding=3D"0" width=3D"600">
+                        <tr>
+                        <td align=3D"center" valign=3D"top" width=3D"600">
+                        <![endif]-->
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"100%" style=3D"max-width:600;">
+<tbody>
+<tr>
+<td align=3D"center" valign=3D"top">
+<table align=3D"center" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" wi=
+dth=3D"600">
+<tbody>
+<tr>
+<td align=3D"left" valign=3D"top">
+<div style=3D"display:inline-block; margin: 0 -2px;vertical-align:top; widt=
+h:100%;">
+<table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" widt=
+h=3D"100%">
+<tbody>
+<tr>
+<td class=3D"article-image" style=3D"padding: 0 30px 0 0;" valign=3D"top">
+<div class=3D"mktoImg" id=3D"artimage16dab37de-e217-48bc-bf56-2411d96cb46e0=
+c1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b0-89b8-e0a94297d8af8424=
+ae5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8152-8c5b54057b790814c4a=
+8-112f-4c99-9ec9-cb4928f33498" mktolockimgsize=3D"true">
+<a href=3D"http://go2.pass.org/J5qNu00Qf00mwu00hp00U8010Hy50" target=3D"_bl=
+ank"><img src=3D"http://go.pass.org/rs/369-QUH-984/images/Item 3.png" style=
+=3D"" alt=3D"Item 3.png">
+</a></div>
+</td>
+<td style=3D"padding: 0 0 15px 0;" class=3D"no-padding"><!-- ARTICLE -->
+<table border=3D"0" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%">
+<tbody>
+<tr>
+<td align=3D"left" style=3D"padding: 10px 0; font-size: 16px; line-height: =
+24px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class=3D"=
+">
+<div class=3D"mktEditable" id=3D"Art16dab37de-e217-48bc-bf56-2411d96cb46e0c=
+1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b0-89b8-e0a94297d8af8424a=
+e5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8152-8c5b54057b790814c4a8=
+-112f-4c99-9ec9-cb4928f33498">
+<h3 style=3D"font-size: 22px; font-family: Helvetica, Arial, sans-serif; fo=
+nt-weight: normal; color: #293338; margin: 0 0 15px 0; padding: 0; line-hei=
+ght: 28px;">
+Why Does the Transaction Log Have to be Zero-Initialized?</h3>
+<div style=3D"font-size: 14px; line-height: 20px; font-family: Helvetica, A=
+rial, sans-serif; font-weight: normal; color: #293338; margin: 0px 0px 15px=
+; padding: 0px; text-align: left;">
+SQL Server knows where crash recovery has to start for a database, but not =
+where it ends =E2=80=93 i.e. SQL Server does not persist the =E2=80=98most =
+recent LSN=E2=80=99 for a database anywhere. Paul Randal shares an explanat=
+ion to this question.&nbsp;
+<br>
+</div>
+</div>
+<div class=3D"read-more-link">
+<div class=3D"mktEditable" id=3D"Art1Link6dab37de-e217-48bc-bf56-2411d96cb4=
+6e0c1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b0-89b8-e0a94297d8af8=
+424ae5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8152-8c5b54057b790814=
+c4a8-112f-4c99-9ec9-cb4928f33498">
+<div><a href=3D"http://go2.pass.org/J5qNu00Qf00mwu00hp00U8010Hy50" style=3D=
+"color: #ef4b41; font-weight: bold; text-decoration: none;" target=3D"_blan=
+k">READ MORE =E2=86=92</a>
+</div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<!--[if (gte mso 9)|(IE)]>
+                        </td>
+                        </tr>
+                        </table>
+                        <![endif]--></td>
+</tr>
+<tr class=3D"mktoModule connector-article" id=3D"mkto-article6dab37de-e217-=
+48bc-bf56-2411d96cb46e0c1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b=
+0-89b8-e0a94297d8af8424ae5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8=
+152-8c5b54057b790814c4a8-112f-4c99-9ec9-cb4928f3349859db2ca7-fd10-4f66-ac11=
+-8be1ba81f61f">
+<td align=3D"center" height=3D"100%" valign=3D"top" width=3D"100%" colspan=
+=3D"2" style=3D"padding-bottom: 60px;">
+<!--[if (gte mso 9)|(IE)]>
+                        <table align=3D"center" border=3D"0" cellspacing=3D=
+"0" cellpadding=3D"0" width=3D"600">
+                        <tr>
+                        <td align=3D"center" valign=3D"top" width=3D"600">
+                        <![endif]-->
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"100%" style=3D"max-width:600;">
+<tbody>
+<tr>
+<td align=3D"center" valign=3D"top">
+<table align=3D"center" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" wi=
+dth=3D"600">
+<tbody>
+<tr>
+<td align=3D"left" valign=3D"top">
+<div style=3D"display:inline-block; margin: 0 -2px;vertical-align:top; widt=
+h:100%;">
+<table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" widt=
+h=3D"100%">
+<tbody>
+<tr>
+<td class=3D"article-image" style=3D"padding: 0 30px 0 0;" valign=3D"top">
+<div class=3D"mktoImg" id=3D"artimage16dab37de-e217-48bc-bf56-2411d96cb46e0=
+c1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b0-89b8-e0a94297d8af8424=
+ae5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8152-8c5b54057b790814c4a=
+8-112f-4c99-9ec9-cb4928f3349859db2ca7-fd10-4f66-ac11-8be1ba81f61f" mktolock=
+imgsize=3D"true">
+<a href=3D"http://go2.pass.org/D0pwfNvHUmy01009Q00q05u0h5000" target=3D"_bl=
+ank"><img src=3D"http://go.pass.org/rs/369-QUH-984/images/Item 4.png" style=
+=3D"" alt=3D"Item 4.png">
+</a></div>
+</td>
+<td style=3D"padding: 0 0 15px 0;" class=3D"no-padding"><!-- ARTICLE -->
+<table border=3D"0" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%">
+<tbody>
+<tr>
+<td align=3D"left" style=3D"padding: 10px 0; font-size: 16px; line-height: =
+24px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class=3D"=
+">
+<div class=3D"mktEditable" id=3D"Art16dab37de-e217-48bc-bf56-2411d96cb46e0c=
+1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b0-89b8-e0a94297d8af8424a=
+e5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8152-8c5b54057b790814c4a8=
+-112f-4c99-9ec9-cb4928f3349859db2ca7-fd10-4f66-ac11-8be1ba81f61f">
+<h3 style=3D"font-size: 22px; font-family: Helvetica, Arial, sans-serif; fo=
+nt-weight: normal; color: #293338; margin: 0 0 15px 0; padding: 0; line-hei=
+ght: 28px;">
+Free SQL Server Performance Tuning</h3>
+<div style=3D"font-size: 14px; line-height: 20px; font-family: Helvetica, A=
+rial, sans-serif; font-weight: normal; color: #293338; margin: 0px 0px 15px=
+; padding: 0px; text-align: left;">
+Looking for the best free on-premise SQL Server performance monitoring tool=
+ out there? Look no further. Spotlight Cloud Basic isn't just free for a li=
+mited time; it's free forever.&nbsp;&nbsp;
+<br>
+</div>
+</div>
+<div class=3D"read-more-link">
+<div class=3D"mktEditable" id=3D"Art1Link6dab37de-e217-48bc-bf56-2411d96cb4=
+6e0c1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b0-89b8-e0a94297d8af8=
+424ae5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8152-8c5b54057b790814=
+c4a8-112f-4c99-9ec9-cb4928f3349859db2ca7-fd10-4f66-ac11-8be1ba81f61f">
+<div><a href=3D"http://go2.pass.org/D0pwfNvHUmy01009Q00q05u0h5000" style=3D=
+"color: #ef4b41; font-weight: bold; text-decoration: none;" target=3D"_blan=
+k">LEARN MORE =E2=86=92</a>
+</div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<!--[if (gte mso 9)|(IE)]>
+                        </td>
+                        </tr>
+                        </table>
+                        <![endif]--></td>
+</tr>
+<tr class=3D"mktoModule connector-article" id=3D"mkto-article6dab37de-e217-=
+48bc-bf56-2411d96cb46e0c1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b=
+0-89b8-e0a94297d8af8424ae5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8=
+152-8c5b54057b790814c4a8-112f-4c99-9ec9-cb4928f3349859db2ca7-fd10-4f66-ac11=
+-8be1ba81f61f67819e71-3844-4ed1-99b1-a9236ab800d5">
+<td align=3D"center" height=3D"100%" valign=3D"top" width=3D"100%" colspan=
+=3D"2" style=3D"padding-bottom: 60px;">
+<!--[if (gte mso 9)|(IE)]>
+                        <table align=3D"center" border=3D"0" cellspacing=3D=
+"0" cellpadding=3D"0" width=3D"600">
+                        <tr>
+                        <td align=3D"center" valign=3D"top" width=3D"600">
+                        <![endif]-->
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"100%" style=3D"max-width:600;">
+<tbody>
+<tr>
+<td align=3D"center" valign=3D"top">
+<table align=3D"center" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" wi=
+dth=3D"600">
+<tbody>
+<tr>
+<td align=3D"left" valign=3D"top">
+<div style=3D"display:inline-block; margin: 0 -2px;vertical-align:top; widt=
+h:100%;">
+<table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" widt=
+h=3D"100%">
+<tbody>
+<tr>
+<td class=3D"article-image" style=3D"padding: 0 30px 0 0;" valign=3D"top">
+<div class=3D"mktoImg" id=3D"artimage16dab37de-e217-48bc-bf56-2411d96cb46e0=
+c1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b0-89b8-e0a94297d8af8424=
+ae5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8152-8c5b54057b790814c4a=
+8-112f-4c99-9ec9-cb4928f3349859db2ca7-fd10-4f66-ac11-8be1ba81f61f67819e71-3=
+844-4ed1-99b1-a9236ab800d5" mktolockimgsize=3D"true">
+<a href=3D"http://go2.pass.org/Ow000Q0005f00mhwyUNu5H0p0qa01" target=3D"_bl=
+ank"><img src=3D"http://go.pass.org/rs/369-QUH-984/images/Item 5.jpg" style=
+=3D"" alt=3D"Item 5.jpg">
+</a></div>
+</td>
+<td style=3D"padding: 0 0 15px 0;" class=3D"no-padding"><!-- ARTICLE -->
+<table border=3D"0" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%">
+<tbody>
+<tr>
+<td align=3D"left" style=3D"padding: 10px 0; font-size: 16px; line-height: =
+24px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class=3D"=
+">
+<div class=3D"mktEditable" id=3D"Art16dab37de-e217-48bc-bf56-2411d96cb46e0c=
+1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b0-89b8-e0a94297d8af8424a=
+e5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8152-8c5b54057b790814c4a8=
+-112f-4c99-9ec9-cb4928f3349859db2ca7-fd10-4f66-ac11-8be1ba81f61f67819e71-38=
+44-4ed1-99b1-a9236ab800d5">
+<h3 style=3D"font-size: 22px; font-family: Helvetica, Arial, sans-serif; fo=
+nt-weight: normal; color: #293338; margin: 0 0 15px 0; padding: 0; line-hei=
+ght: 28px;">
+Pwned Passwords, Version 5</h3>
+<div style=3D"font-size: 14px; line-height: 20px; font-family: Helvetica, A=
+rial, sans-serif; font-weight: normal; color: #293338; margin: 0px 0px 15px=
+; padding: 0px; text-align: left;">
+At 551M records as of V4, Pwned Passwords adds an additional 3,768,890 pass=
+words collected over the past six months.&nbsp;
+<br>
+</div>
+</div>
+<div class=3D"read-more-link">
+<div class=3D"mktEditable" id=3D"Art1Link6dab37de-e217-48bc-bf56-2411d96cb4=
+6e0c1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b0-89b8-e0a94297d8af8=
+424ae5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8152-8c5b54057b790814=
+c4a8-112f-4c99-9ec9-cb4928f3349859db2ca7-fd10-4f66-ac11-8be1ba81f61f67819e7=
+1-3844-4ed1-99b1-a9236ab800d5">
+<div><a href=3D"http://go2.pass.org/Ow000Q0005f00mhwyUNu5H0p0qa01" style=3D=
+"color: #ef4b41; font-weight: bold; text-decoration: none;" target=3D"_blan=
+k">LEARN MORE =E2=86=92</a>
+</div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<!--[if (gte mso 9)|(IE)]>
+                        </td>
+                        </tr>
+                        </table>
+                        <![endif]--></td>
+</tr>
+<tr class=3D"mktoModule connector-article" id=3D"mkto-article6dab37de-e217-=
+48bc-bf56-2411d96cb46e0c1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b=
+0-89b8-e0a94297d8af8424ae5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8=
+152-8c5b54057b790814c4a8-112f-4c99-9ec9-cb4928f3349859db2ca7-fd10-4f66-ac11=
+-8be1ba81f61f67819e71-3844-4ed1-99b1-a9236ab800d585b27223-b367-4ad2-a9de-5c=
+103d6f14fb">
+<td align=3D"center" height=3D"100%" valign=3D"top" width=3D"100%" colspan=
+=3D"2" style=3D"padding-bottom: 60px;">
+<!--[if (gte mso 9)|(IE)]>
+                        <table align=3D"center" border=3D"0" cellspacing=3D=
+"0" cellpadding=3D"0" width=3D"600">
+                        <tr>
+                        <td align=3D"center" valign=3D"top" width=3D"600">
+                        <![endif]-->
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"100%" style=3D"max-width:600;">
+<tbody>
+<tr>
+<td align=3D"center" valign=3D"top">
+<table align=3D"center" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" wi=
+dth=3D"600">
+<tbody>
+<tr>
+<td align=3D"left" valign=3D"top">
+<div style=3D"display:inline-block; margin: 0 -2px;vertical-align:top; widt=
+h:100%;">
+<table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" widt=
+h=3D"100%">
+<tbody>
+<tr>
+<td class=3D"article-image" style=3D"padding: 0 30px 0 0;" valign=3D"top">
+<div class=3D"mktoImg" id=3D"artimage16dab37de-e217-48bc-bf56-2411d96cb46e0=
+c1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b0-89b8-e0a94297d8af8424=
+ae5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8152-8c5b54057b790814c4a=
+8-112f-4c99-9ec9-cb4928f3349859db2ca7-fd10-4f66-ac11-8be1ba81f61f67819e71-3=
+844-4ed1-99b1-a9236ab800d585b27223-b367-4ad2-a9de-5c103d6f14fb" mktolockimg=
+size=3D"true">
+<a href=3D"http://go2.pass.org/Vq0mh0b0U0050x5pQ00w10yfu0H0N" target=3D"_bl=
+ank"><img src=3D"http://go.pass.org/rs/369-QUH-984/images/Item 6.jpg" style=
+=3D"" alt=3D"Item 6.jpg">
+</a></div>
+</td>
+<td style=3D"padding: 0 0 15px 0;" class=3D"no-padding"><!-- ARTICLE -->
+<table border=3D"0" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%">
+<tbody>
+<tr>
+<td align=3D"left" style=3D"padding: 10px 0; font-size: 16px; line-height: =
+24px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class=3D"=
+">
+<div class=3D"mktEditable" id=3D"Art16dab37de-e217-48bc-bf56-2411d96cb46e0c=
+1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b0-89b8-e0a94297d8af8424a=
+e5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8152-8c5b54057b790814c4a8=
+-112f-4c99-9ec9-cb4928f3349859db2ca7-fd10-4f66-ac11-8be1ba81f61f67819e71-38=
+44-4ed1-99b1-a9236ab800d585b27223-b367-4ad2-a9de-5c103d6f14fb">
+<h3 style=3D"font-size: 22px; font-family: Helvetica, Arial, sans-serif; fo=
+nt-weight: normal; color: #293338; margin: 0 0 15px 0; padding: 0; line-hei=
+ght: 28px;">
+Nested Window Functions in SQL</h3>
+<div style=3D"font-size: 14px; line-height: 20px; font-family: Helvetica, A=
+rial, sans-serif; font-weight: normal; color: #293338; margin: 0px 0px 15px=
+; padding: 0px; text-align: left;">
+Looking for more insight from one of the best T-SQL experts? Itzik Ben-Gan =
+discusses a feature which allows the nesting of two kinds of window functio=
+ns as an argument of a window aggregate function.&nbsp;
+<br>
+</div>
+</div>
+<div class=3D"read-more-link">
+<div class=3D"mktEditable" id=3D"Art1Link6dab37de-e217-48bc-bf56-2411d96cb4=
+6e0c1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b0-89b8-e0a94297d8af8=
+424ae5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8152-8c5b54057b790814=
+c4a8-112f-4c99-9ec9-cb4928f3349859db2ca7-fd10-4f66-ac11-8be1ba81f61f67819e7=
+1-3844-4ed1-99b1-a9236ab800d585b27223-b367-4ad2-a9de-5c103d6f14fb">
+<div><a href=3D"http://go2.pass.org/Vq0mh0b0U0050x5pQ00w10yfu0H0N" style=3D=
+"color: #ef4b41; font-weight: bold; text-decoration: none;" target=3D"_blan=
+k">READ MORE =E2=86=92</a>
+</div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<!--[if (gte mso 9)|(IE)]>
+                        </td>
+                        </tr>
+                        </table>
+                        <![endif]--></td>
+</tr>
+<tr class=3D"mktoModule connector-article" id=3D"mkto-article6dab37de-e217-=
+48bc-bf56-2411d96cb46e0c1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b=
+0-89b8-e0a94297d8af8424ae5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8=
+152-8c5b54057b790814c4a8-112f-4c99-9ec9-cb4928f3349859db2ca7-fd10-4f66-ac11=
+-8be1ba81f61f67819e71-3844-4ed1-99b1-a9236ab800d585b27223-b367-4ad2-a9de-5c=
+103d6f14fb446039df-c7b7-420a-a66f-bc34597d21e2">
+<td align=3D"center" height=3D"100%" valign=3D"top" width=3D"100%" colspan=
+=3D"2" style=3D"padding-bottom: 60px;">
+<!--[if (gte mso 9)|(IE)]>
+                        <table align=3D"center" border=3D"0" cellspacing=3D=
+"0" cellpadding=3D"0" width=3D"600">
+                        <tr>
+                        <td align=3D"center" valign=3D"top" width=3D"600">
+                        <![endif]-->
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"100%" style=3D"max-width:600;">
+<tbody>
+<tr>
+<td align=3D"center" valign=3D"top">
+<table align=3D"center" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" wi=
+dth=3D"600">
+<tbody>
+<tr>
+<td align=3D"left" valign=3D"top">
+<div style=3D"display:inline-block; margin: 0 -2px;vertical-align:top; widt=
+h:100%;">
+<table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" widt=
+h=3D"100%">
+<tbody>
+<tr>
+<td class=3D"article-image" style=3D"padding: 0 30px 0 0;" valign=3D"top">
+<div class=3D"mktoImg" id=3D"artimage16dab37de-e217-48bc-bf56-2411d96cb46e0=
+c1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b0-89b8-e0a94297d8af8424=
+ae5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8152-8c5b54057b790814c4a=
+8-112f-4c99-9ec9-cb4928f3349859db2ca7-fd10-4f66-ac11-8be1ba81f61f67819e71-3=
+844-4ed1-99b1-a9236ab800d585b27223-b367-4ad2-a9de-5c103d6f14fb446039df-c7b7=
+-420a-a66f-bc34597d21e2" mktolockimgsize=3D"true">
+<a href=3D"http://go2.pass.org/A00w0pQUf051cu0qH0m00N0yyh500" target=3D"_bl=
+ank"><img src=3D"http://go.pass.org/rs/369-QUH-984/images/Item-7-DBA-081420=
+19.png" style=3D"" alt=3D"Item-7-DBA-08142019.png">
+</a></div>
+</td>
+<td style=3D"padding: 0 0 15px 0;" class=3D"no-padding"><!-- ARTICLE -->
+<table border=3D"0" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%">
+<tbody>
+<tr>
+<td align=3D"left" style=3D"padding: 10px 0; font-size: 16px; line-height: =
+24px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class=3D"=
+">
+<div class=3D"mktEditable" id=3D"Art16dab37de-e217-48bc-bf56-2411d96cb46e0c=
+1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b0-89b8-e0a94297d8af8424a=
+e5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8152-8c5b54057b790814c4a8=
+-112f-4c99-9ec9-cb4928f3349859db2ca7-fd10-4f66-ac11-8be1ba81f61f67819e71-38=
+44-4ed1-99b1-a9236ab800d585b27223-b367-4ad2-a9de-5c103d6f14fb446039df-c7b7-=
+420a-a66f-bc34597d21e2">
+<h3 style=3D"font-size: 22px; font-family: Helvetica, Arial, sans-serif; fo=
+nt-weight: normal; color: #293338; margin: 0 0 15px 0; padding: 0; line-hei=
+ght: 28px;">
+Build Your Azure Skills</h3>
+<div style=3D"font-size: 14px; line-height: 20px; font-family: Helvetica, A=
+rial, sans-serif; font-weight: normal; color: #293338; margin: 0px 0px 15px=
+; padding: 0px; text-align: left;">
+Microsoft Learn is the best place to learn Azure quickly, with free, intera=
+ctive, hands-on, step-by-step tutorials. Start with Azure Fundamentals or D=
+ata &amp; AI training like Azure for the Data Engineer, AI, Bots, Cognitive=
+ Services, or Data Science.
+<br>
+</div>
+</div>
+<div class=3D"read-more-link">
+<div class=3D"mktEditable" id=3D"Art1Link6dab37de-e217-48bc-bf56-2411d96cb4=
+6e0c1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b0-89b8-e0a94297d8af8=
+424ae5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8152-8c5b54057b790814=
+c4a8-112f-4c99-9ec9-cb4928f3349859db2ca7-fd10-4f66-ac11-8be1ba81f61f67819e7=
+1-3844-4ed1-99b1-a9236ab800d585b27223-b367-4ad2-a9de-5c103d6f14fb446039df-c=
+7b7-420a-a66f-bc34597d21e2">
+<div><a href=3D"http://go2.pass.org/A00w0pQUf051cu0qH0m00N0yyh500" style=3D=
+"color: #ef4b41; font-weight: bold; text-decoration: none;" target=3D"_blan=
+k">START HERE =E2=86=92</a>
+</div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<!--[if (gte mso 9)|(IE)]>
+                        </td>
+                        </tr>
+                        </table>
+                        <![endif]--></td>
+</tr>
+<tr class=3D"mktoModule connector-article" id=3D"mkto-article6dab37de-e217-=
+48bc-bf56-2411d96cb46e0c1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b=
+0-89b8-e0a94297d8af8424ae5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8=
+152-8c5b54057b790814c4a8-112f-4c99-9ec9-cb4928f3349859db2ca7-fd10-4f66-ac11=
+-8be1ba81f61f67819e71-3844-4ed1-99b1-a9236ab800d585b27223-b367-4ad2-a9de-5c=
+103d6f14fb446039df-c7b7-420a-a66f-bc34597d21e2621aa3d2-5c5f-42af-b192-2af1b=
+b810a24de87b3c7-e488-4c19-83a8-4bda1309621c">
+<td align=3D"center" height=3D"100%" valign=3D"top" width=3D"100%" colspan=
+=3D"2" style=3D"padding-bottom: 60px;">
+<!--[if (gte mso 9)|(IE)]>
+                        <table align=3D"center" border=3D"0" cellspacing=3D=
+"0" cellpadding=3D"0" width=3D"600">
+                        <tr>
+                        <td align=3D"center" valign=3D"top" width=3D"600">
+                        <![endif]-->
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"100%" style=3D"max-width:600;">
+<tbody>
+<tr>
+<td align=3D"center" valign=3D"top">
+<table align=3D"center" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" wi=
+dth=3D"600">
+<tbody>
+<tr>
+<td align=3D"left" valign=3D"top">
+<div style=3D"display:inline-block; margin: 0 -2px;vertical-align:top; widt=
+h:100%;">
+<table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" widt=
+h=3D"100%">
+<tbody>
+<tr>
+<td class=3D"article-image" style=3D"padding: 0 30px 0 0;" valign=3D"top">
+<div class=3D"mktoImg" id=3D"artimage16dab37de-e217-48bc-bf56-2411d96cb46e0=
+c1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b0-89b8-e0a94297d8af8424=
+ae5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8152-8c5b54057b790814c4a=
+8-112f-4c99-9ec9-cb4928f3349859db2ca7-fd10-4f66-ac11-8be1ba81f61f67819e71-3=
+844-4ed1-99b1-a9236ab800d585b27223-b367-4ad2-a9de-5c103d6f14fb446039df-c7b7=
+-420a-a66f-bc34597d21e2621aa3d2-5c5f-42af-b192-2af1bb810a24de87b3c7-e488-4c=
+19-83a8-4bda1309621c" mktolockimgsize=3D"true">
+<a href=3D"http://go2.pass.org/J5qNz00Qf00mwu00hp00Ud010Hy50" target=3D"_bl=
+ank"><img src=3D"http://go.pass.org/rs/369-QUH-984/images/BlueTalon.png" st=
+yle=3D"" alt=3D"BlueTalon.png">
+</a></div>
+</td>
+<td style=3D"padding: 0 0 15px 0;" class=3D"no-padding"><!-- ARTICLE -->
+<table border=3D"0" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%">
+<tbody>
+<tr>
+<td align=3D"left" style=3D"padding: 10px 0; font-size: 16px; line-height: =
+24px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class=3D"=
+">
+<div class=3D"mktEditable" id=3D"Art16dab37de-e217-48bc-bf56-2411d96cb46e0c=
+1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b0-89b8-e0a94297d8af8424a=
+e5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8152-8c5b54057b790814c4a8=
+-112f-4c99-9ec9-cb4928f3349859db2ca7-fd10-4f66-ac11-8be1ba81f61f67819e71-38=
+44-4ed1-99b1-a9236ab800d585b27223-b367-4ad2-a9de-5c103d6f14fb446039df-c7b7-=
+420a-a66f-bc34597d21e2621aa3d2-5c5f-42af-b192-2af1bb810a24de87b3c7-e488-4c1=
+9-83a8-4bda1309621c">
+<h3 style=3D"font-size: 22px; font-family: Helvetica, Arial, sans-serif; fo=
+nt-weight: normal; color: #293338; margin: 0 0 15px 0; padding: 0; line-hei=
+ght: 28px;">
+Microsoft Acquires BlueTalon to Bolster Data Governance Offerings</h3>
+<div style=3D"font-size: 14px; line-height: 20px; font-family: Helvetica, A=
+rial, sans-serif; font-weight: normal; color: #293338; margin: 0px 0px 15px=
+; padding: 0px; text-align: left;">
+Microsoft recently announced that it has acquired BlueTalon, a cross-platfo=
+rm data access control solutions provider headquartered in Redwood City, Ca=
+lifornia, for an undisclosed amount. In a blog post, Rohan Kumar, Corporate=
+ Vice President of Azure Data said
+ the deal will =E2=80=9Cenhance=E2=80=9D Microsoft=E2=80=99s ability to =E2=
+=80=9Cempower enterprises across industries to digitally transform=E2=80=9D=
+ while =E2=80=9Censuring right use of data with centralized data governance=
+ at scale.=E2=80=9D&nbsp;
+<br>
+</div>
+</div>
+<div class=3D"read-more-link">
+<div class=3D"mktEditable" id=3D"Art1Link6dab37de-e217-48bc-bf56-2411d96cb4=
+6e0c1843a4-2b25-4082-8c36-181b76a9540d8c0238c5-e2b4-44b0-89b8-e0a94297d8af8=
+424ae5c-20a7-45d9-962d-6de58d2441b697d62e61-8427-4af5-8152-8c5b54057b790814=
+c4a8-112f-4c99-9ec9-cb4928f3349859db2ca7-fd10-4f66-ac11-8be1ba81f61f67819e7=
+1-3844-4ed1-99b1-a9236ab800d585b27223-b367-4ad2-a9de-5c103d6f14fb446039df-c=
+7b7-420a-a66f-bc34597d21e2621aa3d2-5c5f-42af-b192-2af1bb810a24de87b3c7-e488=
+-4c19-83a8-4bda1309621c">
+<div><a href=3D"http://go2.pass.org/J5qNz00Qf00mwu00hp00Ud010Hy50" style=3D=
+"color: #ef4b41; font-weight: bold; text-decoration: none;" target=3D"_blan=
+k">LEARN MORE =E2=86=92</a>
+</div>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<!--[if (gte mso 9)|(IE)]>
+                        </td>
+                        </tr>
+                        </table>
+                        <![endif]--></td>
+</tr>
+<tr class=3D"mktoModule" id=3D"BottomEventTitle">
+<td>
+<div class=3D"mktEditable" id=3D"UpcomingEventTitle">
+<h3 style=3D"font-size: 22px; font-family: Helvetica, Arial, sans-serif; fo=
+nt-weight: normal; color: #293338; margin: 0 0 15px 0; padding: 0; line-hei=
+ght: 28px;">
+Upcoming Virtual Events</h3>
+</div>
+</td>
+</tr>
+<tr class=3D"mktoModule connector-article" id=3D"Upcoming-Event-123fedee5-6=
+ccf-4ef8-adb8-8e19c363fdb44bec2226-ee0e-4c85-a65e-5fb43c18cc87e6379025-a724=
+-463a-a2d4-b9844986c43022646fd7-be0a-46bc-aae8-8e15fc364b1d2082da67-18ad-46=
+ea-ae12-f5d55c87c525c2d3063e-b1f9-433d-bb98-33c1032e0098e2ff617b-5f66-4c2f-=
+8a0d-e22e8ce90b1441147d91-3b32-4a4f-b338-5820f72cee1157794eea-8ff7-4d07-810=
+c-030439d05bd486900216-dad3-41f0-bc9d-345d714504a82c4a4f11-7273-4cb0-89ad-4=
+9b0d8278130547c9d35-a81a-4578-973d-ea4e7c38ad32">
+<td align=3D"center" height=3D"100%" valign=3D"top" width=3D"100%" colspan=
+=3D"2"><!--[if (gte mso 9)|(IE)]>
+                        <table align=3D"center" border=3D"0" cellspacing=3D=
+"0" cellpadding=3D"0" width=3D"600">
+                        <tr>
+                        <td align=3D"center" valign=3D"top" width=3D"600">
+                        <![endif]-->
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"100%" style=3D"max-width:600;">
+<tbody>
+<tr>
+<td align=3D"center" valign=3D"top">
+<table align=3D"center" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" wi=
+dth=3D"600">
+<tbody>
+<tr>
+<td align=3D"left" valign=3D"top">
+<div style=3D"display:inline-block; margin: 0 -2px;vertical-align:top; widt=
+h:100%;">
+<table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" widt=
+h=3D"100%">
+<tbody>
+<tr>
+<td style=3D"padding: 0 0 5px 0;" class=3D"no-padding"><!-- ARTICLE -->
+<table border=3D"0" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%">
+<tbody>
+<tr>
+<td align=3D"left" style=3D"padding: 5px 0; font-size: 16px; line-height: 2=
+4px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class=3D""=
+>
+<div class=3D"mktEditable" id=3D"Event-1-Content23fedee5-6ccf-4ef8-adb8-8e1=
+9c363fdb44bec2226-ee0e-4c85-a65e-5fb43c18cc87e6379025-a724-463a-a2d4-b98449=
+86c43022646fd7-be0a-46bc-aae8-8e15fc364b1d2082da67-18ad-46ea-ae12-f5d55c87c=
+525c2d3063e-b1f9-433d-bb98-33c1032e0098e2ff617b-5f66-4c2f-8a0d-e22e8ce90b14=
+41147d91-3b32-4a4f-b338-5820f72cee1157794eea-8ff7-4d07-810c-030439d05bd4869=
+00216-dad3-41f0-bc9d-345d714504a82c4a4f11-7273-4cb0-89ad-49b0d8278130547c9d=
+35-a81a-4578-973d-ea4e7c38ad32">
+<h4 style=3D"font-size: 16px; line-height: 24px; font-family: Helvetica, Ar=
+ial, sans-serif; color: #ef4b41; margin: 0;">
+<a href=3D"http://go2.pass.org/r0m0p0ue0000QhqN0yHU5A0050f1w" target=3D"_bl=
+ank" style=3D"color: #ef4b41;">Sponsored Webinar: SQL in the City Streamed:=
+ 20 Years of Redgate - Register Now</a></h4>
+<p style=3D"margin: 0; font-size: 14px; line-height: 24px; font-family: Hel=
+vetica, Arial, sans-serif; color: #666666;">
+Wednesday, September 04. 13:00 UTC.</p>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<!--[if (gte mso 9)|(IE)]>
+                        </td>
+                        </tr>
+                        </table>
+                        <![endif]--></td>
+</tr>
+<tr class=3D"mktoModule connector-article" id=3D"Upcoming-Event-123fedee5-6=
+ccf-4ef8-adb8-8e19c363fdb44bec2226-ee0e-4c85-a65e-5fb43c18cc87e6379025-a724=
+-463a-a2d4-b9844986c43022646fd7-be0a-46bc-aae8-8e15fc364b1d2082da67-18ad-46=
+ea-ae12-f5d55c87c525c2d3063e-b1f9-433d-bb98-33c1032e0098e2ff617b-5f66-4c2f-=
+8a0d-e22e8ce90b1441147d91-3b32-4a4f-b338-5820f72cee1157794eea-8ff7-4d07-810=
+c-030439d05bd486900216-dad3-41f0-bc9d-345d714504a82c4a4f11-7273-4cb0-89ad-4=
+9b0d8278130547c9d35-a81a-4578-973d-ea4e7c38ad3214008f2d-7c71-4cd9-b312-3d27=
+4f7248983161e491-f228-4736-aed5-88efc17fcbcd">
+<td align=3D"center" height=3D"100%" valign=3D"top" width=3D"100%" colspan=
+=3D"2"><!--[if (gte mso 9)|(IE)]>
+                        <table align=3D"center" border=3D"0" cellspacing=3D=
+"0" cellpadding=3D"0" width=3D"600">
+                        <tr>
+                        <td align=3D"center" valign=3D"top" width=3D"600">
+                        <![endif]-->
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"100%" style=3D"max-width:600;">
+<tbody>
+<tr>
+<td align=3D"center" valign=3D"top">
+<table align=3D"center" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" wi=
+dth=3D"600">
+<tbody>
+<tr>
+<td align=3D"left" valign=3D"top">
+<div style=3D"display:inline-block; margin: 0 -2px;vertical-align:top; widt=
+h:100%;">
+<table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" widt=
+h=3D"100%">
+<tbody>
+<tr>
+<td style=3D"padding: 0 0 5px 0;" class=3D"no-padding"><!-- ARTICLE -->
+<table border=3D"0" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%">
+<tbody>
+<tr>
+<td align=3D"left" style=3D"padding: 5px 0; font-size: 16px; line-height: 2=
+4px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class=3D""=
+>
+<div class=3D"mktEditable" id=3D"Event-1-Content23fedee5-6ccf-4ef8-adb8-8e1=
+9c363fdb44bec2226-ee0e-4c85-a65e-5fb43c18cc87e6379025-a724-463a-a2d4-b98449=
+86c43022646fd7-be0a-46bc-aae8-8e15fc364b1d2082da67-18ad-46ea-ae12-f5d55c87c=
+525c2d3063e-b1f9-433d-bb98-33c1032e0098e2ff617b-5f66-4c2f-8a0d-e22e8ce90b14=
+41147d91-3b32-4a4f-b338-5820f72cee1157794eea-8ff7-4d07-810c-030439d05bd4869=
+00216-dad3-41f0-bc9d-345d714504a82c4a4f11-7273-4cb0-89ad-49b0d8278130547c9d=
+35-a81a-4578-973d-ea4e7c38ad3214008f2d-7c71-4cd9-b312-3d274f7248983161e491-=
+f228-4736-aed5-88efc17fcbcd">
+<h4 style=3D"font-size: 16px; line-height: 24px; font-family: Helvetica, Ar=
+ial, sans-serif; color: #ef4b41; margin: 0;">
+<a href=3D"http://go2.pass.org/jB0N0h00Q5m010y5H00Ufq0u00fwp" target=3D"_bl=
+ank" style=3D"color: #ef4b41;">Go, Go, QueryStore! (Upgraded) =E2=80=93 wit=
+h Gail Shaw</a></h4>
+<p style=3D"margin: 0; font-size: 14px; line-height: 24px; font-family: Hel=
+vetica, Arial, sans-serif; color: #666666;">
+Tuesday, August 20. 16:00 UTC.</p>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<!--[if (gte mso 9)|(IE)]>
+                        </td>
+                        </tr>
+                        </table>
+                        <![endif]--></td>
+</tr>
+<tr class=3D"mktoModule connector-article" id=3D"Upcoming-Event-123fedee5-6=
+ccf-4ef8-adb8-8e19c363fdb44bec2226-ee0e-4c85-a65e-5fb43c18cc87e6379025-a724=
+-463a-a2d4-b9844986c43022646fd7-be0a-46bc-aae8-8e15fc364b1d2082da67-18ad-46=
+ea-ae12-f5d55c87c525c2d3063e-b1f9-433d-bb98-33c1032e0098e2ff617b-5f66-4c2f-=
+8a0d-e22e8ce90b1441147d91-3b32-4a4f-b338-5820f72cee1157794eea-8ff7-4d07-810=
+c-030439d05bd486900216-dad3-41f0-bc9d-345d714504a82c4a4f11-7273-4cb0-89ad-4=
+9b0d8278130547c9d35-a81a-4578-973d-ea4e7c38ad3214008f2d-7c71-4cd9-b312-3d27=
+4f7248983161e491-f228-4736-aed5-88efc17fcbcd7a0d8ba5-77ee-4a94-b3d5-bacc589=
+719dd">
+<td align=3D"center" height=3D"100%" valign=3D"top" width=3D"100%" colspan=
+=3D"2"><!--[if (gte mso 9)|(IE)]>
+                        <table align=3D"center" border=3D"0" cellspacing=3D=
+"0" cellpadding=3D"0" width=3D"600">
+                        <tr>
+                        <td align=3D"center" valign=3D"top" width=3D"600">
+                        <![endif]-->
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"100%" style=3D"max-width:600;">
+<tbody>
+<tr>
+<td align=3D"center" valign=3D"top">
+<table align=3D"center" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" wi=
+dth=3D"600">
+<tbody>
+<tr>
+<td align=3D"left" valign=3D"top">
+<div style=3D"display:inline-block; margin: 0 -2px;vertical-align:top; widt=
+h:100%;">
+<table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" widt=
+h=3D"100%">
+<tbody>
+<tr>
+<td style=3D"padding: 0 0 5px 0;" class=3D"no-padding"><!-- ARTICLE -->
+<table border=3D"0" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%">
+<tbody>
+<tr>
+<td align=3D"left" style=3D"padding: 5px 0; font-size: 16px; line-height: 2=
+4px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class=3D""=
+>
+<div class=3D"mktEditable" id=3D"Event-1-Content23fedee5-6ccf-4ef8-adb8-8e1=
+9c363fdb44bec2226-ee0e-4c85-a65e-5fb43c18cc87e6379025-a724-463a-a2d4-b98449=
+86c43022646fd7-be0a-46bc-aae8-8e15fc364b1d2082da67-18ad-46ea-ae12-f5d55c87c=
+525c2d3063e-b1f9-433d-bb98-33c1032e0098e2ff617b-5f66-4c2f-8a0d-e22e8ce90b14=
+41147d91-3b32-4a4f-b338-5820f72cee1157794eea-8ff7-4d07-810c-030439d05bd4869=
+00216-dad3-41f0-bc9d-345d714504a82c4a4f11-7273-4cb0-89ad-49b0d8278130547c9d=
+35-a81a-4578-973d-ea4e7c38ad3214008f2d-7c71-4cd9-b312-3d274f7248983161e491-=
+f228-4736-aed5-88efc17fcbcd7a0d8ba5-77ee-4a94-b3d5-bacc589719dd">
+<h4 style=3D"font-size: 16px; line-height: 24px; font-family: Helvetica, Ar=
+ial, sans-serif; color: #ef4b41; margin: 0;">
+<a href=3D"http://go2.pass.org/vq005wumHCygN0h1f5U0000p00Q00" target=3D"_bl=
+ank" style=3D"color: #ef4b41;">Secure by Design-Developing a Cloud Informat=
+ion Governance and Security Strategy =E2=80=93 with Patrick Gallucci</a></h=
+4>
+<p style=3D"margin: 0; font-size: 14px; line-height: 24px; font-family: Hel=
+vetica, Arial, sans-serif; color: #666666;">
+Thursday, <span style=3D"color: #666666; font-family: Helvetica, Arial, san=
+s-serif; font-size: 14px; font-style: normal; font-variant-ligatures: norma=
+l; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orp=
+hans: 2; text-align: -webkit-left; text-indent: 0px; text-transform: none; =
+white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-widt=
+h: 0px; background-color: #ffffff; text-decoration-style: initial; text-dec=
+oration-color: initial; display: inline !important; float: none;">
+August<span>&nbsp;</span></span>22. 17:00 UTC.</p>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<!--[if (gte mso 9)|(IE)]>
+                        </td>
+                        </tr>
+                        </table>
+                        <![endif]--></td>
+</tr>
+<tr class=3D"mktoModule connector-article" id=3D"Upcoming-Event-123fedee5-6=
+ccf-4ef8-adb8-8e19c363fdb44bec2226-ee0e-4c85-a65e-5fb43c18cc87e6379025-a724=
+-463a-a2d4-b9844986c43022646fd7-be0a-46bc-aae8-8e15fc364b1d2082da67-18ad-46=
+ea-ae12-f5d55c87c525c2d3063e-b1f9-433d-bb98-33c1032e0098e2ff617b-5f66-4c2f-=
+8a0d-e22e8ce90b1441147d91-3b32-4a4f-b338-5820f72cee1157794eea-8ff7-4d07-810=
+c-030439d05bd486900216-dad3-41f0-bc9d-345d714504a82c4a4f11-7273-4cb0-89ad-4=
+9b0d8278130547c9d35-a81a-4578-973d-ea4e7c38ad3214008f2d-7c71-4cd9-b312-3d27=
+4f7248982c43e464-749e-40e0-95eb-68f6c36e21c5">
+<td align=3D"center" height=3D"100%" valign=3D"top" width=3D"100%" colspan=
+=3D"2"><!--[if (gte mso 9)|(IE)]>
+                        <table align=3D"center" border=3D"0" cellspacing=3D=
+"0" cellpadding=3D"0" width=3D"600">
+                        <tr>
+                        <td align=3D"center" valign=3D"top" width=3D"600">
+                        <![endif]-->
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"100%" style=3D"max-width:600;">
+<tbody>
+<tr>
+<td align=3D"center" valign=3D"top">
+<table align=3D"center" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" wi=
+dth=3D"600">
+<tbody>
+<tr>
+<td align=3D"left" valign=3D"top">
+<div style=3D"display:inline-block; margin: 0 -2px;vertical-align:top; widt=
+h:100%;">
+<table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" widt=
+h=3D"100%">
+<tbody>
+<tr>
+<td style=3D"padding: 0 0 5px 0;" class=3D"no-padding"><!-- ARTICLE -->
+<table border=3D"0" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%">
+<tbody>
+<tr>
+<td align=3D"left" style=3D"padding: 5px 0; font-size: 16px; line-height: 2=
+4px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class=3D""=
+>
+<div class=3D"mktEditable" id=3D"Event-1-Content23fedee5-6ccf-4ef8-adb8-8e1=
+9c363fdb44bec2226-ee0e-4c85-a65e-5fb43c18cc87e6379025-a724-463a-a2d4-b98449=
+86c43022646fd7-be0a-46bc-aae8-8e15fc364b1d2082da67-18ad-46ea-ae12-f5d55c87c=
+525c2d3063e-b1f9-433d-bb98-33c1032e0098e2ff617b-5f66-4c2f-8a0d-e22e8ce90b14=
+41147d91-3b32-4a4f-b338-5820f72cee1157794eea-8ff7-4d07-810c-030439d05bd4869=
+00216-dad3-41f0-bc9d-345d714504a82c4a4f11-7273-4cb0-89ad-49b0d8278130547c9d=
+35-a81a-4578-973d-ea4e7c38ad3214008f2d-7c71-4cd9-b312-3d274f7248982c43e464-=
+749e-40e0-95eb-68f6c36e21c5">
+<h4 style=3D"font-size: 16px; line-height: 24px; font-family: Helvetica, Ar=
+ial, sans-serif; color: #ef4b41; margin: 0;">
+<a href=3D"http://go2.pass.org/f00yNh05f00HU050QqDmp0hwu1000" target=3D"_bl=
+ank" style=3D"color: #ef4b41;">Using Columnstore Indexes in Azure DevOps Se=
+rvices. Lessons Learned - with Konstantin Kosinsky</a></h4>
+<p style=3D"margin: 0; font-size: 14px; line-height: 24px; font-family: Hel=
+vetica, Arial, sans-serif; color: #666666;">
+Tuesday, <span style=3D"color: #666666; font-family: Helvetica, Arial, sans=
+-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal=
+; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orph=
+ans: 2; text-align: -webkit-left; text-indent: 0px; text-transform: none; w=
+hite-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width=
+: 0px; background-color: #ffffff; text-decoration-style: initial; text-deco=
+ration-color: initial; display: inline !important; float: none;">
+August<span>&nbsp;</span></span>27. 17:00 UTC.</p>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<!--[if (gte mso 9)|(IE)]>
+                        </td>
+                        </tr>
+                        </table>
+                        <![endif]--></td>
+</tr>
+<tr class=3D"mktoModule connector-article" id=3D"Upcoming-Event-123fedee5-6=
+ccf-4ef8-adb8-8e19c363fdb44bec2226-ee0e-4c85-a65e-5fb43c18cc87e6379025-a724=
+-463a-a2d4-b9844986c43022646fd7-be0a-46bc-aae8-8e15fc364b1d2082da67-18ad-46=
+ea-ae12-f5d55c87c525c2d3063e-b1f9-433d-bb98-33c1032e0098e2ff617b-5f66-4c2f-=
+8a0d-e22e8ce90b1441147d91-3b32-4a4f-b338-5820f72cee1157794eea-8ff7-4d07-810=
+c-030439d05bd486900216-dad3-41f0-bc9d-345d714504a82c4a4f11-7273-4cb0-89ad-4=
+9b0d8278130547c9d35-a81a-4578-973d-ea4e7c38ad3214008f2d-7c71-4cd9-b312-3d27=
+4f724898187c16d6-6fcf-4993-a5c6-e799f60b2c05">
+<td align=3D"center" height=3D"100%" valign=3D"top" width=3D"100%" colspan=
+=3D"2"><!--[if (gte mso 9)|(IE)]>
+                        <table align=3D"center" border=3D"0" cellspacing=3D=
+"0" cellpadding=3D"0" width=3D"600">
+                        <tr>
+                        <td align=3D"center" valign=3D"top" width=3D"600">
+                        <![endif]-->
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"100%" style=3D"max-width:600;">
+<tbody>
+<tr>
+<td align=3D"center" valign=3D"top">
+<table align=3D"center" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" wi=
+dth=3D"600">
+<tbody>
+<tr>
+<td align=3D"left" valign=3D"top">
+<div style=3D"display:inline-block; margin: 0 -2px;vertical-align:top; widt=
+h:100%;">
+<table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" widt=
+h=3D"100%">
+<tbody>
+<tr>
+<td style=3D"padding: 0 0 5px 0;" class=3D"no-padding"><!-- ARTICLE -->
+<table border=3D"0" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%">
+<tbody>
+<tr>
+<td align=3D"left" style=3D"padding: 5px 0; font-size: 16px; line-height: 2=
+4px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class=3D""=
+>
+<div class=3D"mktEditable" id=3D"Event-1-Content23fedee5-6ccf-4ef8-adb8-8e1=
+9c363fdb44bec2226-ee0e-4c85-a65e-5fb43c18cc87e6379025-a724-463a-a2d4-b98449=
+86c43022646fd7-be0a-46bc-aae8-8e15fc364b1d2082da67-18ad-46ea-ae12-f5d55c87c=
+525c2d3063e-b1f9-433d-bb98-33c1032e0098e2ff617b-5f66-4c2f-8a0d-e22e8ce90b14=
+41147d91-3b32-4a4f-b338-5820f72cee1157794eea-8ff7-4d07-810c-030439d05bd4869=
+00216-dad3-41f0-bc9d-345d714504a82c4a4f11-7273-4cb0-89ad-49b0d8278130547c9d=
+35-a81a-4578-973d-ea4e7c38ad3214008f2d-7c71-4cd9-b312-3d274f724898187c16d6-=
+6fcf-4993-a5c6-e799f60b2c05">
+<h4 style=3D"font-size: 16px; line-height: 24px; font-family: Helvetica, Ar=
+ial, sans-serif; color: #ef4b41; margin: 0;">
+<a href=3D"http://go2.pass.org/S05i1w0yQHU050hm0p000Euf0qN00" target=3D"_bl=
+ank" style=3D"color: #ef4b41;">Cosmos Db Geo-Replication: True Global Datab=
+ase =E2=80=93 with Warner Chaves</a></h4>
+<p style=3D"margin: 0; font-size: 14px; line-height: 24px; font-family: Hel=
+vetica, Arial, sans-serif; color: #666666;">
+Thursday, <span style=3D"color: #666666; font-family: Helvetica, Arial, san=
+s-serif; font-size: 14px; font-style: normal; font-variant-ligatures: norma=
+l; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orp=
+hans: 2; text-align: -webkit-left; text-indent: 0px; text-transform: none; =
+white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-widt=
+h: 0px; background-color: #ffffff; text-decoration-style: initial; text-dec=
+oration-color: initial; display: inline !important; float: none;">
+August<span>&nbsp;</span></span>29. 17:00 UTC.</p>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<!--[if (gte mso 9)|(IE)]>
+                        </td>
+                        </tr>
+                        </table>
+                        <![endif]--></td>
+</tr>
+<tr class=3D"mktoModule connector-article" id=3D"Upcoming-Event-123fedee5-6=
+ccf-4ef8-adb8-8e19c363fdb44bec2226-ee0e-4c85-a65e-5fb43c18cc87e6379025-a724=
+-463a-a2d4-b9844986c43022646fd7-be0a-46bc-aae8-8e15fc364b1d2082da67-18ad-46=
+ea-ae12-f5d55c87c525c2d3063e-b1f9-433d-bb98-33c1032e0098e2ff617b-5f66-4c2f-=
+8a0d-e22e8ce90b1441147d91-3b32-4a4f-b338-5820f72cee1157794eea-8ff7-4d07-810=
+c-030439d05bd486900216-dad3-41f0-bc9d-345d714504a82c4a4f11-7273-4cb0-89ad-4=
+9b0d8278130547c9d35-a81a-4578-973d-ea4e7c38ad3214008f2d-7c71-4cd9-b312-3d27=
+4f724898d8906dbc-5dd2-49af-85ab-832cd7d419f4">
+<td align=3D"center" height=3D"100%" valign=3D"top" width=3D"100%" colspan=
+=3D"2"><!--[if (gte mso 9)|(IE)]>
+                        <table align=3D"center" border=3D"0" cellspacing=3D=
+"0" cellpadding=3D"0" width=3D"600">
+                        <tr>
+                        <td align=3D"center" valign=3D"top" width=3D"600">
+                        <![endif]-->
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"100%" style=3D"max-width:600;">
+<tbody>
+<tr>
+<td align=3D"center" valign=3D"top">
+<table align=3D"center" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" wi=
+dth=3D"600">
+<tbody>
+<tr>
+<td align=3D"left" valign=3D"top">
+<div style=3D"display:inline-block; margin: 0 -2px;vertical-align:top; widt=
+h:100%;">
+<table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" widt=
+h=3D"100%">
+<tbody>
+<tr>
+<td style=3D"padding: 0 0 5px 0;" class=3D"no-padding"><!-- ARTICLE -->
+<table border=3D"0" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%">
+<tbody>
+<tr>
+<td align=3D"left" style=3D"padding: 5px 0; font-size: 16px; line-height: 2=
+4px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class=3D""=
+>
+<div class=3D"mktEditable" id=3D"Event-1-Content23fedee5-6ccf-4ef8-adb8-8e1=
+9c363fdb44bec2226-ee0e-4c85-a65e-5fb43c18cc87e6379025-a724-463a-a2d4-b98449=
+86c43022646fd7-be0a-46bc-aae8-8e15fc364b1d2082da67-18ad-46ea-ae12-f5d55c87c=
+525c2d3063e-b1f9-433d-bb98-33c1032e0098e2ff617b-5f66-4c2f-8a0d-e22e8ce90b14=
+41147d91-3b32-4a4f-b338-5820f72cee1157794eea-8ff7-4d07-810c-030439d05bd4869=
+00216-dad3-41f0-bc9d-345d714504a82c4a4f11-7273-4cb0-89ad-49b0d8278130547c9d=
+35-a81a-4578-973d-ea4e7c38ad3214008f2d-7c71-4cd9-b312-3d274f724898d8906dbc-=
+5dd2-49af-85ab-832cd7d419f4">
+<h4 style=3D"font-size: 16px; line-height: 24px; font-family: Helvetica, Ar=
+ial, sans-serif; color: #ef4b41; margin: 0;">
+<a href=3D"http://go2.pass.org/P5000F0050y0uqQhHmU0001p0fwjN" target=3D"_bl=
+ank" style=3D"color: #ef4b41;">Refactoring Queries for Improved Performance=
+ =E2=80=93 with Bert Wagner</a></h4>
+<p style=3D"margin: 0; font-size: 14px; line-height: 24px; font-family: Hel=
+vetica, Arial, sans-serif; color: #666666;">
+Tuesday, September 10. 16:00 UTC.</p>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<!--[if (gte mso 9)|(IE)]>
+                        </td>
+                        </tr>
+                        </table>
+                        <![endif]--></td>
+</tr>
+<tr class=3D"mktoModule connector-article-video" id=3D"mkto-article91f57bc0=
+-545b-4973-9759-83a0dca8992x878eadf5-1c01-4f59-aeeb-39281eeb0b24">
+<td align=3D"center" height=3D"100%" valign=3D"top" width=3D"100%" colspan=
+=3D"2"><!--[if (gte mso 9)|(IE)]>
+                        <table align=3D"center" border=3D"0" cellspacing=3D=
+"0" cellpadding=3D"0" width=3D"600">
+                        <tr>
+                        <td align=3D"center" valign=3D"top" width=3D"600">
+                        <![endif]-->
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wi=
+dth=3D"100%" style=3D"max-width:600; margin-bottom: 15px;">
+<tbody>
+<tr>
+<td align=3D"center" valign=3D"top">
+<table align=3D"center" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" wi=
+dth=3D"600">
+<tbody>
+<tr>
+<td align=3D"left" valign=3D"top">
+<div style=3D"display:inline-block; margin: 0 -2px;vertical-align:top; widt=
+h:100%;">
+<table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" widt=
+h=3D"100%">
+<tbody>
+<tr>
+<td style=3D"padding: 0 0 15px 0;" class=3D"no-padding"><!-- ARTICLE -->
+<table border=3D"0" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%">
+<tbody>
+<tr>
+<td align=3D"left" style=3D"padding: 10px 0; font-size: 16px; line-height: =
+24px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class=3D"=
+">
+<div class=3D"mktEditable" id=3D"Art191f57bc0-545b-4973-9759-83a0dca8992x87=
+8eadf5-1c01-4f59-aeeb-39281eeb0b24">
+<p style=3D"font-size: 14px; line-height: 20px; font-family: Helvetica, Ari=
+al, sans-serif; font-weight: normal; color: #293338; margin: 0px 0px 15px; =
+padding: 0px; text-align: center;">
+&nbsp;</p>
+<hr>
+<p style=3D"font-size: 14px; line-height: 20px; font-family: Helvetica, Ari=
+al, sans-serif; font-weight: normal; color: #293338; margin: 0px 0px 15px; =
+padding: 0px; text-align: center;">
+We are recruiting community contributors for all PASS Insights newsletter e=
+ditions:<br>
+</p>
+<div style=3D"font-size: 14px; line-height: 20px; font-family: Helvetica, A=
+rial, sans-serif; font-weight: normal; color: #293338; margin: 0px 0px 15px=
+; padding: 0px; text-align: center;">
+<strong>DBA</strong>, <strong>BI</strong>, <strong>Developer</strong>, and =
+<strong>
+Analyst</strong>. </div>
+<div style=3D"font-size: 14px; line-height: 18px; font-family: Helvetica, A=
+rial, sans-serif; font-weight: normal; color: #293338; margin: 0px 0px 15px=
+; padding: 0px; text-align: center;">
+We=E2=80=99re looking for engaging, in-depth, and technically-focused ideas=
+ to feature each month. If you are interested, submit your ideas to
+<a href=3D"http://go2.pass.org/f00yNh05f00HU050QqGmp0kwu1000" target=3D"_bl=
+ank" style=3D"color: #ef4b41; font-weight: bold; text-decoration: none;">
+insights@pass.org</a>. </div>
+<div style=3D"font-size: 14px; line-height: 20px; font-family: Helvetica, A=
+rial, sans-serif; font-weight: normal; color: #293338; margin: 0px 0px 15px=
+; padding: 0px; text-align: center;">
+You just might see yourself featured in an upcoming edition! </div>
+<div style=3D"font-size: 14px; line-height: 20px; font-family: Helvetica, A=
+rial, sans-serif; font-weight: normal; color: #293338; margin: 0px 0px 15px=
+; padding: 0px; text-align: center;">
+<hr>
+<span style=3D"font-size: 11px;">Looking for more than just DBA educational=
+ and technical content?
+</span><br>
+<span style=3D"font-size: 11px;">Log in to your <a href=3D"http://go2.pass.=
+org/G0u50UpHH000Qm0hf5lN00yq01w00" target=3D"_blank" style=3D"color: #ef4b4=
+1; font-weight: bold; text-decoration: none;">
+PASS account</a> and subscribe to the new <strong>Analyst</strong>, <strong=
+>BI</strong>, and
+<strong>Developer </strong>PASS Insights newsletters.</span> </div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<!--[if (gte mso 9)|(IE)]>
+                        </td>
+                        </tr>
+                        </table>
+                        <![endif]--></td>
+</tr>
+</tbody>
+</table>
+<!--[if (gte mso 9)|(IE)]>
+            </td>
+            </tr>
+            </table>
+            <![endif]--></td>
+</tr>
+<!-- start the footer (outside of the marketo container) -->
+<tr>
+<td>
+<table id=3D"footer" idstyle=3D"-webkit-text-size-adjust: 100%; -ms-text-si=
+ze-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-spaci=
+ng: 0; border-collapse: collapse;" align=3D"center" border=3D"0" cellpaddin=
+g=3D"0" cellspacing=3D"0" width=3D"100%" mktoname=3D"FOOTER">
+<tbody>
+<tr>
+<td style=3D"-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;mso-=
+table-lspace: 0pt;mso-table-rspace: 0pt;word-break: break-word;-webkit-hyph=
+ens: none;-moz-hyphens: none;hyphens: none;border-collapse: collapse;backgr=
+ound-color:#535353};" bgcolor=3D"#535353" valign=3D"top">
+<center>
+<table class=3D"table600" style=3D"-webkit-text-size-adjust: 100%; -ms-text=
+-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-sp=
+acing: 0; border-collapse: collapse; margin-top: 0; margin-right: auto; mar=
+gin-bottom: 0; margin-left: auto;" align=3D"center" border=3D"0" cellpaddin=
+g=3D"0" cellspacing=3D"0" width=3D"600">
+<tbody>
+<tr>
+<td class=3D"secondary-font text" style=3D"-moz-hyphens: none;-webkit-text-=
+size-adjust: 100%;mso-table-lspace: 0pt;mso-table-rspace: 0pt;word-break: b=
+reak-word;-webkit-hyphens: none;-ms-text-size-adjust: 100%;hyphens: none;fo=
+nt-family: Arial, sans-serif;font-size: 14px;line-height: 23px;color: #FFFF=
+FF;border-collapse: collapse;">
+<table cellspacing=3D"0" cellpadding=3D"0" border=3D"0" align=3D"center" wi=
+dth=3D"100%" style=3D"max-width: 680px;">
+<tbody>
+<tr>
+<td style=3D"padding: 0; width: 100%; font-size: 10px; font-family: Arial, =
+sans-serif; mso-height-rule: exactly; line-height: 14px; text-align: left; =
+color: #fff; background-color: #535353;">
+<table cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" align=3D"left">
+<tbody>
+<tr>
+<td>
+<div style=3D"height: 10px; line-height: 10px;">&nbsp; </div>
+</td>
+</tr>
+<tr>
+<td>
+<div class=3D"mktoText" id=3D"footerSocialMedia"><a href=3D"http://go2.pass=
+.org/P5000I0050y0uqQhHmU0001p0fwmN"><img src=3D"http://go.pass.org/rs/369-Q=
+UH-984/images/fb.png" style=3D"width: 28px;"></a>&nbsp;&nbsp;
+<a href=3D"http://go2.pass.org/I0005Uhpf0J0u0N0wH0mn0yQ51q00"><img src=3D"h=
+ttp://go.pass.org/rs/369-QUH-984/images/twiiter.png" style=3D"width: 28px;"=
+></a>&nbsp;&nbsp;
+<a href=3D"http://go2.pass.org/WqKu5p0o1005Q000yf0NHU000hm0w"><img src=3D"h=
+ttp://go.pass.org/rs/369-QUH-984/images/insta.png" style=3D"width: 28px;"><=
+/a>&nbsp;&nbsp;
+<a href=3D"http://go2.pass.org/w0U0H000NL00puqh00005Qym1pf5w"><img src=3D"h=
+ttp://go.pass.org/rs/369-QUH-984/images/youtube.png" style=3D"width: 28px;"=
+></a>&nbsp;&nbsp;
+<a href=3D"http://go2.pass.org/B0w0q00uy0Nf0q5M0h0U00Hm05Qp1" style=3D"font=
+-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; font-style=
+: normal;=20
+font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400=
+; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; t=
+ext-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -we=
+bkit-text-stroke-width: 0px;" target=3D"_blank">
+<img src=3D"http://go.pass.org/rs/369-QUH-984/images/INSTA_TEST_SIG.png" wi=
+dth=3D"28" height=3D"28" constrain=3D"true" imagepreview=3D"false"></a>
+</div>
+</td>
+<td></td>
+<td style=3D"text-align: right;">
+<div class=3D"mktoImg" id=3D"FooterLogoImg" style=3D"width: 100px; height: =
+100px; display: inline-block; margin-left: auto;" mktolockimgsize=3D"true">
+<a href=3D"http://go2.pass.org/Hywu10N0pq000m050f55QH000hrU0" target=3D"_bl=
+ank"><img src=3D"http://go.pass.org/rs/369-QUH-984/images/PASS_LOGO_WHITE_F=
+OOTER.png" style=3D"width: 100px; vertical-align: top; float: right;" width=
+=3D"100" height=3D"100" alt=3D"PASS"></a>
+</div>
+</td>
+</tr>
+<tr>
+<td colspan=3D"3">
+<div class=3D"mktoText" id=3D"footerBottomText">
+<p style=3D"color: #fff;"><a href=3D"http://go2.pass.org/Rpr0qf0y00UH05um0N=
+5N0w00Q001h" style=3D"text-decoration: none; color: #33c0cd;" target=3D"_bl=
+ank">pass.org</a> |
+<a href=3D"http://go2.pass.org/Rps0qf0y00UH05um0O5N0w00Q001h" style=3D"text=
+-decoration: none; color: #33c0cd;" target=3D"_blank">
+Contact Us</a> | <a href=3D"http://go2.pass.org/n1wt0mPQy00HN5q00uhp50U000f=
+00" style=3D"text-decoration: none; color: #33c0cd;" target=3D"_blank">
+Privacy Policy</a> | <a href=3D"http://go2.pass.org/o0mQu5p5H0fh0yUqN000Q00=
+0u10w0" style=3D"text-decoration: none; color: #33c0cd;" target=3D"_blank">
+Terms of Use</a> <br>
+<br>
+Suite 2100-203 North LaSalle Street <br>
+Chicago lL 60601<br>
+604.899.6009 <br>
+<br>
+This message was sent to <a href=3D"http://go2.pass.org/dc/zhmZ3NM2UjZarhQR=
+G1WW9dtKYMdKJsTtoO9roSxDw34=3D/B0w0q00uy0Nf0v5R0h0U00Hm05Qp1" target=3D"_bl=
+ank" style=3D"text-decoration: none; color:=20
+#33c0cd;">
+hiramfleitas@hotmail.com</a> by Christianson &amp; Company Event Management=
+ Ltd. on behalf of PASS. To update your preferences, click
+<a href=3D"http://go2.pass.org/D0pwfNSHUmy0100wQ00q05u0h5000" target=3D"_bl=
+ank" style=3D"text-decoration: none; color: #33c0cd;">
+here</a> or to unsubscribe from all PASS communications, click <a href=3D"h=
+ttp://go2.pass.org/w0U0H000NT00xuqh00005Qym1pf5w" target=3D"_blank" style=
+=3D"text-decoration: none; color: #33c0cd;">
+here</a>.</p>
+</div>
+</td>
+</tr>
+<tr>
+<td>
+<div style=3D"height: 30px; line-height: 30px;">&nbsp; </div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</center>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<!-- end the footer here -->
+</tbody>
+</table>
+<a href=3D"http://go2.pass.org/Hywu10N0pq000m050f5yQH000hUU0"></a><img src=
+=3D"http://go2.pass.org/trk?t=3D1&amp;mid=3DMzY5LVFVSC05ODQ6ODQwMTozNDE2OjU=
+wMjc6MDo2MTc5Ojk6MzM0ODoxMjg5NDAxLTAtMzMyOmhpcmFtZmxlaXRhc0Bob3RtYWlsLmNvbQ=
+%3D%3D" width=3D"1" height=3D"1" style=3D"display:none !important;" alt=3D"=
+"><!--This is comment-->
+</body>
+</html>
