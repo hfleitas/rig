@@ -23,7 +23,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "OracleTable1",
+						"referenceName": "sx_inventory_items_active",
 						"type": "DatasetReference"
 					}
 				]
