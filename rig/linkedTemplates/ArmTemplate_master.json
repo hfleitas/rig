@@ -31,13 +31,41 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'hiscale'"
 		},
+		"prod1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'prod1'"
+		},
 		"sqlva4onabrnvvfrkw_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'sqlva4onabrnvvfrkw'"
 		},
+		"jlhiramlaptop_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'jlhiramlaptop'"
+		},
+		"jldw_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'jldw'"
+		},
+		"jldw_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'jldw'"
+		},
 		"hf0524_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "UPCIC\\HFleitas"
+		},
+		"jlhiramlaptop_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "C:\\fleitasarts\\erp-data"
+		},
+		"jlhiramlaptop_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "JLAMIRAMAR.com\\hfleitas"
+		},
+		"jldw_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "JLAMIRAMAR.com\\hfleitas"
 		},
 		"containerUri": {
 			"type": "string",
@@ -87,6 +115,9 @@
 					"hiram_connectionString": {
 						"value": "[parameters('hiram_connectionString')]"
 					},
+					"prod1_connectionString": {
+						"value": "[parameters('prod1_connectionString')]"
+					},
 					"hf0524_properties_typeProperties_userName": {
 						"value": "[parameters('hf0524_properties_typeProperties_userName')]"
 					}
@@ -107,6 +138,24 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"jlhiramlaptop_password": {
+						"value": "[parameters('jlhiramlaptop_password')]"
+					},
+					"jldw_connectionString": {
+						"value": "[parameters('jldw_connectionString')]"
+					},
+					"jldw_password": {
+						"value": "[parameters('jldw_password')]"
+					},
+					"jlhiramlaptop_properties_typeProperties_host": {
+						"value": "[parameters('jlhiramlaptop_properties_typeProperties_host')]"
+					},
+					"jlhiramlaptop_properties_typeProperties_userId": {
+						"value": "[parameters('jlhiramlaptop_properties_typeProperties_userId')]"
+					},
+					"jldw_properties_typeProperties_userName": {
+						"value": "[parameters('jldw_properties_typeProperties_userName')]"
 					}
 				}
 			},

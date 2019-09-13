@@ -23,11 +23,32 @@
 		"hiscale_connectionString": {
 			"value": ""
 		},
+		"prod1_connectionString": {
+			"value": ""
+		},
 		"sqlva4onabrnvvfrkw_connectionString": {
+			"value": ""
+		},
+		"jlhiramlaptop_password": {
+			"value": ""
+		},
+		"jldw_connectionString": {
+			"value": ""
+		},
+		"jldw_password": {
 			"value": ""
 		},
 		"hf0524_properties_typeProperties_userName": {
 			"value": "UPCIC\\HFleitas"
+		},
+		"jlhiramlaptop_properties_typeProperties_host": {
+			"value": "C:\\fleitasarts\\erp-data"
+		},
+		"jlhiramlaptop_properties_typeProperties_userId": {
+			"value": "JLAMIRAMAR.com\\hfleitas"
+		},
+		"jldw_properties_typeProperties_userName": {
+			"value": "JLAMIRAMAR.com\\hfleitas"
 		},
 		"containerUri": {
 			"value": ""
