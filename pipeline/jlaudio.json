@@ -20,15 +20,7 @@
 						"partitionOption": "None"
 					},
 					"sink": {
-						"type": "DelimitedTextSink",
-						"storeSettings": {
-							"type": "FileServerWriteSettings"
-						},
-						"formatSettings": {
-							"type": "DelimitedTextWriteSettings",
-							"quoteAllText": true,
-							"fileExtension": ".txt"
-						}
+						"type": "SqlServerSink"
 					},
 					"enableStaging": false,
 					"translator": {
@@ -40,8 +32,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 1
+									"name": "ID",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -50,8 +42,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 2
+									"name": "STATUS",
+									"type": "String"
 								}
 							},
 							{
@@ -60,8 +52,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 3
+									"name": "ITEM_CLASS",
+									"type": "String"
 								}
 							},
 							{
@@ -70,8 +62,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 4
+									"name": "PART_NUMBER",
+									"type": "String"
 								}
 							},
 							{
@@ -80,8 +72,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 5
+									"name": "SKU",
+									"type": "String"
 								}
 							},
 							{
@@ -90,8 +82,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 6
+									"name": "DESCRIPTION",
+									"type": "String"
 								}
 							},
 							{
@@ -100,8 +92,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 7
+									"name": "CATEGORY",
+									"type": "String"
 								}
 							},
 							{
@@ -110,8 +102,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 8
+									"name": "DEPARTMENT",
+									"type": "String"
 								}
 							},
 							{
@@ -120,8 +112,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 9
+									"name": "MODEL",
+									"type": "String"
 								}
 							},
 							{
@@ -130,8 +122,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 10
+									"name": "STYLE",
+									"type": "String"
 								}
 							},
 							{
@@ -140,8 +132,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 11
+									"name": "COLOR",
+									"type": "String"
 								}
 							},
 							{
@@ -150,8 +142,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 12
+									"name": "ITEM_SIZE",
+									"type": "String"
 								}
 							},
 							{
@@ -160,8 +152,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 13
+									"name": "BOOK_COST",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -170,8 +162,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 14
+									"name": "LAST_COST",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -180,8 +172,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 15
+									"name": "TOTAL_VALUE",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -190,8 +182,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 16
+									"name": "PURCHASE_QUANTITY",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -200,8 +192,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 17
+									"name": "PURCHASE_UNIT",
+									"type": "String"
 								}
 							},
 							{
@@ -210,8 +202,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 18
+									"name": "SALES_PRICE",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -220,8 +212,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 19
+									"name": "SALES_QUANTITY",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -230,8 +222,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 20
+									"name": "SALES_UNIT",
+									"type": "String"
 								}
 							},
 							{
@@ -240,8 +232,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 21
+									"name": "BACKORDER_QUANTITY",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -250,8 +242,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 22
+									"name": "ONHAND_QUANTITY",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -260,8 +252,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 23
+									"name": "ONORDER_QUANTITY",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -270,8 +262,8 @@
 									"type": "DateTime"
 								},
 								"sink": {
-									"type": "DateTime",
-									"ordinal": 24
+									"name": "EXPECTED_DATE",
+									"type": "DateTime"
 								}
 							},
 							{
@@ -280,8 +272,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 25
+									"name": "RESERVE_QUANTITY",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -290,8 +282,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 26
+									"name": "MINIMUM_STOCK",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -300,8 +292,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 27
+									"name": "REORDER_QUANTITY",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -310,8 +302,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 28
+									"name": "SHIPPING_WEIGHT",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -320,8 +312,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 29
+									"name": "SALES_TAXABLE",
+									"type": "String"
 								}
 							},
 							{
@@ -330,8 +322,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 30
+									"name": "PURCHASED",
+									"type": "String"
 								}
 							},
 							{
@@ -340,8 +332,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 31
+									"name": "INVENTORIED",
+									"type": "String"
 								}
 							},
 							{
@@ -350,8 +342,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 32
+									"name": "SOLD",
+									"type": "String"
 								}
 							},
 							{
@@ -360,8 +352,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 33
+									"name": "BUILT",
+									"type": "String"
 								}
 							},
 							{
@@ -370,8 +362,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 34
+									"name": "SERIALIZED",
+									"type": "String"
 								}
 							},
 							{
@@ -380,8 +372,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 35
+									"name": "SXACCCHT_EXPENSE_FK",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -390,8 +382,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 36
+									"name": "SXACCCHT_INCOME_FK",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -400,8 +392,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 37
+									"name": "SXACCCHT_ASSET_FK",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -410,8 +402,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 38
+									"name": "SXVEND_FK",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -420,8 +412,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 39
+									"name": "VENDOR_ITEM_ID",
+									"type": "String"
 								}
 							},
 							{
@@ -430,8 +422,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 40
+									"name": "ASSOCIATION1",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -440,8 +432,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 41
+									"name": "ASSOCIATION2",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -450,8 +442,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 42
+									"name": "ASSOCIATION3",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -460,8 +452,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 43
+									"name": "ASSOCIATION4",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -470,8 +462,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 44
+									"name": "ASSOCIATION5",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -480,8 +472,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 45
+									"name": "ASSOCIATION6",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -490,8 +482,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 46
+									"name": "ASSOCIATION7",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -500,8 +492,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 47
+									"name": "ASSOCIATION8",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -510,8 +502,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 48
+									"name": "PURCHASE_TAXABLE",
+									"type": "String"
 								}
 							},
 							{
@@ -520,8 +512,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 49
+									"name": "NON_TANGIBLE",
+									"type": "String"
 								}
 							},
 							{
@@ -530,8 +522,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 50
+									"name": "STOCK_UNIT",
+									"type": "String"
 								}
 							},
 							{
@@ -540,8 +532,8 @@
 									"type": "DateTime"
 								},
 								"sink": {
-									"type": "DateTime",
-									"ordinal": 51
+									"name": "DELETE_DATE",
+									"type": "DateTime"
 								}
 							},
 							{
@@ -550,8 +542,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 52
+									"name": "DELETE_USER_ID",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -560,8 +552,8 @@
 									"type": "DateTime"
 								},
 								"sink": {
-									"type": "DateTime",
-									"ordinal": 53
+									"name": "CREATE_DATE",
+									"type": "DateTime"
 								}
 							},
 							{
@@ -570,8 +562,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 54
+									"name": "CREATE_USER_ID",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -580,8 +572,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 55
+									"name": "SXACCCHT_COS_FK",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -590,8 +582,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 56
+									"name": "PICKED_QUANTITY",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -600,8 +592,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 57
+									"name": "PACKAGED_QUANTITY",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -610,8 +602,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 58
+									"name": "ISSUED_QUANTITY",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -620,8 +612,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 59
+									"name": "HOLD_QUANTITY",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -630,8 +622,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 60
+									"name": "SXINVITM_REMAP_FK",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -640,8 +632,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 61
+									"name": "DEPLETE_FLAG",
+									"type": "String"
 								}
 							},
 							{
@@ -650,8 +642,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 62
+									"name": "PENDING_QUANTITY",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -660,8 +652,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 63
+									"name": "MATERIAL_COST",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -670,8 +662,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 64
+									"name": "LABOR_STANDARD",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -680,8 +672,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 65
+									"name": "PICK_CLASS",
+									"type": "String"
 								}
 							},
 							{
@@ -690,8 +682,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 66
+									"name": "DIMENSION_WEIGHT",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -700,8 +692,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 67
+									"name": "SXVD_LIC_FK",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -710,8 +702,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 68
+									"name": "SXVD_DESC_FK",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -720,8 +712,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 69
+									"name": "LEAD_TIME",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -730,8 +722,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 70
+									"name": "SXGEN_SAFETYSTOCK_FK",
+									"type": "String"
 								}
 							},
 							{
@@ -740,8 +732,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 71
+									"name": "GENERAL1",
+									"type": "String"
 								}
 							},
 							{
@@ -750,8 +742,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 72
+									"name": "GENERAL2",
+									"type": "String"
 								}
 							},
 							{
@@ -760,8 +752,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 73
+									"name": "GENERAL3",
+									"type": "String"
 								}
 							},
 							{
@@ -770,8 +762,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 74
+									"name": "GENERAL4",
+									"type": "String"
 								}
 							},
 							{
@@ -780,8 +772,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 75
+									"name": "GENERAL5",
+									"type": "String"
 								}
 							},
 							{
@@ -790,8 +782,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 76
+									"name": "GENERAL6",
+									"type": "String"
 								}
 							},
 							{
@@ -800,8 +792,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 77
+									"name": "GENERAL7",
+									"type": "String"
 								}
 							},
 							{
@@ -810,8 +802,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 78
+									"name": "GENERAL8",
+									"type": "String"
 								}
 							},
 							{
@@ -820,8 +812,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 79
+									"name": "GENERAL9",
+									"type": "String"
 								}
 							},
 							{
@@ -830,8 +822,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 80
+									"name": "GENERAL10",
+									"type": "String"
 								}
 							},
 							{
@@ -840,8 +832,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 81
+									"name": "GENERAL11",
+									"type": "String"
 								}
 							},
 							{
@@ -850,8 +842,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 82
+									"name": "GENERAL12",
+									"type": "String"
 								}
 							},
 							{
@@ -860,8 +852,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 83
+									"name": "GENERAL13",
+									"type": "String"
 								}
 							},
 							{
@@ -870,8 +862,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 84
+									"name": "GENERAL14",
+									"type": "String"
 								}
 							},
 							{
@@ -880,8 +872,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 85
+									"name": "DISCONTINUED",
+									"type": "String"
 								}
 							},
 							{
@@ -890,8 +882,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 86
+									"name": "STATIC_MATERIAL_COST",
+									"type": "String"
 								}
 							},
 							{
@@ -900,8 +892,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 87
+									"name": "BOOLEAN2",
+									"type": "String"
 								}
 							},
 							{
@@ -910,8 +902,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 88
+									"name": "BOOLEAN3",
+									"type": "String"
 								}
 							},
 							{
@@ -920,8 +912,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 89
+									"name": "SXCLASS_FK",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -930,8 +922,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 90
+									"name": "MAP_PRICE",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -940,8 +932,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 91
+									"name": "RETAIL_PRICE",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -950,8 +942,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 92
+									"name": "MASTER_PACK_QTY",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -960,8 +952,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 93
+									"name": "QTY_PER_PALLET",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -970,8 +962,8 @@
 									"type": "Decimal"
 								},
 								"sink": {
-									"type": "Decimal",
-									"ordinal": 94
+									"name": "MASTER_PACK_UNIT_PRICE",
+									"type": "Decimal"
 								}
 							},
 							{
@@ -980,8 +972,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 95
+									"name": "MOD_BY",
+									"type": "String"
 								}
 							},
 							{
@@ -990,8 +982,8 @@
 									"type": "DateTime"
 								},
 								"sink": {
-									"type": "DateTime",
-									"ordinal": 96
+									"name": "MOD_DATE",
+									"type": "DateTime"
 								}
 							}
 						]
@@ -1005,7 +997,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "sink",
+						"referenceName": "jldwStagingItems",
 						"type": "DatasetReference"
 					}
 				]
