@@ -1,0 +1,495 @@
+{
+	"name": "jldwStagingItems",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "jldw",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "ID",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "STATUS",
+				"type": "varchar"
+			},
+			{
+				"name": "ITEM_CLASS",
+				"type": "varchar"
+			},
+			{
+				"name": "PART_NUMBER",
+				"type": "varchar"
+			},
+			{
+				"name": "SKU",
+				"type": "varchar"
+			},
+			{
+				"name": "DESCRIPTION",
+				"type": "varchar"
+			},
+			{
+				"name": "CATEGORY",
+				"type": "varchar"
+			},
+			{
+				"name": "DEPARTMENT",
+				"type": "varchar"
+			},
+			{
+				"name": "MODEL",
+				"type": "varchar"
+			},
+			{
+				"name": "STYLE",
+				"type": "varchar"
+			},
+			{
+				"name": "COLOR",
+				"type": "varchar"
+			},
+			{
+				"name": "ITEM_SIZE",
+				"type": "varchar"
+			},
+			{
+				"name": "BOOK_COST",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 8
+			},
+			{
+				"name": "LAST_COST",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 8
+			},
+			{
+				"name": "TOTAL_VALUE",
+				"type": "decimal",
+				"precision": 15,
+				"scale": 8
+			},
+			{
+				"name": "PURCHASE_QUANTITY",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "PURCHASE_UNIT",
+				"type": "varchar"
+			},
+			{
+				"name": "SALES_PRICE",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 2
+			},
+			{
+				"name": "SALES_QUANTITY",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "SALES_UNIT",
+				"type": "varchar"
+			},
+			{
+				"name": "BACKORDER_QUANTITY",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "ONHAND_QUANTITY",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "ONORDER_QUANTITY",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "EXPECTED_DATE",
+				"type": "date"
+			},
+			{
+				"name": "RESERVE_QUANTITY",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "MINIMUM_STOCK",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "REORDER_QUANTITY",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "SHIPPING_WEIGHT",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 2
+			},
+			{
+				"name": "SALES_TAXABLE",
+				"type": "varchar"
+			},
+			{
+				"name": "PURCHASED",
+				"type": "varchar"
+			},
+			{
+				"name": "INVENTORIED",
+				"type": "varchar"
+			},
+			{
+				"name": "SOLD",
+				"type": "varchar"
+			},
+			{
+				"name": "BUILT",
+				"type": "varchar"
+			},
+			{
+				"name": "SERIALIZED",
+				"type": "varchar"
+			},
+			{
+				"name": "SXACCCHT_EXPENSE_FK",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "SXACCCHT_INCOME_FK",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "SXACCCHT_ASSET_FK",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "SXVEND_FK",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "VENDOR_ITEM_ID",
+				"type": "varchar"
+			},
+			{
+				"name": "ASSOCIATION1",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "ASSOCIATION2",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "ASSOCIATION3",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "ASSOCIATION4",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "ASSOCIATION5",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "ASSOCIATION6",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "ASSOCIATION7",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "ASSOCIATION8",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "PURCHASE_TAXABLE",
+				"type": "varchar"
+			},
+			{
+				"name": "NON_TANGIBLE",
+				"type": "varchar"
+			},
+			{
+				"name": "STOCK_UNIT",
+				"type": "varchar"
+			},
+			{
+				"name": "DELETE_DATE",
+				"type": "date"
+			},
+			{
+				"name": "DELETE_USER_ID",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "CREATE_DATE",
+				"type": "date"
+			},
+			{
+				"name": "CREATE_USER_ID",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "SXACCCHT_COS_FK",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "PICKED_QUANTITY",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "PACKAGED_QUANTITY",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "ISSUED_QUANTITY",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "HOLD_QUANTITY",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "SXINVITM_REMAP_FK",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "DEPLETE_FLAG",
+				"type": "varchar"
+			},
+			{
+				"name": "PENDING_QUANTITY",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "MATERIAL_COST",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 8
+			},
+			{
+				"name": "LABOR_STANDARD",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 8
+			},
+			{
+				"name": "PICK_CLASS",
+				"type": "varchar"
+			},
+			{
+				"name": "DIMENSION_WEIGHT",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 2
+			},
+			{
+				"name": "SXVD_LIC_FK",
+				"type": "decimal",
+				"precision": 12,
+				"scale": 0
+			},
+			{
+				"name": "SXVD_DESC_FK",
+				"type": "decimal",
+				"precision": 12,
+				"scale": 0
+			},
+			{
+				"name": "LEAD_TIME",
+				"type": "decimal",
+				"precision": 8,
+				"scale": 0
+			},
+			{
+				"name": "SXGEN_SAFETYSTOCK_FK",
+				"type": "varchar"
+			},
+			{
+				"name": "GENERAL1",
+				"type": "varchar"
+			},
+			{
+				"name": "GENERAL2",
+				"type": "varchar"
+			},
+			{
+				"name": "GENERAL3",
+				"type": "varchar"
+			},
+			{
+				"name": "GENERAL4",
+				"type": "varchar"
+			},
+			{
+				"name": "GENERAL5",
+				"type": "varchar"
+			},
+			{
+				"name": "GENERAL6",
+				"type": "varchar"
+			},
+			{
+				"name": "GENERAL7",
+				"type": "varchar"
+			},
+			{
+				"name": "GENERAL8",
+				"type": "varchar"
+			},
+			{
+				"name": "GENERAL9",
+				"type": "varchar"
+			},
+			{
+				"name": "GENERAL10",
+				"type": "varchar"
+			},
+			{
+				"name": "GENERAL11",
+				"type": "varchar"
+			},
+			{
+				"name": "GENERAL12",
+				"type": "varchar"
+			},
+			{
+				"name": "GENERAL13",
+				"type": "varchar"
+			},
+			{
+				"name": "GENERAL14",
+				"type": "varchar"
+			},
+			{
+				"name": "DISCONTINUED",
+				"type": "varchar"
+			},
+			{
+				"name": "STATIC_MATERIAL_COST",
+				"type": "varchar"
+			},
+			{
+				"name": "BOOLEAN2",
+				"type": "varchar"
+			},
+			{
+				"name": "BOOLEAN3",
+				"type": "varchar"
+			},
+			{
+				"name": "SXCLASS_FK",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "MAP_PRICE",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 2
+			},
+			{
+				"name": "RETAIL_PRICE",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 2
+			},
+			{
+				"name": "MASTER_PACK_QTY",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "QTY_PER_PALLET",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 0
+			},
+			{
+				"name": "MASTER_PACK_UNIT_PRICE",
+				"type": "decimal",
+				"precision": 14,
+				"scale": 2
+			},
+			{
+				"name": "MOD_BY",
+				"type": "varchar"
+			},
+			{
+				"name": "MOD_DATE",
+				"type": "date"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "StagingItems"
+		}
+	}
+}
