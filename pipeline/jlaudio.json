@@ -19,11 +19,993 @@
 						"type": "OracleSource",
 						"partitionOption": "None"
 					},
-					"enableStaging": false
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "FileServerWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "ID",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 1
+								}
+							},
+							{
+								"source": {
+									"name": "STATUS",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 2
+								}
+							},
+							{
+								"source": {
+									"name": "ITEM_CLASS",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 3
+								}
+							},
+							{
+								"source": {
+									"name": "PART_NUMBER",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 4
+								}
+							},
+							{
+								"source": {
+									"name": "SKU",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 5
+								}
+							},
+							{
+								"source": {
+									"name": "DESCRIPTION",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 6
+								}
+							},
+							{
+								"source": {
+									"name": "CATEGORY",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 7
+								}
+							},
+							{
+								"source": {
+									"name": "DEPARTMENT",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 8
+								}
+							},
+							{
+								"source": {
+									"name": "MODEL",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 9
+								}
+							},
+							{
+								"source": {
+									"name": "STYLE",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 10
+								}
+							},
+							{
+								"source": {
+									"name": "COLOR",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 11
+								}
+							},
+							{
+								"source": {
+									"name": "ITEM_SIZE",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 12
+								}
+							},
+							{
+								"source": {
+									"name": "BOOK_COST",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 13
+								}
+							},
+							{
+								"source": {
+									"name": "LAST_COST",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 14
+								}
+							},
+							{
+								"source": {
+									"name": "TOTAL_VALUE",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 15
+								}
+							},
+							{
+								"source": {
+									"name": "PURCHASE_QUANTITY",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 16
+								}
+							},
+							{
+								"source": {
+									"name": "PURCHASE_UNIT",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 17
+								}
+							},
+							{
+								"source": {
+									"name": "SALES_PRICE",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 18
+								}
+							},
+							{
+								"source": {
+									"name": "SALES_QUANTITY",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 19
+								}
+							},
+							{
+								"source": {
+									"name": "SALES_UNIT",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 20
+								}
+							},
+							{
+								"source": {
+									"name": "BACKORDER_QUANTITY",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 21
+								}
+							},
+							{
+								"source": {
+									"name": "ONHAND_QUANTITY",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 22
+								}
+							},
+							{
+								"source": {
+									"name": "ONORDER_QUANTITY",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 23
+								}
+							},
+							{
+								"source": {
+									"name": "EXPECTED_DATE",
+									"type": "DateTime"
+								},
+								"sink": {
+									"type": "DateTime",
+									"ordinal": 24
+								}
+							},
+							{
+								"source": {
+									"name": "RESERVE_QUANTITY",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 25
+								}
+							},
+							{
+								"source": {
+									"name": "MINIMUM_STOCK",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 26
+								}
+							},
+							{
+								"source": {
+									"name": "REORDER_QUANTITY",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 27
+								}
+							},
+							{
+								"source": {
+									"name": "SHIPPING_WEIGHT",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 28
+								}
+							},
+							{
+								"source": {
+									"name": "SALES_TAXABLE",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 29
+								}
+							},
+							{
+								"source": {
+									"name": "PURCHASED",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 30
+								}
+							},
+							{
+								"source": {
+									"name": "INVENTORIED",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 31
+								}
+							},
+							{
+								"source": {
+									"name": "SOLD",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 32
+								}
+							},
+							{
+								"source": {
+									"name": "BUILT",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 33
+								}
+							},
+							{
+								"source": {
+									"name": "SERIALIZED",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 34
+								}
+							},
+							{
+								"source": {
+									"name": "SXACCCHT_EXPENSE_FK",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 35
+								}
+							},
+							{
+								"source": {
+									"name": "SXACCCHT_INCOME_FK",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 36
+								}
+							},
+							{
+								"source": {
+									"name": "SXACCCHT_ASSET_FK",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 37
+								}
+							},
+							{
+								"source": {
+									"name": "SXVEND_FK",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 38
+								}
+							},
+							{
+								"source": {
+									"name": "VENDOR_ITEM_ID",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 39
+								}
+							},
+							{
+								"source": {
+									"name": "ASSOCIATION1",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 40
+								}
+							},
+							{
+								"source": {
+									"name": "ASSOCIATION2",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 41
+								}
+							},
+							{
+								"source": {
+									"name": "ASSOCIATION3",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 42
+								}
+							},
+							{
+								"source": {
+									"name": "ASSOCIATION4",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 43
+								}
+							},
+							{
+								"source": {
+									"name": "ASSOCIATION5",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 44
+								}
+							},
+							{
+								"source": {
+									"name": "ASSOCIATION6",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 45
+								}
+							},
+							{
+								"source": {
+									"name": "ASSOCIATION7",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 46
+								}
+							},
+							{
+								"source": {
+									"name": "ASSOCIATION8",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 47
+								}
+							},
+							{
+								"source": {
+									"name": "PURCHASE_TAXABLE",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 48
+								}
+							},
+							{
+								"source": {
+									"name": "NON_TANGIBLE",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 49
+								}
+							},
+							{
+								"source": {
+									"name": "STOCK_UNIT",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 50
+								}
+							},
+							{
+								"source": {
+									"name": "DELETE_DATE",
+									"type": "DateTime"
+								},
+								"sink": {
+									"type": "DateTime",
+									"ordinal": 51
+								}
+							},
+							{
+								"source": {
+									"name": "DELETE_USER_ID",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 52
+								}
+							},
+							{
+								"source": {
+									"name": "CREATE_DATE",
+									"type": "DateTime"
+								},
+								"sink": {
+									"type": "DateTime",
+									"ordinal": 53
+								}
+							},
+							{
+								"source": {
+									"name": "CREATE_USER_ID",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 54
+								}
+							},
+							{
+								"source": {
+									"name": "SXACCCHT_COS_FK",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 55
+								}
+							},
+							{
+								"source": {
+									"name": "PICKED_QUANTITY",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 56
+								}
+							},
+							{
+								"source": {
+									"name": "PACKAGED_QUANTITY",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 57
+								}
+							},
+							{
+								"source": {
+									"name": "ISSUED_QUANTITY",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 58
+								}
+							},
+							{
+								"source": {
+									"name": "HOLD_QUANTITY",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 59
+								}
+							},
+							{
+								"source": {
+									"name": "SXINVITM_REMAP_FK",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 60
+								}
+							},
+							{
+								"source": {
+									"name": "DEPLETE_FLAG",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 61
+								}
+							},
+							{
+								"source": {
+									"name": "PENDING_QUANTITY",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 62
+								}
+							},
+							{
+								"source": {
+									"name": "MATERIAL_COST",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 63
+								}
+							},
+							{
+								"source": {
+									"name": "LABOR_STANDARD",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 64
+								}
+							},
+							{
+								"source": {
+									"name": "PICK_CLASS",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 65
+								}
+							},
+							{
+								"source": {
+									"name": "DIMENSION_WEIGHT",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 66
+								}
+							},
+							{
+								"source": {
+									"name": "SXVD_LIC_FK",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 67
+								}
+							},
+							{
+								"source": {
+									"name": "SXVD_DESC_FK",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 68
+								}
+							},
+							{
+								"source": {
+									"name": "LEAD_TIME",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 69
+								}
+							},
+							{
+								"source": {
+									"name": "SXGEN_SAFETYSTOCK_FK",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 70
+								}
+							},
+							{
+								"source": {
+									"name": "GENERAL1",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 71
+								}
+							},
+							{
+								"source": {
+									"name": "GENERAL2",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 72
+								}
+							},
+							{
+								"source": {
+									"name": "GENERAL3",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 73
+								}
+							},
+							{
+								"source": {
+									"name": "GENERAL4",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 74
+								}
+							},
+							{
+								"source": {
+									"name": "GENERAL5",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 75
+								}
+							},
+							{
+								"source": {
+									"name": "GENERAL6",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 76
+								}
+							},
+							{
+								"source": {
+									"name": "GENERAL7",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 77
+								}
+							},
+							{
+								"source": {
+									"name": "GENERAL8",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 78
+								}
+							},
+							{
+								"source": {
+									"name": "GENERAL9",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 79
+								}
+							},
+							{
+								"source": {
+									"name": "GENERAL10",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 80
+								}
+							},
+							{
+								"source": {
+									"name": "GENERAL11",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 81
+								}
+							},
+							{
+								"source": {
+									"name": "GENERAL12",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 82
+								}
+							},
+							{
+								"source": {
+									"name": "GENERAL13",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 83
+								}
+							},
+							{
+								"source": {
+									"name": "GENERAL14",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 84
+								}
+							},
+							{
+								"source": {
+									"name": "DISCONTINUED",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 85
+								}
+							},
+							{
+								"source": {
+									"name": "STATIC_MATERIAL_COST",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 86
+								}
+							},
+							{
+								"source": {
+									"name": "BOOLEAN2",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 87
+								}
+							},
+							{
+								"source": {
+									"name": "BOOLEAN3",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 88
+								}
+							},
+							{
+								"source": {
+									"name": "SXCLASS_FK",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 89
+								}
+							},
+							{
+								"source": {
+									"name": "MAP_PRICE",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 90
+								}
+							},
+							{
+								"source": {
+									"name": "RETAIL_PRICE",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 91
+								}
+							},
+							{
+								"source": {
+									"name": "MASTER_PACK_QTY",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 92
+								}
+							},
+							{
+								"source": {
+									"name": "QTY_PER_PALLET",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 93
+								}
+							},
+							{
+								"source": {
+									"name": "MASTER_PACK_UNIT_PRICE",
+									"type": "Decimal"
+								},
+								"sink": {
+									"type": "Decimal",
+									"ordinal": 94
+								}
+							},
+							{
+								"source": {
+									"name": "MOD_BY",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 95
+								}
+							},
+							{
+								"source": {
+									"name": "MOD_DATE",
+									"type": "DateTime"
+								},
+								"sink": {
+									"type": "DateTime",
+									"ordinal": 96
+								}
+							}
+						]
+					}
 				},
 				"inputs": [
 					{
 						"referenceName": "sx_inventory_items_active",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "sink",
 						"type": "DatasetReference"
 					}
 				]
