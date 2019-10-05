@@ -4,7 +4,7 @@
 	"parameters": {
 		"factoryName": {
 			"type": "string",
-			"metadata": "Data Factory Name",
+			"metadata": "Data Factory name",
 			"defaultValue": "rig"
 		},
 		"dw_connectionString": {
@@ -31,18 +31,6 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'hiscale'"
 		},
-		"prod1_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'prod1'"
-		},
-		"sqlva4onabrnvvfrkw_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'sqlva4onabrnvvfrkw'"
-		},
-		"jlhiramlaptop_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'jlhiramlaptop'"
-		},
 		"jldw_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'jldw'"
@@ -51,19 +39,31 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'jldw'"
 		},
+		"jlhiramlaptop_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'jlhiramlaptop'"
+		},
+		"prod1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'prod1'"
+		},
+		"sqlva4onabrnvvfrkw_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'sqlva4onabrnvvfrkw'"
+		},
 		"hf0524_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "UPCIC\\HFleitas"
+		},
+		"jldw_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "JLAMIRAMAR.com\\hfleitas"
 		},
 		"jlhiramlaptop_properties_typeProperties_host": {
 			"type": "string",
 			"defaultValue": "C:\\fleitasarts\\erp-data"
 		},
 		"jlhiramlaptop_properties_typeProperties_userId": {
-			"type": "string",
-			"defaultValue": "JLAMIRAMAR.com\\hfleitas"
-		},
-		"jldw_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "JLAMIRAMAR.com\\hfleitas"
 		}
@@ -988,7 +988,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/jlaudio')]",
+			"name": "[concat(parameters('factoryName'), '/JLA')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -2396,398 +2396,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/sqlCharacter')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "hf0524.",
-				"linkedServiceName": {
-					"referenceName": "hf0524",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "SqlServerTable",
-				"structure": [
-					{
-						"name": "quoteid",
-						"type": "Int32"
-					},
-					{
-						"name": "character",
-						"type": "String"
-					},
-					{
-						"name": "quote",
-						"type": "String"
-					},
-					{
-						"name": "sentiment",
-						"type": "Double"
-					}
-				],
-				"typeProperties": {}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/sqlCustomer')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "hf0524",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "SqlServerTable",
-				"schema": [
-					{
-						"name": "CustomerId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Name",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Email",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Customer"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/sqlCustomerAccount')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "hf0524",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "SqlServerTable",
-				"schema": [
-					{
-						"name": "CustomerAccountId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "CustomerId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "AcctNumEnding",
-						"type": "int",
-						"precision": 10
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "CustomerAccount"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/sx_inventory_items_active')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "oracle view",
-				"linkedServiceName": {
-					"referenceName": "prod1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "OracleTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "JLAUDIO",
-					"table": "SX_INVENTORY_ITEMS_ACTIVE"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/prod1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dw')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "hiramdw.database.windows.net",
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"connectionString": "[parameters('dw_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hf0524')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "desktop",
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"connectionString": "[parameters('hf0524_connectionString')]",
-					"userName": "[parameters('hf0524_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('hf0524_password')]"
-					}
-				},
-				"connectVia": {
-					"referenceName": "hf0524",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/hf0524')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hiram')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "localhost",
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"connectionString": "[parameters('hiram_connectionString')]"
-				},
-				"connectVia": {
-					"referenceName": "hiram",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/hiram')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hiramdw')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDW",
-				"typeProperties": {
-					"connectionString": "[parameters('hiramdw_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hiscale')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"connectionString": "[parameters('hiscale_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/prod1')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "Oracle",
-				"typeProperties": {
-					"connectionString": "[parameters('prod1_connectionString')]"
-				},
-				"connectVia": {
-					"referenceName": "jlaudio",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/jlaudio')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/sqlva4onabrnvvfrkw')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('sqlva4onabrnvvfrkw_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/every 15 minutes')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Stopped",
-				"type": "TumblingWindowTrigger",
-				"typeProperties": {
-					"frequency": "Minute",
-					"interval": 15,
-					"startTime": "2019-06-27T22:28:00.000Z",
-					"endTime": "2019-06-28T01:00:00.000Z",
-					"delay": "00:00:00",
-					"maxConcurrency": 50,
-					"retryPolicy": {
-						"intervalInSeconds": 30
-					},
-					"dependsOn": []
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hf0524')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hiram')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/jlaudio')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"description": "hiram laptop",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/laptop')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"description": "R90GTU6N",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/jlhiramlaptop')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "FileServer",
-				"typeProperties": {
-					"host": "[parameters('jlhiramlaptop_properties_typeProperties_host')]",
-					"userId": "[parameters('jlhiramlaptop_properties_typeProperties_userId')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('jlhiramlaptop_password')]"
-					}
-				},
-				"connectVia": {
-					"referenceName": "jlaudio",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/jlaudio')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/sink')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "jlhiramlaptop",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "FileServerLocation"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/jlhiramlaptop')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/jldw')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"connectionString": "[parameters('jldw_connectionString')]",
-					"userName": "[parameters('jldw_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('jldw_password')]"
-					}
-				},
-				"connectVia": {
-					"referenceName": "jlaudio",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/jlaudio')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/jldwStagingItems')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -3286,6 +2894,398 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/jldw')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sink')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "jlhiramlaptop",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "FileServerLocation"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/jlhiramlaptop')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sqlCharacter')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "hf0524.",
+				"linkedServiceName": {
+					"referenceName": "hf0524",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"structure": [
+					{
+						"name": "quoteid",
+						"type": "Int32"
+					},
+					{
+						"name": "character",
+						"type": "String"
+					},
+					{
+						"name": "quote",
+						"type": "String"
+					},
+					{
+						"name": "sentiment",
+						"type": "Double"
+					}
+				],
+				"typeProperties": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sqlCustomer')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "hf0524",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "CustomerId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Name",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Email",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Customer"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sqlCustomerAccount')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "hf0524",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "CustomerAccountId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "CustomerId",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "AcctNumEnding",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "CustomerAccount"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sx_inventory_items_active')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "oracle view",
+				"linkedServiceName": {
+					"referenceName": "prod1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "OracleTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "JLAUDIO",
+					"table": "SX_INVENTORY_ITEMS_ACTIVE"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/prod1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dw')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "hiramdw.database.windows.net",
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('dw_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hf0524')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "desktop",
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('hf0524_connectionString')]",
+					"userName": "[parameters('hf0524_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('hf0524_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "hf0524",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/hf0524')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hiram')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "localhost",
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('hiram_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "hiram",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/hiram')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hiramdw')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('hiramdw_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hiscale')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('hiscale_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/jldw')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('jldw_connectionString')]",
+					"userName": "[parameters('jldw_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('jldw_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "jlaudio",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/jlaudio')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/jlhiramlaptop')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "FileServer",
+				"typeProperties": {
+					"host": "[parameters('jlhiramlaptop_properties_typeProperties_host')]",
+					"userId": "[parameters('jlhiramlaptop_properties_typeProperties_userId')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('jlhiramlaptop_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "jlaudio",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/jlaudio')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/prod1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "Oracle",
+				"typeProperties": {
+					"connectionString": "[parameters('prod1_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "jlaudio",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/jlaudio')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/sqlva4onabrnvvfrkw')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('sqlva4onabrnvvfrkw_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/every 15 minutes')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"type": "TumblingWindowTrigger",
+				"typeProperties": {
+					"frequency": "Minute",
+					"interval": 15,
+					"startTime": "2019-06-27T22:28:00.000Z",
+					"endTime": "2019-06-28T01:00:00.000Z",
+					"delay": "00:00:00",
+					"maxConcurrency": 50,
+					"retryPolicy": {
+						"intervalInSeconds": 30
+					},
+					"dependsOn": []
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hf0524')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hiram')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/jlaudio')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"description": "hiram laptop",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/laptop')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"description": "R90GTU6N",
+				"typeProperties": {}
+			},
+			"dependsOn": []
 		}
 	]
 }

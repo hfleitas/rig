@@ -4,7 +4,7 @@
 	"parameters": {
 		"factoryName": {
 			"type": "string",
-			"metadata": "Data Factory Name",
+			"metadata": "Data Factory name",
 			"defaultValue": "rig"
 		},
 		"dw_connectionString": {
@@ -35,13 +35,21 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'hiram'"
 		},
-		"prod1_connectionString": {
+		"jldw_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'prod1'"
+			"metadata": "Secure string for 'connectionString' of 'jldw'"
+		},
+		"jldw_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'jldw'"
 		},
 		"hf0524_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "UPCIC\\HFleitas"
+		},
+		"jldw_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "JLAMIRAMAR.com\\hfleitas"
 		}
 	},
 	"variables": {
@@ -604,14 +612,19 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/prod1')]",
+			"name": "[concat(parameters('factoryName'), '/jldw')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"type": "Oracle",
+				"type": "SqlServer",
 				"typeProperties": {
-					"connectionString": "[parameters('prod1_connectionString')]"
+					"connectionString": "[parameters('jldw_connectionString')]",
+					"userName": "[parameters('jldw_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('jldw_password')]"
+					}
 				},
 				"connectVia": {
 					"referenceName": "jlaudio",
