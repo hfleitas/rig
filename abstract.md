@@ -18,6 +18,7 @@ He will also show you how to automate tasks like Resuming or Pausing your Azure 
 Hope to see you there.
 
 Sincerely,
+
 Hiram
 
 ## Bio
@@ -29,4 +30,5 @@ Hiram is also a code contributor to several open source projects and serves as t
 
 ## Contact
 https://linkedin.com/in/hiramfleitas
+
 http://fleitasarts.com
