@@ -1,0 +1,22 @@
+// Generated Code Behind Header
+USE DATABASE [undefined];
+USE SCHEMA [undefined];
+// Generated Code Behind Header
+@searchlog = 
+    EXTRACT UserId          int, 
+            Start           DateTime, 
+            Region          string, 
+            Query           string, 
+            Duration        int, 
+            Urls            string, 
+            ClickedUrls     string
+    FROM "/SearchLog.tsv"
+    USING Extractors.Tsv();
+
+OUTPUT @searchlog 
+    TO "/SearchLog_output.tsv"
+    USING Outputters.Tsv();
+// Generated Code Behind Footer
+USE DATABASE [undefined];
+USE SCHEMA [undefined];
+// Generated Code Behind Footer
