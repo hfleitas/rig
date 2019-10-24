@@ -6,14 +6,7 @@
 				"name": "GetStatus",
 				"description": "Start",
 				"type": "WebActivity",
-				"dependsOn": [
-					{
-						"activity": "ScaleDW",
-						"dependencyConditions": [
-							"Skipped"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -74,26 +67,6 @@
 						"type": "MSI",
 						"resource": "https://management.core.windows.net/"
 					}
-				}
-			},
-			{
-				"name": "ScaleDW",
-				"type": "SqlServerStoredProcedure",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"storedProcedureName": "ALTER DATABASE hiramdw MODIFY (SERVICE_OBJECTIVE = 'DW200c');"
-				},
-				"linkedServiceName": {
-					"referenceName": "hiramdwmaster",
-					"type": "LinkedServiceReference"
 				}
 			}
 		],
