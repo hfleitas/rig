@@ -9,7 +9,7 @@
 					{
 						"activity": "GetStatus",
 						"dependencyConditions": [
-							"Completed"
+							"Succeeded"
 						]
 					}
 				],
@@ -126,7 +126,7 @@
 					{
 						"activity": "IfPausedThenOnline",
 						"dependencyConditions": [
-							"Completed"
+							"Succeeded"
 						]
 					}
 				],
@@ -177,7 +177,7 @@
 					{
 						"activity": "UntilOnline",
 						"dependencyConditions": [
-							"Completed"
+							"Succeeded"
 						]
 					}
 				],
@@ -225,7 +225,7 @@
 					{
 						"activity": "wipeDW",
 						"dependencyConditions": [
-							"Completed"
+							"Succeeded"
 						]
 					}
 				],
