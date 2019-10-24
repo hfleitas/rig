@@ -60,7 +60,7 @@
 						"Content-Type": "application/json"
 					},
 					"body": {
-						"value": "@concat('{\"location\":\"eastus2\",\"properties\":{\"requestedServiceObjectiveName\": \"',pipeline().parameters.SLO,'\"}}')",
+						"value": "@concat('{\"location\":\"eastus2\",\"sku\":{\"name\": \"',pipeline().parameters.SLO,'\"}}')",
 						"type": "Expression"
 					},
 					"authentication": {
