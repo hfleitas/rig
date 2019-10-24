@@ -43,8 +43,6 @@
 									"value": "@string('')",
 									"type": "Expression"
 								},
-								"linkedServices": [],
-								"datasets": [],
 								"authentication": {
 									"type": "MSI",
 									"resource": "https://management.core.windows.net/"
@@ -124,8 +122,6 @@
 									"value": "@string('')",
 									"type": "Expression"
 								},
-								"linkedServices": [],
-								"datasets": [],
 								"authentication": {
 									"type": "MSI",
 									"resource": "https://management.core.windows.net/"
@@ -272,8 +268,6 @@
 									"value": "@string('')",
 									"type": "Expression"
 								},
-								"linkedServices": [],
-								"datasets": [],
 								"authentication": {
 									"type": "MSI",
 									"resource": "https://management.core.windows.net/"
@@ -300,6 +294,10 @@
 			"DW": {
 				"type": "string",
 				"defaultValue": "dw"
+			},
+			"SLO": {
+				"type": "string",
+				"defaultValue": "DW1000c"
 			}
 		},
 		"annotations": []
