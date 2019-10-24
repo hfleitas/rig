@@ -7,6 +7,10 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "rig"
 		},
+		"hiram_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'hiram'"
+		},
 		"jldw_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'jldw'"
@@ -40,6 +44,24 @@
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/hiram')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "localhost",
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('hiram_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "hiram",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/jldw')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
@@ -1784,7 +1806,14 @@
 						"name": "dwCustomer",
 						"description": "copy",
 						"type": "Copy",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "hsCustomerAccount",
+								"dependencyConditions": [
+									"Skipped"
+								]
+							}
+						],
 						"policy": {
 							"timeout": "7.00:00:00",
 							"retry": 0,
@@ -1873,7 +1902,7 @@
 							{
 								"activity": "dwCustomer",
 								"dependencyConditions": [
-									"Succeeded"
+									"Skipped"
 								]
 							}
 						],
@@ -1962,14 +1991,7 @@
 						"name": "hsCustomer",
 						"description": "copy",
 						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "dwCustomerAccount",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
+						"dependsOn": [],
 						"policy": {
 							"timeout": "7.00:00:00",
 							"retry": 0,
@@ -2150,7 +2172,14 @@
 					{
 						"name": "dwCharacters",
 						"type": "Copy",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "hsQuotes",
+								"dependencyConditions": [
+									"Skipped"
+								]
+							}
+						],
 						"policy": {
 							"timeout": "7.00:00:00",
 							"retry": 0,
@@ -2204,7 +2233,7 @@
 							{
 								"activity": "dwCharacters",
 								"dependencyConditions": [
-									"Succeeded"
+									"Skipped"
 								]
 							}
 						],
@@ -2257,14 +2286,7 @@
 					{
 						"name": "hsCharacaters",
 						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "dwQuotes",
-								"dependencyConditions": [
-									"Completed"
-								]
-							}
-						],
+						"dependsOn": [],
 						"policy": {
 							"timeout": "7.00:00:00",
 							"retry": 0,
@@ -2376,7 +2398,7 @@
 							{
 								"activity": "GetStatus",
 								"dependencyConditions": [
-									"Succeeded"
+									"Skipped"
 								]
 							}
 						],
@@ -2457,7 +2479,7 @@
 							{
 								"activity": "IfPausedThenOnline",
 								"dependencyConditions": [
-									"Succeeded"
+									"Skipped"
 								]
 							}
 						],
@@ -2509,7 +2531,7 @@
 							{
 								"activity": "UntilOnline",
 								"dependencyConditions": [
-									"Succeeded"
+									"Skipped"
 								]
 							}
 						],
@@ -2558,7 +2580,7 @@
 							{
 								"activity": "wipeDW",
 								"dependencyConditions": [
-									"Succeeded"
+									"Completed"
 								]
 							}
 						],
@@ -2606,7 +2628,7 @@
 							{
 								"activity": "execTrollhunters",
 								"dependencyConditions": [
-									"Succeeded"
+									"Skipped"
 								]
 							}
 						],

@@ -20,6 +20,9 @@
 		"hiramdw_connectionString": {
 			"value": ""
 		},
+		"hiramdwmaster_connectionString": {
+			"value": ""
+		},
 		"hiscale_connectionString": {
 			"value": ""
 		},

@@ -27,6 +27,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'hiramdw'"
 		},
+		"hiramdwmaster_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'hiramdwmaster'"
+		},
 		"hiscale_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'hiscale'"
@@ -100,6 +104,9 @@
 					"hiramdw_connectionString": {
 						"value": "[parameters('hiramdw_connectionString')]"
 					},
+					"hiramdwmaster_connectionString": {
+						"value": "[parameters('hiramdwmaster_connectionString')]"
+					},
 					"hiscale_connectionString": {
 						"value": "[parameters('hiscale_connectionString')]"
 					},
@@ -111,9 +118,6 @@
 					},
 					"hf0524_password": {
 						"value": "[parameters('hf0524_password')]"
-					},
-					"hiram_connectionString": {
-						"value": "[parameters('hiram_connectionString')]"
 					},
 					"hf0524_properties_typeProperties_userName": {
 						"value": "[parameters('hf0524_properties_typeProperties_userName')]"
@@ -135,6 +139,9 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"hiram_connectionString": {
+						"value": "[parameters('hiram_connectionString')]"
 					},
 					"jldw_connectionString": {
 						"value": "[parameters('jldw_connectionString')]"
