@@ -266,7 +266,8 @@
 				}
 			},
 			{
-				"name": "IfOnlineThenSacle",
+				"name": "IfOnline",
+				"description": "Sacle down and Pause",
 				"type": "IfCondition",
 				"dependsOn": [
 					{
@@ -296,6 +297,44 @@
 									"WebhookName": "scaledw"
 								},
 								"timeout": "00:10:00"
+							}
+						},
+						{
+							"name": "Pause",
+							"description": "Pause",
+							"type": "WebActivity",
+							"dependsOn": [
+								{
+									"activity": "ScaleWebHook",
+									"dependencyConditions": [
+										"Completed"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"url": {
+									"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'/pause?api-version=2018-06-01-preview')",
+									"type": "Expression"
+								},
+								"method": "POST",
+								"body": {
+									"value": "@string('')",
+									"type": "Expression"
+								},
+								"linkedServices": [],
+								"datasets": [],
+								"authentication": {
+									"type": "MSI",
+									"resource": "https://management.core.windows.net/"
+								}
 							}
 						}
 					]
@@ -378,35 +417,6 @@
 					"body": {
 						"value": "@concat('{\n   \"DataFactoryName\": \"',pipeline().DataFactory,'\",\n   \"PipelineName\": \"',pipeline().Pipeline,'\",\n   \"Subject\": \"An error has occurred!\",\n   \"ErrorMessage\": \"The ADF pipeline failed. Please check the activity log.\",\n   \"EmailTo\": \"',pipeline().parameters.Notify,'\"\n}')",
 						"type": "Expression"
-					}
-				}
-			},
-			{
-				"name": "Pause",
-				"description": "Pause",
-				"type": "WebActivity",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"url": {
-						"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'/pause?api-version=2018-06-01-preview')",
-						"type": "Expression"
-					},
-					"method": "POST",
-					"body": {
-						"value": "@string('')",
-						"type": "Expression"
-					},
-					"authentication": {
-						"type": "MSI",
-						"resource": "https://management.core.windows.net/"
 					}
 				}
 			}
