@@ -688,7 +688,7 @@
 						}
 					},
 					{
-						"name": "IfOnline",
+						"name": "IfOnlinePause",
 						"description": "Sacle down and Pause",
 						"type": "IfCondition",
 						"dependsOn": [
