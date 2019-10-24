@@ -112,15 +112,6 @@
 					},
 					"sqlva4onabrnvvfrkw_connectionString": {
 						"value": "[parameters('sqlva4onabrnvvfrkw_connectionString')]"
-					},
-					"hf0524_connectionString": {
-						"value": "[parameters('hf0524_connectionString')]"
-					},
-					"hf0524_password": {
-						"value": "[parameters('hf0524_password')]"
-					},
-					"hf0524_properties_typeProperties_userName": {
-						"value": "[parameters('hf0524_properties_typeProperties_userName')]"
 					}
 				}
 			},
@@ -140,6 +131,12 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"hf0524_connectionString": {
+						"value": "[parameters('hf0524_connectionString')]"
+					},
+					"hf0524_password": {
+						"value": "[parameters('hf0524_password')]"
+					},
 					"hiram_connectionString": {
 						"value": "[parameters('hiram_connectionString')]"
 					},
@@ -154,6 +151,9 @@
 					},
 					"prod1_connectionString": {
 						"value": "[parameters('prod1_connectionString')]"
+					},
+					"hf0524_properties_typeProperties_userName": {
+						"value": "[parameters('hf0524_properties_typeProperties_userName')]"
 					},
 					"jldw_properties_typeProperties_userName": {
 						"value": "[parameters('jldw_properties_typeProperties_userName')]"

@@ -7,6 +7,14 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "rig"
 		},
+		"hf0524_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'hf0524'"
+		},
+		"hf0524_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'hf0524'"
+		},
 		"hiram_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'hiram'"
@@ -27,6 +35,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'prod1'"
 		},
+		"hf0524_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "UPCIC\\HFleitas"
+		},
 		"jldw_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "JLAMIRAMAR.com\\hfleitas"
@@ -44,6 +56,29 @@
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/hf0524')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "desktop",
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('hf0524_connectionString')]",
+					"userName": "[parameters('hf0524_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('hf0524_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "hf0524",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/hiram')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
@@ -687,7 +722,9 @@
 				],
 				"typeProperties": {}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/sqlCustomer')]",
@@ -720,7 +757,9 @@
 					"table": "Customer"
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/sqlCustomerAccount')]",
@@ -755,7 +794,9 @@
 					"table": "CustomerAccount"
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/sx_inventory_items_active')]",
@@ -2555,7 +2596,7 @@
 							{
 								"activity": "UntilOnline",
 								"dependencyConditions": [
-									"Completed"
+									"Succeeded"
 								]
 							}
 						],
@@ -2604,7 +2645,7 @@
 							{
 								"activity": "wipeDW",
 								"dependencyConditions": [
-									"Completed"
+									"Succeeded"
 								]
 							}
 						],
@@ -2755,6 +2796,44 @@
 								"resource": "https://management.core.windows.net/"
 							}
 						}
+					},
+					{
+						"name": "Notify",
+						"description": "",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "execTrollhunters",
+								"dependencyConditions": [
+									"Failed"
+								]
+							},
+							{
+								"activity": "execLeads",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-23.eastus2.logic.azure.com:443/workflows/a3b71278fcd74578912de49da8f0cc41/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=hDohhaBVFqS07vlHEOhum2ZLvhUnvyi1u9oqKBO5fRc",
+							"method": "POST",
+							"headers": {
+								"Content-type": "application/json"
+							},
+							"body": {
+								"value": "@concat('{\n   \"DataFactoryName\": \"',pipeline().DataFactory,'\",\n   \"PipelineName\": \"',pipeline().Pipeline,'\",\n   \"Subject\": \"An error has occurred!\",\n   \"ErrorMessage\": \"The ADF pipeline failed. Please check the activity log.\",\n   \"EmailTo\": \"',pipeline().parameters.Notify,'\"\n}')",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"parameters": {
@@ -2777,6 +2856,10 @@
 					"SLO": {
 						"type": "string",
 						"defaultValue": "DW1000c"
+					},
+					"Notify": {
+						"type": "string",
+						"defaultValue": "azure@fleitasarts.com"
 					}
 				},
 				"annotations": []
