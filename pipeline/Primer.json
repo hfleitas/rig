@@ -43,6 +43,8 @@
 									"value": "@string('')",
 									"type": "Expression"
 								},
+								"linkedServices": [],
+								"datasets": [],
 								"authentication": {
 									"type": "MSI",
 									"resource": "https://management.core.windows.net/"
@@ -56,7 +58,7 @@
 								{
 									"activity": "Resume",
 									"dependencyConditions": [
-										"Skipped"
+										"Succeeded"
 									]
 								}
 							],
@@ -81,32 +83,12 @@
 									"value": "@concat('{\"location\":\"eastus2\",\"properties\":{\"requestedServiceObjectiveName\": \"',pipeline().parameters.SLO,'\"}}')",
 									"type": "Expression"
 								},
+								"linkedServices": [],
+								"datasets": [],
 								"authentication": {
 									"type": "MSI",
 									"resource": "https://management.core.windows.net/"
 								}
-							}
-						},
-						{
-							"name": "ScaleWebHook",
-							"description": "https://s1events.azure-automation.net/webhooks?token=gedxRKHcZ2FWzWTJx5wGavBsu8kBmk3LYMTWDzyjCDs%3d",
-							"type": "WebHook",
-							"dependsOn": [
-								{
-									"activity": "ScaleAPI",
-									"dependencyConditions": [
-										"Skipped"
-									]
-								}
-							],
-							"userProperties": [],
-							"typeProperties": {
-								"url": "https://s1events.azure-automation.net/webhooks?token=gedxRKHcZ2FWzWTJx5wGavBsu8kBmk3LYMTWDzyjCDs%3d",
-								"method": "POST",
-								"body": {
-									"WebhookName": "scaledw"
-								},
-								"timeout": "00:10:00"
 							}
 						}
 					]
@@ -182,6 +164,8 @@
 									"value": "@string('')",
 									"type": "Expression"
 								},
+								"linkedServices": [],
+								"datasets": [],
 								"authentication": {
 									"type": "MSI",
 									"resource": "https://management.core.windows.net/"
@@ -294,7 +278,7 @@
 					{
 						"activity": "GetStatusEnd",
 						"dependencyConditions": [
-							"Completed"
+							"Succeeded"
 						]
 					}
 				],
@@ -309,7 +293,14 @@
 							"name": "Pause",
 							"description": "Pause",
 							"type": "WebActivity",
-							"dependsOn": [],
+							"dependsOn": [
+								{
+									"activity": "ScaleWebHook",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
 							"policy": {
 								"timeout": "7.00:00:00",
 								"retry": 0,
@@ -332,6 +323,21 @@
 									"type": "MSI",
 									"resource": "https://management.core.windows.net/"
 								}
+							}
+						},
+						{
+							"name": "ScaleWebHook",
+							"description": "https://s1events.azure-automation.net/webhooks?token=gedxRKHcZ2FWzWTJx5wGavBsu8kBmk3LYMTWDzyjCDs%3d",
+							"type": "WebHook",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"url": "https://s1events.azure-automation.net/webhooks?token=gedxRKHcZ2FWzWTJx5wGavBsu8kBmk3LYMTWDzyjCDs%3d",
+								"method": "POST",
+								"body": {
+									"WebhookName": "scaledw"
+								},
+								"timeout": "00:10:00"
 							}
 						}
 					]
