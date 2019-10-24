@@ -327,12 +327,12 @@
 						},
 						{
 							"name": "ScaleWebHook",
-							"description": "https://s1events.azure-automation.net/webhooks?token=gedxRKHcZ2FWzWTJx5wGavBsu8kBmk3LYMTWDzyjCDs%3d",
+							"description": "https://s1events.azure-automation.net/webhooks?token=g%2faPH6fkV80NyOBzBggPBY5MslhWlhaJiZG6uxBJHbY%3d",
 							"type": "WebHook",
 							"dependsOn": [],
 							"userProperties": [],
 							"typeProperties": {
-								"url": "https://s1events.azure-automation.net/webhooks?token=gedxRKHcZ2FWzWTJx5wGavBsu8kBmk3LYMTWDzyjCDs%3d",
+								"url": "https://s1events.azure-automation.net/webhooks?token=g%2faPH6fkV80NyOBzBggPBY5MslhWlhaJiZG6uxBJHbY%3d",
 								"method": "POST",
 								"body": {
 									"WebhookName": "scaledw"
