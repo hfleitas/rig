@@ -9,7 +9,7 @@
 					{
 						"activity": "GetStatus",
 						"dependencyConditions": [
-							"Skipped"
+							"Completed"
 						]
 					}
 				],
@@ -43,8 +43,6 @@
 									"value": "@string('')",
 									"type": "Expression"
 								},
-								"linkedServices": [],
-								"datasets": [],
 								"authentication": {
 									"type": "MSI",
 									"resource": "https://management.core.windows.net/"
@@ -83,8 +81,6 @@
 									"value": "@concat('{\"location\":\"eastus2\",\"properties\":{\"requestedServiceObjectiveName\": \"',pipeline().parameters.SLO,'\"}}')",
 									"type": "Expression"
 								},
-								"linkedServices": [],
-								"datasets": [],
 								"authentication": {
 									"type": "MSI",
 									"resource": "https://management.core.windows.net/"
@@ -332,8 +328,6 @@
 									"value": "@string('')",
 									"type": "Expression"
 								},
-								"linkedServices": [],
-								"datasets": [],
 								"authentication": {
 									"type": "MSI",
 									"resource": "https://management.core.windows.net/"
