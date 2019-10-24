@@ -13,5 +13,6 @@
 * Azure SQL Data Warehouse: [HASH vs Round-Robin Distributed Tables](https://blogs.msdn.microsoft.com/sqlcat/2015/08/11/choosing-hash-distributed-table-vs-round-robin-distributed-table-in-azure-sql-dw-service/)
 * Azure Friday: [Managed Service Identity](https://www.youtube.com/watch?v=bBi1bll2928)
 * [aka.ms/azuremsi](https://aka.ms/azuremsi)
+* [Send Notification from Pipeline](https://www.mssqltips.com/sqlservertip/5962/send-notifications-from-an-azure-data-factory-pipeline--part-2)
 * Greg Galloway: [github.com/furmangg/automating-azure-sql-dw](https://github.com/furmangg/automating-azure-sql-dw)
 * [pass.org/summit](https://www.pass.org/summit/2019/Learn/SpeakerDetails.aspx?spid=4116)
