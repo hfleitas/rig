@@ -56,8 +56,11 @@
 						"type": "Expression"
 					},
 					"method": "PATCH",
+					"headers": {
+						"Content-Type": "application/json; charset=UTF-8"
+					},
 					"body": {
-						"value": "{\n    \"properties\": {\n        \"requestedServiceObjectiveName\": DW1000c\n    }\n}",
+						"value": "{\"properties\": {\"requestedServiceObjectiveName\": DW200c }}",
 						"type": "Expression"
 					},
 					"authentication": {
@@ -86,7 +89,7 @@
 			},
 			"SLO": {
 				"type": "string",
-				"defaultValue": "DW1000c"
+				"defaultValue": "DW200c"
 			}
 		},
 		"annotations": []
