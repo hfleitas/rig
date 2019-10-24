@@ -298,7 +298,7 @@
 					{
 						"activity": "GetStatusEnd",
 						"dependencyConditions": [
-							"Skipped"
+							"Completed"
 						]
 					}
 				],
@@ -332,6 +332,8 @@
 									"value": "@string('')",
 									"type": "Expression"
 								},
+								"linkedServices": [],
+								"datasets": [],
 								"authentication": {
 									"type": "MSI",
 									"resource": "https://management.core.windows.net/"
