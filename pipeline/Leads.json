@@ -7,7 +7,14 @@
 				"name": "dwCustomer",
 				"description": "copy",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "hsCustomerAccount",
+						"dependencyConditions": [
+							"Skipped"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -94,7 +101,7 @@
 					{
 						"activity": "dwCustomer",
 						"dependencyConditions": [
-							"Succeeded"
+							"Skipped"
 						]
 					}
 				],
@@ -181,14 +188,7 @@
 				"name": "hsCustomer",
 				"description": "copy",
 				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "dwCustomerAccount",
-						"dependencyConditions": [
-							"Completed"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,

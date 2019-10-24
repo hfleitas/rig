@@ -6,7 +6,14 @@
 			{
 				"name": "dwCharacters",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "hsQuotes",
+						"dependencyConditions": [
+							"Skipped"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -58,7 +65,7 @@
 					{
 						"activity": "dwCharacters",
 						"dependencyConditions": [
-							"Succeeded"
+							"Skipped"
 						]
 					}
 				],
@@ -109,14 +116,7 @@
 			{
 				"name": "hsCharacaters",
 				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "dwQuotes",
-						"dependencyConditions": [
-							"Completed"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
