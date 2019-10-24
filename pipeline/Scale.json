@@ -32,7 +32,7 @@
 				}
 			},
 			{
-				"name": "Scale",
+				"name": "ScaleAPI",
 				"type": "WebActivity",
 				"dependsOn": [
 					{
@@ -60,13 +60,37 @@
 						"Content-Type": "application/json"
 					},
 					"body": {
-						"value": "{\"properties\":{\"requestedServiceObjectiveName\": \"DW200c\"}}",
+						"value": "@concat('{\"properties\":{\"requestedServiceObjectiveName\": \"',pipeline().parameters.SLO,'\"}}')",
 						"type": "Expression"
 					},
 					"authentication": {
 						"type": "MSI",
 						"resource": "https://management.core.windows.net/"
 					}
+				}
+			},
+			{
+				"name": "ScaleDW",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "ScaleAPI",
+						"dependencyConditions": [
+							"Skipped"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "hiramdw",
+					"type": "LinkedServiceReference"
 				}
 			}
 		],
