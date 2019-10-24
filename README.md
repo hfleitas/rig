@@ -4,6 +4,7 @@
 ## Resources
 
 * [fleitasarts.com](http://fleitasarts.com)
+* [github.com/hfleitas/rig](https://github.com/hfleitas/rig)
 * [netflix.com/trollhunters](https://netflix.com/trollhunters)
 * Azure Data Factory: [GitHub Integration](https://azure.microsoft.com/en-us/blog/azure-data-factory-visual-tools-now-supports-github-integration/)
 * Azure Data Factory: [Documentation](https://docs.microsoft.com/en-us/azure/data-factory/)
