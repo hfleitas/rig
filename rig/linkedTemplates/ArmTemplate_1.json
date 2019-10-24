@@ -2425,7 +2425,7 @@
 							{
 								"activity": "GetStatus",
 								"dependencyConditions": [
-									"Completed"
+									"Succeeded"
 								]
 							}
 						],
@@ -2544,7 +2544,7 @@
 							{
 								"activity": "IfPausedThenOnline",
 								"dependencyConditions": [
-									"Completed"
+									"Succeeded"
 								]
 							}
 						],
