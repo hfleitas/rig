@@ -181,14 +181,7 @@
 				"name": "hsCustomer",
 				"description": "copy",
 				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "dwCustomerAccount",
-						"dependencyConditions": [
-							"Completed"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
