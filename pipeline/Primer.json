@@ -379,24 +379,6 @@
 				"type": "WebActivity",
 				"dependsOn": [
 					{
-						"activity": "IfPausedThenOnline",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
-						"activity": "wipeDW",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
-						"activity": "wipeHS",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
 						"activity": "execTrollhunters",
 						"dependencyConditions": [
 							"Failed"
@@ -404,12 +386,6 @@
 					},
 					{
 						"activity": "execLeads",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
-						"activity": "IfOnlineThenPause",
 						"dependencyConditions": [
 							"Failed"
 						]
