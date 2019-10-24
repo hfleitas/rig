@@ -26,16 +26,7 @@
 		"hiscale_connectionString": {
 			"value": ""
 		},
-		"jldw_connectionString": {
-			"value": ""
-		},
-		"jldw_password": {
-			"value": ""
-		},
 		"jlhiramlaptop_password": {
-			"value": ""
-		},
-		"prod1_connectionString": {
 			"value": ""
 		},
 		"sqlva4onabrnvvfrkw_connectionString": {
@@ -43,9 +34,6 @@
 		},
 		"hf0524_properties_typeProperties_userName": {
 			"value": "UPCIC\\HFleitas"
-		},
-		"jldw_properties_typeProperties_userName": {
-			"value": "JLAMIRAMAR.com\\hfleitas"
 		},
 		"jlhiramlaptop_properties_typeProperties_host": {
 			"value": "C:\\fleitasarts\\erp-data"

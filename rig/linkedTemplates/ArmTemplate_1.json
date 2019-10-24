@@ -19,29 +19,13 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'hiram'"
 		},
-		"jldw_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'jldw'"
-		},
-		"jldw_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'jldw'"
-		},
 		"jlhiramlaptop_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'jlhiramlaptop'"
 		},
-		"prod1_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'prod1'"
-		},
 		"hf0524_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "UPCIC\\HFleitas"
-		},
-		"jldw_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "JLAMIRAMAR.com\\hfleitas"
 		},
 		"jlhiramlaptop_properties_typeProperties_host": {
 			"type": "string",
@@ -98,28 +82,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/jldw')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"connectionString": "[parameters('jldw_connectionString')]",
-					"userName": "[parameters('jldw_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('jldw_password')]"
-					}
-				},
-				"connectVia": {
-					"referenceName": "jlaudio",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/jlhiramlaptop')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -133,23 +95,6 @@
 						"type": "SecureString",
 						"value": "[parameters('jlhiramlaptop_password')]"
 					}
-				},
-				"connectVia": {
-					"referenceName": "jlaudio",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/prod1')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "Oracle",
-				"typeProperties": {
-					"connectionString": "[parameters('prod1_connectionString')]"
 				},
 				"connectVia": {
 					"referenceName": "jlaudio",

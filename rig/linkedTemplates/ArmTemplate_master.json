@@ -35,21 +35,9 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'hiscale'"
 		},
-		"jldw_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'jldw'"
-		},
-		"jldw_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'jldw'"
-		},
 		"jlhiramlaptop_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'jlhiramlaptop'"
-		},
-		"prod1_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'prod1'"
 		},
 		"sqlva4onabrnvvfrkw_connectionString": {
 			"type": "secureString",
@@ -58,10 +46,6 @@
 		"hf0524_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "UPCIC\\HFleitas"
-		},
-		"jldw_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "JLAMIRAMAR.com\\hfleitas"
 		},
 		"jlhiramlaptop_properties_typeProperties_host": {
 			"type": "string",
@@ -140,23 +124,11 @@
 					"hiram_connectionString": {
 						"value": "[parameters('hiram_connectionString')]"
 					},
-					"jldw_connectionString": {
-						"value": "[parameters('jldw_connectionString')]"
-					},
-					"jldw_password": {
-						"value": "[parameters('jldw_password')]"
-					},
 					"jlhiramlaptop_password": {
 						"value": "[parameters('jlhiramlaptop_password')]"
 					},
-					"prod1_connectionString": {
-						"value": "[parameters('prod1_connectionString')]"
-					},
 					"hf0524_properties_typeProperties_userName": {
 						"value": "[parameters('hf0524_properties_typeProperties_userName')]"
-					},
-					"jldw_properties_typeProperties_userName": {
-						"value": "[parameters('jldw_properties_typeProperties_userName')]"
 					},
 					"jlhiramlaptop_properties_typeProperties_host": {
 						"value": "[parameters('jlhiramlaptop_properties_typeProperties_host')]"
