@@ -435,7 +435,7 @@
 			},
 			"Notify": {
 				"type": "string",
-				"defaultValue": "adf-alert@fleitasarts.com"
+				"defaultValue": "azure@fleitasarts.com"
 			}
 		},
 		"annotations": []
