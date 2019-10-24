@@ -1,0 +1,33 @@
+{
+	"name": "notify",
+	"properties": {
+		"activities": [
+			{
+				"name": "Notify",
+				"description": "",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-23.eastus2.logic.azure.com:443/workflows/a3b71278fcd74578912de49da8f0cc41/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=hDohhaBVFqS07vlHEOhum2ZLvhUnvyi1u9oqKBO5fRc",
+					"method": "POST",
+					"headers": {
+						"Content-type": "application/json"
+					},
+					"body": {
+						"value": "{\n   \"DataFactoryName\": \"@{pipeline().DataFactory}\",\n   \"PipelineName\": \"@{pipeline().Pipeline}\",\n   \"Subject\": \"An error has occurred!\",\n   \"ErrorMessage\": \"The ADF pipeline failed. Please check the activity log.\",\n   \"EmailTo\": \"hiram@fleitasarts.com\"\n}\t",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"annotations": []
+	}
+}
