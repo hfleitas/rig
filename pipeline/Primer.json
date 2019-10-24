@@ -43,10 +43,74 @@
 									"value": "@string('')",
 									"type": "Expression"
 								},
+								"linkedServices": [],
+								"datasets": [],
 								"authentication": {
 									"type": "MSI",
 									"resource": "https://management.core.windows.net/"
 								}
+							}
+						},
+						{
+							"name": "ScaleAPI",
+							"type": "WebActivity",
+							"dependsOn": [
+								{
+									"activity": "Resume",
+									"dependencyConditions": [
+										"Skipped"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"url": {
+									"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'?api-version=2018-06-01-preview')",
+									"type": "Expression"
+								},
+								"method": "PUT",
+								"headers": {
+									"Content-Type": "application/json"
+								},
+								"body": {
+									"value": "@concat('{\"location\":\"eastus2\",\"properties\":{\"requestedServiceObjectiveName\": \"',pipeline().parameters.SLO,'\"}}')",
+									"type": "Expression"
+								},
+								"linkedServices": [],
+								"datasets": [],
+								"authentication": {
+									"type": "MSI",
+									"resource": "https://management.core.windows.net/"
+								}
+							}
+						},
+						{
+							"name": "ScaleWebHook",
+							"description": "https://s1events.azure-automation.net/webhooks?token=gedxRKHcZ2FWzWTJx5wGavBsu8kBmk3LYMTWDzyjCDs%3d",
+							"type": "WebHook",
+							"dependsOn": [
+								{
+									"activity": "ScaleAPI",
+									"dependencyConditions": [
+										"Skipped"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"url": "https://s1events.azure-automation.net/webhooks?token=gedxRKHcZ2FWzWTJx5wGavBsu8kBmk3LYMTWDzyjCDs%3d",
+								"method": "POST",
+								"body": {
+									"WebhookName": "scaledw"
+								},
+								"timeout": "00:10:00"
 							}
 						}
 					]
@@ -88,7 +152,7 @@
 					{
 						"activity": "IfPausedThenOnline",
 						"dependencyConditions": [
-							"Skipped"
+							"Completed"
 						]
 					}
 				],
@@ -135,14 +199,7 @@
 			{
 				"name": "wipeDW",
 				"type": "SqlServerStoredProcedure",
-				"dependsOn": [
-					{
-						"activity": "UntilOnline",
-						"dependencyConditions": [
-							"Skipped"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
