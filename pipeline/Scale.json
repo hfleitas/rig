@@ -57,7 +57,7 @@
 					},
 					"method": "PATCH",
 					"body": {
-						"value": "@concat('{\n    \"properties\": {\n        \"requestedServiceObjectiveName\": ',pipeline().parameters.SLO,'\n    }\n}')",
+						"value": "{\n    \"properties\": {\n        \"requestedServiceObjectiveName\": DW1000c\n    }\n}",
 						"type": "Expression"
 					},
 					"authentication": {
