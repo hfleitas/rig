@@ -7,14 +7,7 @@
 				"name": "dwCustomer",
 				"description": "copy",
 				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "hsCustomerAccount",
-						"dependencyConditions": [
-							"Skipped"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -101,7 +94,7 @@
 					{
 						"activity": "dwCustomer",
 						"dependencyConditions": [
-							"Skipped"
+							"Succeeded"
 						]
 					}
 				],
