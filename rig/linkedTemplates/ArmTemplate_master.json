@@ -115,17 +115,8 @@
 					"hiram_connectionString": {
 						"value": "[parameters('hiram_connectionString')]"
 					},
-					"jldw_connectionString": {
-						"value": "[parameters('jldw_connectionString')]"
-					},
-					"jldw_password": {
-						"value": "[parameters('jldw_password')]"
-					},
 					"hf0524_properties_typeProperties_userName": {
 						"value": "[parameters('hf0524_properties_typeProperties_userName')]"
-					},
-					"jldw_properties_typeProperties_userName": {
-						"value": "[parameters('jldw_properties_typeProperties_userName')]"
 					}
 				}
 			},
@@ -145,11 +136,20 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"jldw_connectionString": {
+						"value": "[parameters('jldw_connectionString')]"
+					},
+					"jldw_password": {
+						"value": "[parameters('jldw_password')]"
+					},
 					"jlhiramlaptop_password": {
 						"value": "[parameters('jlhiramlaptop_password')]"
 					},
 					"prod1_connectionString": {
 						"value": "[parameters('prod1_connectionString')]"
+					},
+					"jldw_properties_typeProperties_userName": {
+						"value": "[parameters('jldw_properties_typeProperties_userName')]"
 					},
 					"jlhiramlaptop_properties_typeProperties_host": {
 						"value": "[parameters('jlhiramlaptop_properties_typeProperties_host')]"

@@ -7,6 +7,14 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "rig"
 		},
+		"jldw_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'jldw'"
+		},
+		"jldw_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'jldw'"
+		},
 		"jlhiramlaptop_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'jlhiramlaptop'"
@@ -14,6 +22,10 @@
 		"prod1_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'prod1'"
+		},
+		"jldw_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "JLAMIRAMAR.com\\hfleitas"
 		},
 		"jlhiramlaptop_properties_typeProperties_host": {
 			"type": "string",
@@ -28,6 +40,28 @@
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/jldw')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('jldw_connectionString')]",
+					"userName": "[parameters('jldw_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('jldw_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "jlaudio",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/jlhiramlaptop')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
@@ -563,7 +597,9 @@
 					"table": "StagingItems"
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/jldw')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/sink')]",
@@ -2631,6 +2667,10 @@
 					"DW": {
 						"type": "string",
 						"defaultValue": "dw"
+					},
+					"SLO": {
+						"type": "string",
+						"defaultValue": "DW1000c"
 					}
 				},
 				"annotations": []
