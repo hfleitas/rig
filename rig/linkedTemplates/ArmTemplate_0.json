@@ -26,6 +26,18 @@
 		"sqlva4onabrnvvfrkw_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'sqlva4onabrnvvfrkw'"
+		},
+		"hf0524_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'hf0524'"
+		},
+		"hf0524_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'hf0524'"
+		},
+		"hf0524_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "UPCIC\\HFleitas"
 		}
 	},
 	"variables": {
@@ -97,7 +109,7 @@
 								"Content-Type": "application/json"
 							},
 							"body": {
-								"value": "@concat('{\"location\":\"eastus2\",\"properties\":{\"requestedServiceObjectiveName\": \"',pipeline().parameters.SLO,'\"}}')",
+								"value": "@concat('{\"location\":\"eastus2\",\"sku\":{\"name\": \"',pipeline().parameters.SLO,'\"}}')",
 								"type": "Expression"
 							},
 							"authentication": {
@@ -108,7 +120,7 @@
 					},
 					{
 						"name": "ScaleWebHook",
-						"description": "https://s1events.azure-automation.net/webhooks?token=gedxRKHcZ2FWzWTJx5wGavBsu8kBmk3LYMTWDzyjCDs%3d",
+						"description": "",
 						"type": "WebHook",
 						"dependsOn": [
 							{
@@ -120,7 +132,7 @@
 						],
 						"userProperties": [],
 						"typeProperties": {
-							"url": "https://s1events.azure-automation.net/webhooks?token=gedxRKHcZ2FWzWTJx5wGavBsu8kBmk3LYMTWDzyjCDs%3d",
+							"url": "https://s1events.azure-automation.net/webhooks?token=EnUcmPAqjmhXx7uKcLIj%2bN%2fNkzod6WPU6CaGc%2bhaPQI%3d",
 							"method": "POST",
 							"headers": {},
 							"body": {
@@ -297,17 +309,6 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"type": "SelfHosted",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/jlaudio')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"description": "hiram laptop",
 				"typeProperties": {}
 			},
 			"dependsOn": []
@@ -713,6 +714,31 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/hiscale')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hf0524')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "desktop",
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('hf0524_connectionString')]",
+					"userName": "[parameters('hf0524_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('hf0524_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "hf0524",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/hf0524')]"
 			]
 		}
 	]

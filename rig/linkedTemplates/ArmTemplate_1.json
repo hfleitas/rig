@@ -7,50 +7,15 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "rig"
 		},
-		"hf0524_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'hf0524'"
-		},
-		"hf0524_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'hf0524'"
-		},
 		"hiram_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'hiram'"
-		},
-		"hf0524_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "UPCIC\\HFleitas"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
-		{
-			"name": "[concat(parameters('factoryName'), '/hf0524')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "desktop",
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"connectionString": "[parameters('hf0524_connectionString')]",
-					"userName": "[parameters('hf0524_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('hf0524_password')]"
-					}
-				},
-				"connectVia": {
-					"referenceName": "hf0524",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": []
-		},
 		{
 			"name": "[concat(parameters('factoryName'), '/hiram')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
@@ -101,9 +66,7 @@
 				],
 				"typeProperties": {}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/sqlCustomer')]",
@@ -136,9 +99,7 @@
 					"table": "Customer"
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/sqlCustomerAccount')]",
@@ -173,9 +134,7 @@
 					"table": "CustomerAccount"
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Leads')]",
@@ -1028,7 +987,8 @@
 						}
 					},
 					{
-						"name": "IfOnlineThenPause",
+						"name": "IfOnline",
+						"description": "Sacle down and Pause",
 						"type": "IfCondition",
 						"dependsOn": [
 							{
@@ -1046,14 +1006,30 @@
 							},
 							"ifTrueActivities": [
 								{
+									"name": "ScaleWebhook",
+									"description": "",
+									"type": "WebHook",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"url": "https://s1events.azure-automation.net/webhooks?token=EnUcmPAqjmhXx7uKcLIj%2bN%2fNkzod6WPU6CaGc%2bhaPQI%3d",
+										"method": "POST",
+										"headers": {},
+										"body": {
+											"WebhookName": "scaledw"
+										},
+										"timeout": "00:10:00"
+									}
+								},
+								{
 									"name": "Pause",
 									"description": "Pause",
 									"type": "WebActivity",
 									"dependsOn": [
 										{
-											"activity": "ScaleWebHook",
+											"activity": "ScaleWebhook",
 											"dependencyConditions": [
-												"Succeeded"
+												"Completed"
 											]
 										}
 									],
@@ -1081,22 +1057,6 @@
 											"resource": "https://management.core.windows.net/"
 										}
 									}
-								},
-								{
-									"name": "ScaleWebHook",
-									"description": "https://s1events.azure-automation.net/webhooks?token=g%2faPH6fkV80NyOBzBggPBY5MslhWlhaJiZG6uxBJHbY%3d",
-									"type": "WebHook",
-									"dependsOn": [],
-									"userProperties": [],
-									"typeProperties": {
-										"url": "https://s1events.azure-automation.net/webhooks?token=g%2faPH6fkV80NyOBzBggPBY5MslhWlhaJiZG6uxBJHbY%3d",
-										"method": "POST",
-										"headers": {},
-										"body": {
-											"WebhookName": "scaledw"
-										},
-										"timeout": "00:10:00"
-									}
 								}
 							]
 						}
@@ -1108,6 +1068,12 @@
 						"dependsOn": [
 							{
 								"activity": "execTrollhunters",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "Notify",
 								"dependencyConditions": [
 									"Succeeded"
 								]
