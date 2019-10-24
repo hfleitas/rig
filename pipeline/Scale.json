@@ -85,6 +85,9 @@
 				"typeProperties": {
 					"url": "https://s1events.azure-automation.net/webhooks?token=gedxRKHcZ2FWzWTJx5wGavBsu8kBmk3LYMTWDzyjCDs%3d",
 					"method": "POST",
+					"body": {
+						"WebhookName": "scaledw"
+					},
 					"timeout": "00:10:00"
 				}
 			}
