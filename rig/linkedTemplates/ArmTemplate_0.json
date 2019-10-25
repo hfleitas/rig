@@ -85,9 +85,9 @@
 						"type": "WebActivity",
 						"dependsOn": [
 							{
-								"activity": "ScaleWebHook",
+								"activity": "GetStatus",
 								"dependencyConditions": [
-									"Skipped"
+									"Succeeded"
 								]
 							}
 						],
@@ -120,19 +120,19 @@
 					},
 					{
 						"name": "ScaleWebHook",
-						"description": "",
+						"description": "https://s1events.azure-automation.net/webhooks?token=gedxRKHcZ2FWzWTJx5wGavBsu8kBmk3LYMTWDzyjCDs%3d",
 						"type": "WebHook",
 						"dependsOn": [
 							{
-								"activity": "GetStatus",
+								"activity": "ScaleAPI",
 								"dependencyConditions": [
-									"Succeeded"
+									"Skipped"
 								]
 							}
 						],
 						"userProperties": [],
 						"typeProperties": {
-							"url": "https://s1events.azure-automation.net/webhooks?token=EnUcmPAqjmhXx7uKcLIj%2bN%2fNkzod6WPU6CaGc%2bhaPQI%3d",
+							"url": "https://s1events.azure-automation.net/webhooks?token=gedxRKHcZ2FWzWTJx5wGavBsu8kBmk3LYMTWDzyjCDs%3d",
 							"method": "POST",
 							"headers": {},
 							"body": {
