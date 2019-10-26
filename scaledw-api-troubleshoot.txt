@@ -1,0 +1,139 @@
+@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'?api-version=2018-06-01-preview')
+
+PATCH https://management.azure.com/subscriptions/{subscription-id}/resourceGroups/{resource-group-name}/providers/Microsoft.Sql/servers/{server-name}/databases/{database-name}?api-version=2014-04-01-preview 
+
+HTTP/1.1
+Content-Type: application/json; charset=UTF-8
+
+{
+    "properties": {
+        "requestedServiceObjectiveName": DW1000
+    }
+}
+
+{
+    "url": "https://management.azure.com/subscriptions/eaab21d5-8ecd-4ef0-a0c4-92fac2e22875/resourceGroups/dw/providers/Microsoft.Sql/servers/hiramdw/databases/dw?api-version=2018-06-01-preview",
+    "method": "PATCH",
+    "headers": {},
+    "body": "{\"properties\": {\"requestedServiceObjectiveName\": DW1000c }}",
+    "authentication": {
+        "type": "MSI",
+        "resource": "https://management.core.windows.net/"
+    }
+}
+
+{
+    "errorCode": "2108",
+    "message": "{\"error\":{\"code\":\"InvalidRequestContent\",\"message\":\"The request content was invalid and could not be deserialized: 'Unexpected character encountered while parsing value: D. Path 'properties.requestedServiceObjectiveName', line 1, position 49.'.\"}}",
+    "failureType": "UserError",
+    "target": "Scale"
+}
+
+{
+    "url": "https://management.azure.com/subscriptions/eaab21d5-8ecd-4ef0-a0c4-92fac2e22875/resourceGroups/dw/providers/Microsoft.Sql/servers/hiramdw/databases/dw?api-version=2014-04-01-preview",
+    "method": "PATCH",
+    "headers": {
+        "Content-Type": "application/json; charset=UTF-8"
+    },
+    "body": "{\"properties\": {\"requestedServiceObjectiveName\": DW1000c }}",
+    "authentication": {
+        "type": "MSI",
+        "resource": "https://management.core.windows.net/"
+    }
+}
+
+{
+    "errorCode": "2108",
+    "message": "Error calling the endpoint 'https://management.azure.com/subscriptions/eaab21d5-8ecd-4ef0-a0c4-92fac2e22875/resourceGroups/dw/providers/Microsoft.Sql/servers/hiramdw/databases/dw?api-version=2014-04-01-preview'. Response status code: ''. More details:Exception message: 'The format of value 'application/json; charset=UTF-8' is invalid.'.\r\nNo response from the endpoint. Possible causes: network connectivity, DNS failure, server certificate validation or timeout.",
+    "failureType": "UserError",
+    "target": "Scale"
+}
+
+{
+    "sku": {
+        "name": "DataWarehouse",
+        "tier": "DataWarehouse",
+        "capacity": 900
+    },
+    "kind": "v12.0,user,datawarehouse,gen2",
+    "properties": {
+        "collation": "SQL_Latin1_General_CP1_CI_AS",
+        "maxSizeBytes": 263882790666240,
+        "status": "Online",
+        "databaseId": "e6f5193e-f0f1-4a26-a9b3-66a66bf12e20",
+        "creationDate": "2019-06-27T14:50:12.197Z",
+        "currentServiceObjectiveName": "DW100c",
+        "requestedServiceObjectiveName": "DW100c",
+        "defaultSecondaryLocation": "centralus",
+        "catalogCollation": "SQL_Latin1_General_CP1_CI_AS",
+        "readScale": "Disabled",
+        "readReplicaCount": 0,
+        "currentSku": {
+            "name": "DataWarehouse",
+            "tier": "DataWarehouse",
+            "capacity": 900
+        },
+        "storageAccountType": "GRS"
+    },
+    "location": "eastus2",
+    "tags": {},
+    "id": "/subscriptions/eaab21d5-8ecd-4ef0-a0c4-92fac2e22875/resourceGroups/dw/providers/Microsoft.Sql/servers/hiramdw/databases/dw",
+    "name": "dw",
+    "type": "Microsoft.Sql/servers/databases",
+    "ADFWebActivityResponseHeaders": {
+        "Pragma": "no-cache",
+        "x-ms-request-id": "a3161e3a-75fd-46a6-9fb2-0b2196612554",
+        "x-ms-ratelimit-remaining-subscription-reads": "11999",
+        "x-ms-correlation-request-id": "c4b415c5-0715-4f3c-a4e6-cb52a74d10ba",
+        "x-ms-routing-request-id": "EASTUS2:20191024T012255Z:c4b415c5-0715-4f3c-a4e6-cb52a74d10ba",
+        "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+        "X-Content-Type-Options": "nosniff",
+        "Cache-Control": "no-cache",
+        "Date": "Thu, 24 Oct 2019 01:22:55 GMT",
+        "Server": "Microsoft-HTTPAPI/2.0"
+    }
+}
+
+{
+    "sku": {
+        "name": "DataWarehouse",
+        "tier": "DataWarehouse",
+        "capacity": 2700
+    },
+    "kind": "v12.0,user,datawarehouse,gen2",
+    "properties": {
+        "collation": "SQL_Latin1_General_CP1_CI_AS",
+        "maxSizeBytes": 263882790666240,
+        "status": "Online",
+        "databaseId": "e6f5193e-f0f1-4a26-a9b3-66a66bf12e20",
+        "creationDate": "2019-06-27T14:50:12.197Z",
+        "currentServiceObjectiveName": "DW300c",
+        "requestedServiceObjectiveName": "DW300c",
+        "defaultSecondaryLocation": "centralus",
+        "catalogCollation": "SQL_Latin1_General_CP1_CI_AS",
+        "readReplicaCount": 0,
+        "currentSku": {
+            "name": "DataWarehouse",
+            "tier": "DataWarehouse",
+            "capacity": 2700
+        },
+        "storageAccountType": "GRS"
+    },
+    "location": "eastus2",
+    "tags": {},
+    "id": "/subscriptions/eaab21d5-8ecd-4ef0-a0c4-92fac2e22875/resourceGroups/dw/providers/Microsoft.Sql/servers/hiramdw/databases/dw",
+    "name": "dw",
+    "type": "Microsoft.Sql/servers/databases",
+    "ADFWebActivityResponseHeaders": {
+        "Pragma": "no-cache",
+        "x-ms-request-id": "b5a29b04-0356-4c7a-92bb-1e920852e735",
+        "x-ms-ratelimit-remaining-subscription-reads": "11999",
+        "x-ms-correlation-request-id": "a30cec85-3844-451f-99a3-8ea4d621fb66",
+        "x-ms-routing-request-id": "EASTUS2:20191024T014754Z:a30cec85-3844-451f-99a3-8ea4d621fb66",
+        "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+        "X-Content-Type-Options": "nosniff",
+        "Cache-Control": "no-cache",
+        "Date": "Thu, 24 Oct 2019 01:47:54 GMT",
+        "Server": "Microsoft-HTTPAPI/2.0"
+    }
+}
