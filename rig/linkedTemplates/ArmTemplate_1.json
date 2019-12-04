@@ -7,15 +7,50 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "rig"
 		},
+		"hf0524_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'hf0524'"
+		},
+		"hf0524_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'hf0524'"
+		},
 		"hiram_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'hiram'"
+		},
+		"hf0524_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "UPCIC\\HFleitas"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/hf0524')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "desktop",
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('hf0524_connectionString')]",
+					"userName": "[parameters('hf0524_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('hf0524_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "hf0524",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/hiram')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
@@ -31,6 +66,28 @@
 					"referenceName": "hiram",
 					"type": "IntegrationRuntimeReference"
 				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/lakeCharacters')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "lakehiram",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "raw"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
 			},
 			"dependsOn": []
 		},
@@ -66,7 +123,9 @@
 				],
 				"typeProperties": {}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/sqlCustomer')]",
@@ -99,7 +158,9 @@
 					"table": "Customer"
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/sqlCustomerAccount')]",
@@ -134,7 +195,9 @@
 					"table": "CustomerAccount"
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Leads')]",
@@ -710,6 +773,60 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/sqlCharacter')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LakeHiram')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "lakeCharacters",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"sqlReaderQuery": "select * from [ᕙ༼,இܫஇ,༽ᕗ].dbo.Character"
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "sqlCharacter",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "lakeCharacters",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/sqlCharacter')]",
+				"[concat(variables('factoryId'), '/datasets/lakeCharacters')]"
 			]
 		},
 		{

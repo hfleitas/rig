@@ -29,8 +29,14 @@
 		"sqlva4onabrnvvfrkw_connectionString": {
 			"value": ""
 		},
+		"lakehiram_accountKey": {
+			"value": ""
+		},
 		"hf0524_properties_typeProperties_userName": {
 			"value": "UPCIC\\HFleitas"
+		},
+		"lakehiram_properties_typeProperties_url": {
+			"value": "https://lakehiram.dfs.core.windows.net"
 		},
 		"containerUri": {
 			"value": ""

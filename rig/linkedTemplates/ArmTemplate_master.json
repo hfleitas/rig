@@ -39,9 +39,17 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'sqlva4onabrnvvfrkw'"
 		},
+		"lakehiram_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'lakehiram'"
+		},
 		"hf0524_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "UPCIC\\HFleitas"
+		},
+		"lakehiram_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://lakehiram.dfs.core.windows.net"
 		},
 		"containerUri": {
 			"type": "string",
@@ -85,14 +93,11 @@
 					"sqlva4onabrnvvfrkw_connectionString": {
 						"value": "[parameters('sqlva4onabrnvvfrkw_connectionString')]"
 					},
-					"hf0524_connectionString": {
-						"value": "[parameters('hf0524_connectionString')]"
+					"lakehiram_accountKey": {
+						"value": "[parameters('lakehiram_accountKey')]"
 					},
-					"hf0524_password": {
-						"value": "[parameters('hf0524_password')]"
-					},
-					"hf0524_properties_typeProperties_userName": {
-						"value": "[parameters('hf0524_properties_typeProperties_userName')]"
+					"lakehiram_properties_typeProperties_url": {
+						"value": "[parameters('lakehiram_properties_typeProperties_url')]"
 					}
 				}
 			},
@@ -112,8 +117,17 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
+					"hf0524_connectionString": {
+						"value": "[parameters('hf0524_connectionString')]"
+					},
+					"hf0524_password": {
+						"value": "[parameters('hf0524_password')]"
+					},
 					"hiram_connectionString": {
 						"value": "[parameters('hiram_connectionString')]"
+					},
+					"hf0524_properties_typeProperties_userName": {
+						"value": "[parameters('hf0524_properties_typeProperties_userName')]"
 					}
 				}
 			},
