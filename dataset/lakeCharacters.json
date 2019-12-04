@@ -10,6 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"folderPath": "trollhunters/2019/12",
 				"fileSystem": "raw"
 			},
 			"compressionCodec": "snappy"
