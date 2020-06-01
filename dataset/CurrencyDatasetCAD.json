@@ -1,0 +1,23 @@
+{
+	"name": "CurrencyDatasetCAD",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "sqlva4onabrnvvfrkw",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Currency_CAD.txt",
+				"container": "demo"
+			},
+			"columnDelimiter": "\t",
+			"escapeChar": "\\",
+			"firstRowAsHeader": false,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}

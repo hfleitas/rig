@@ -1,0 +1,22 @@
+{
+	"name": "TaxiDemoTotalByPaymentType",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "sqlva4onabrnvvfrkw",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "demo"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": false,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
