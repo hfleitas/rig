@@ -1,0 +1,22 @@
+{
+	"name": "movie_dataflow_sink",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "sqlva4onabrnvvfrkw",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "hiramblob"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": false,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
