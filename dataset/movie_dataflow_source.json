@@ -1,0 +1,23 @@
+{
+	"name": "movie_dataflow_source",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "sqlva4onabrnvvfrkw",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "movies.csv",
+				"container": "hiramblob"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
