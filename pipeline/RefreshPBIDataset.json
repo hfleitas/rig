@@ -269,22 +269,28 @@
 		],
 		"parameters": {
 			"SecretName_TenantId": {
-				"type": "String"
+				"type": "String",
+				"defaultValue": "ee04c8a6a46b4773ace9d1af1861d4e6"
 			},
 			"SecretName_SPClientId": {
-				"type": "String"
+				"type": "String",
+				"defaultValue": "d9fa8d60ef1d4a59a3473770505c55bb"
 			},
 			"SecretName_SPSecret": {
-				"type": "String"
+				"type": "String",
+				"defaultValue": "11b1bd7c5da4431f992dc229735e8e33"
 			},
 			"KeyVaultDNSName": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "https://keyvaultformyrig.vault.azure.net/"
 			},
 			"workspaceGuid": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "632eaee3-ed58-4902-a71b-21e946c89e4d"
 			},
 			"datasetGuid": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "8fb24d41-98e8-4bcc-94eb-2ee4cfce56d9"
 			}
 		},
 		"variables": {
