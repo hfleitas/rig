@@ -270,15 +270,15 @@
 		"parameters": {
 			"SecretName_TenantId": {
 				"type": "String",
-				"defaultValue": "ee04c8a6a46b4773ace9d1af1861d4e6"
+				"defaultValue": "TenantId"
 			},
 			"SecretName_SPClientId": {
 				"type": "String",
-				"defaultValue": "d9fa8d60ef1d4a59a3473770505c55bb"
+				"defaultValue": "ClientId"
 			},
 			"SecretName_SPSecret": {
 				"type": "String",
-				"defaultValue": "11b1bd7c5da4431f992dc229735e8e33"
+				"defaultValue": "ClientSecret"
 			},
 			"KeyVaultDNSName": {
 				"type": "string",
