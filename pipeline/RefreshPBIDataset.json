@@ -290,7 +290,7 @@
 			},
 			"datasetGuid": {
 				"type": "string",
-				"defaultValue": "5bf9be32-9302-4bd7-84c9-5eea35f3a602"
+				"defaultValue": "4b1b9400-81d5-4c99-a87a-d576fb908e42"
 			}
 		},
 		"variables": {
