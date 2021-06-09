@@ -32,10 +32,11 @@
 						"Authorization": {
 							"value": "@concat(string(activity('Get AAD Token').output.token_type),' ',string(activity('Get AAD Token').output.access_token))",
 							"type": "Expression"
-						}
+						},
+						"Content-Type": "@string('application/json')"
 					},
 					"body": {
-						"notifyOption": "MailOnCompletion"
+						"notifyOption": "NoNotification"
 					}
 				}
 			},
