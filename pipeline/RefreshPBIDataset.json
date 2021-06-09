@@ -33,10 +33,10 @@
 							"value": "@concat(string(activity('Get AAD Token').output.token_type),' ',string(activity('Get AAD Token').output.access_token))",
 							"type": "Expression"
 						},
-						"Content-Type": "application/json"
+						"Content-Type": "application/octet-stream"
 					},
 					"body": {
-						"notifyOption": ""
+						"notifyOption": "MailOnCompletion"
 					}
 				}
 			},
