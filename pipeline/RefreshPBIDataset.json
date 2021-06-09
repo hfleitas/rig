@@ -36,7 +36,7 @@
 						"Content-Type": "@string('application/json')"
 					},
 					"body": {
-						"notifyOption": "NoNotification"
+						"notifyOption": "MailOnCompletion"
 					}
 				}
 			},
