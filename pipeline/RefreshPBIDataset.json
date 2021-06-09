@@ -35,7 +35,7 @@
 						}
 					},
 					"body": {
-						"notifyOption": "NoNotification"
+						"notifyOption": "MailOnFailure"
 					}
 				}
 			},
