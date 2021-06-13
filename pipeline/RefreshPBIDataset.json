@@ -189,14 +189,7 @@
 			{
 				"name": "Get TenantId from AKV",
 				"type": "WebActivity",
-				"dependsOn": [
-					{
-						"activity": "AppendRows",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -223,14 +216,7 @@
 			{
 				"name": "Get ClientId from AKV",
 				"type": "WebActivity",
-				"dependsOn": [
-					{
-						"activity": "AppendRows",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -257,14 +243,7 @@
 			{
 				"name": "Get Secret from AKV",
 				"type": "WebActivity",
-				"dependsOn": [
-					{
-						"activity": "AppendRows",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -286,30 +265,6 @@
 						"type": "MSI",
 						"resource": "https://vault.azure.net"
 					}
-				}
-			},
-			{
-				"name": "AppendRows",
-				"type": "ExecuteDataFlow",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "1.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"dataflow": {
-						"referenceName": "AppendRows",
-						"type": "DataFlowReference"
-					},
-					"compute": {
-						"coreCount": 8,
-						"computeType": "General"
-					},
-					"traceLevel": "Fine"
 				}
 			}
 		],
