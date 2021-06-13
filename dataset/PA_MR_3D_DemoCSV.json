@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "PA_MR_3D_Demo.csv",
+				"fileName": "*.csv",
 				"fileSystem": "lakehiram"
 			},
 			"columnDelimiter": ",",
