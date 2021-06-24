@@ -191,10 +191,6 @@
 				"userProperties": [],
 				"typeProperties": {
 					"storedProcedureName": "dbo.wipe"
-				},
-				"linkedServiceName": {
-					"referenceName": "dw",
-					"type": "LinkedServiceReference"
 				}
 			},
 			{
@@ -239,10 +235,6 @@
 				"userProperties": [],
 				"typeProperties": {
 					"storedProcedureName": "[dbo].[wipe]"
-				},
-				"linkedServiceName": {
-					"referenceName": "hiscale",
-					"type": "LinkedServiceReference"
 				}
 			},
 			{

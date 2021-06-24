@@ -18,7 +18,8 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "select * from [ᕙ༼,இܫஇ,༽ᕗ].dbo.Character"
+						"sqlReaderQuery": "select * from [ᕙ༼,இܫஇ,༽ᕗ].dbo.Character",
+						"partitionOption": "None"
 					},
 					"sink": {
 						"type": "SqlDWSink",
@@ -29,14 +30,7 @@
 							"useTypeDefault": true
 						}
 					},
-					"enableStaging": true,
-					"stagingSettings": {
-						"linkedServiceName": {
-							"referenceName": "sqlva4onabrnvvfrkw",
-							"type": "LinkedServiceReference"
-						},
-						"path": "adfstaging"
-					}
+					"enableStaging": true
 				},
 				"inputs": [
 					{
@@ -73,7 +67,8 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "select * from [tpcxbb_1gb].[dbo].[Quotes]"
+						"sqlReaderQuery": "select * from [tpcxbb_1gb].[dbo].[Quotes]",
+						"partitionOption": "None"
 					},
 					"sink": {
 						"type": "SqlDWSink",
@@ -84,14 +79,7 @@
 							"useTypeDefault": true
 						}
 					},
-					"enableStaging": true,
-					"stagingSettings": {
-						"linkedServiceName": {
-							"referenceName": "sqlva4onabrnvvfrkw",
-							"type": "LinkedServiceReference"
-						},
-						"path": "adfstaging"
-					}
+					"enableStaging": true
 				},
 				"inputs": [
 					{
@@ -121,19 +109,13 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "select * from [ᕙ༼,இܫஇ,༽ᕗ].dbo.Character"
+						"sqlReaderQuery": "select * from [ᕙ༼,இܫஇ,༽ᕗ].dbo.Character",
+						"partitionOption": "None"
 					},
 					"sink": {
 						"type": "AzureSqlSink"
 					},
-					"enableStaging": true,
-					"stagingSettings": {
-						"linkedServiceName": {
-							"referenceName": "sqlva4onabrnvvfrkw",
-							"type": "LinkedServiceReference"
-						},
-						"path": "adfstaging"
-					}
+					"enableStaging": true
 				},
 				"inputs": [
 					{
@@ -170,19 +152,13 @@
 				"typeProperties": {
 					"source": {
 						"type": "SqlServerSource",
-						"sqlReaderQuery": "select * from [tpcxbb_1gb].[dbo].[Quotes]"
+						"sqlReaderQuery": "select * from [tpcxbb_1gb].[dbo].[Quotes]",
+						"partitionOption": "None"
 					},
 					"sink": {
 						"type": "AzureSqlSink"
 					},
-					"enableStaging": true,
-					"stagingSettings": {
-						"linkedServiceName": {
-							"referenceName": "sqlva4onabrnvvfrkw",
-							"type": "LinkedServiceReference"
-						},
-						"path": "adfstaging"
-					}
+					"enableStaging": true
 				},
 				"inputs": [
 					{

@@ -1,10 +1,6 @@
 {
 	"name": "CurrencyDatasetCAD",
 	"properties": {
-		"linkedServiceName": {
-			"referenceName": "sqlva4onabrnvvfrkw",
-			"type": "LinkedServiceReference"
-		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {

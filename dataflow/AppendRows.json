@@ -5,26 +5,14 @@
 		"typeProperties": {
 			"sources": [
 				{
-					"linkedService": {
-						"referenceName": "lakehiram",
-						"type": "LinkedServiceReference"
-					},
 					"name": "source1"
 				},
 				{
-					"linkedService": {
-						"referenceName": "lakehiram",
-						"type": "LinkedServiceReference"
-					},
 					"name": "source2"
 				}
 			],
 			"sinks": [
 				{
-					"linkedService": {
-						"referenceName": "lakehiram",
-						"type": "LinkedServiceReference"
-					},
 					"name": "sink1"
 				}
 			],
@@ -33,7 +21,7 @@
 					"name": "Union1"
 				}
 			],
-			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tignoreNoFilesFound: false,\n\tformat: 'excel',\n\tfileSystem: 'lakehiram',\n\tfileName: 'PA_MR_3D_Demo.xlsx',\n\tsheetName: 'PA3DModel',\n\tfirstRowAsHeader: true) ~> source1\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tignoreNoFilesFound: false,\n\tformat: 'excel',\n\tfileSystem: 'lakehiram',\n\tfileName: 'PA_MR_3D_Demo.xlsx',\n\tsheetName: 'PA3DModel',\n\tfirstRowAsHeader: true) ~> source2\nsource1, source2 union(byName: true)~> Union1\nUnion1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tfileSystem: 'lakehiram',\n\tcolumnDelimiter: ',',\n\tescapeChar: '\\\\',\n\tqutoChar: '\\\"',\n\tcolumnNamesAsHeader: false,\n\tumask: 0022,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1) ~> sink1"
+			"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tignoreNoFilesFound: false) ~> source1\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tignoreNoFilesFound: false) ~> source2\nsource1, source2 union(byName: true)~> Union1\nUnion1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1) ~> sink1"
 		}
 	}
 }

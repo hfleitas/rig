@@ -1,10 +1,6 @@
 {
 	"name": "lakeCharacters",
 	"properties": {
-		"linkedServiceName": {
-			"referenceName": "lakehiram",
-			"type": "LinkedServiceReference"
-		},
 		"annotations": [],
 		"type": "Parquet",
 		"typeProperties": {

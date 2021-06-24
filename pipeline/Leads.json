@@ -18,7 +18,8 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "SqlServerSource"
+						"type": "SqlServerSource",
+						"partitionOption": "None"
 					},
 					"sink": {
 						"type": "SqlDWSink",
@@ -30,13 +31,6 @@
 						}
 					},
 					"enableStaging": true,
-					"stagingSettings": {
-						"linkedServiceName": {
-							"referenceName": "sqlva4onabrnvvfrkw",
-							"type": "LinkedServiceReference"
-						},
-						"path": "adfstaging"
-					},
 					"translator": {
 						"type": "TabularTranslator",
 						"mappings": [
@@ -108,7 +102,8 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "SqlServerSource"
+						"type": "SqlServerSource",
+						"partitionOption": "None"
 					},
 					"sink": {
 						"type": "SqlDWSink",
@@ -120,13 +115,6 @@
 						}
 					},
 					"enableStaging": true,
-					"stagingSettings": {
-						"linkedServiceName": {
-							"referenceName": "sqlva4onabrnvvfrkw",
-							"type": "LinkedServiceReference"
-						},
-						"path": "adfstaging"
-					},
 					"dataIntegrationUnits": 0,
 					"translator": {
 						"type": "TabularTranslator",
@@ -192,19 +180,13 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "SqlServerSource"
+						"type": "SqlServerSource",
+						"partitionOption": "None"
 					},
 					"sink": {
 						"type": "AzureSqlSink"
 					},
 					"enableStaging": true,
-					"stagingSettings": {
-						"linkedServiceName": {
-							"referenceName": "sqlva4onabrnvvfrkw",
-							"type": "LinkedServiceReference"
-						},
-						"path": "adfstaging"
-					},
 					"translator": {
 						"type": "TabularTranslator",
 						"mappings": [
@@ -276,19 +258,13 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "SqlServerSource"
+						"type": "SqlServerSource",
+						"partitionOption": "None"
 					},
 					"sink": {
 						"type": "AzureSqlSink"
 					},
 					"enableStaging": true,
-					"stagingSettings": {
-						"linkedServiceName": {
-							"referenceName": "sqlva4onabrnvvfrkw",
-							"type": "LinkedServiceReference"
-						},
-						"path": "adfstaging"
-					},
 					"dataIntegrationUnits": 0,
 					"translator": {
 						"type": "TabularTranslator",

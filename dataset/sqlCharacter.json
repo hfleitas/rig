@@ -2,10 +2,6 @@
 	"name": "sqlCharacter",
 	"properties": {
 		"description": "hf0524.",
-		"linkedServiceName": {
-			"referenceName": "hf0524",
-			"type": "LinkedServiceReference"
-		},
 		"annotations": [],
 		"type": "SqlServerTable",
 		"structure": [

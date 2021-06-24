@@ -1,10 +1,6 @@
 {
 	"name": "dwCharacter",
 	"properties": {
-		"linkedServiceName": {
-			"referenceName": "hiramdw",
-			"type": "LinkedServiceReference"
-		},
 		"annotations": [],
 		"type": "AzureSqlDWTable",
 		"schema": [

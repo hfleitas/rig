@@ -1,10 +1,6 @@
 {
 	"name": "PA_MR_3D_Demo",
 	"properties": {
-		"linkedServiceName": {
-			"referenceName": "lakehiram",
-			"type": "LinkedServiceReference"
-		},
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {

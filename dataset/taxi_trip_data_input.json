@@ -1,10 +1,6 @@
 {
 	"name": "taxi_trip_data_input",
 	"properties": {
-		"linkedServiceName": {
-			"referenceName": "sqlva4onabrnvvfrkw",
-			"type": "LinkedServiceReference"
-		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {

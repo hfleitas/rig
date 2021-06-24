@@ -1,10 +1,6 @@
 {
 	"name": "sqlCustomerAccount",
 	"properties": {
-		"linkedServiceName": {
-			"referenceName": "hf0524",
-			"type": "LinkedServiceReference"
-		},
 		"annotations": [],
 		"type": "SqlServerTable",
 		"schema": [
