@@ -171,41 +171,11 @@
 				}
 			},
 			{
-				"name": "wipeDW",
-				"type": "SqlServerStoredProcedure",
-				"dependsOn": [
-					{
-						"activity": "UntilOnline",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"storedProcedureName": {
-						"value": "@string('')",
-						"type": "Expression"
-					}
-				},
-				"linkedServiceName": {
-					"referenceName": "hiramdwmaster",
-					"type": "LinkedServiceReference"
-				}
-			},
-			{
 				"name": "execTrollhunters",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
-						"activity": "wipeDW",
+						"activity": "UntilOnline",
 						"dependencyConditions": [
 							"Succeeded"
 						]
