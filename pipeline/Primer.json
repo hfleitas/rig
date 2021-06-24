@@ -190,51 +190,14 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"storedProcedureName": "dbo.wipe"
-				}
-			},
-			{
-				"name": "execLeads",
-				"type": "ExecutePipeline",
-				"dependsOn": [
-					{
-						"activity": "wipeHS",
-						"dependencyConditions": [
-							"Succeeded"
-						]
+					"storedProcedureName": {
+						"value": "@string('')",
+						"type": "Expression"
 					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"pipeline": {
-						"referenceName": "Leads",
-						"type": "PipelineReference"
-					},
-					"waitOnCompletion": true
-				}
-			},
-			{
-				"name": "wipeHS",
-				"description": " ",
-				"type": "SqlServerStoredProcedure",
-				"dependsOn": [
-					{
-						"activity": "wipeDW",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
 				},
-				"userProperties": [],
-				"typeProperties": {
-					"storedProcedureName": "[dbo].[wipe]"
+				"linkedServiceName": {
+					"referenceName": "hiramdwmaster",
+					"type": "LinkedServiceReference"
 				}
 			},
 			{
@@ -242,7 +205,7 @@
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
-						"activity": "wipeHS",
+						"activity": "wipeDW",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -373,12 +336,6 @@
 				"dependsOn": [
 					{
 						"activity": "execTrollhunters",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
-						"activity": "execLeads",
 						"dependencyConditions": [
 							"Failed"
 						]
