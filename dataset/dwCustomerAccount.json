@@ -1,6 +1,10 @@
 {
 	"name": "dwCustomerAccount",
 	"properties": {
+		"linkedServiceName": {
+			"referenceName": "hiramdwmaster",
+			"type": "LinkedServiceReference"
+		},
 		"annotations": [],
 		"type": "AzureSqlDWTable",
 		"schema": [

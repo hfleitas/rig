@@ -1,13 +1,17 @@
 {
 	"name": "movie_dataflow_source",
 	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lakehiram",
+			"type": "LinkedServiceReference"
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobStorageLocation",
+				"type": "AzureBlobFSLocation",
 				"fileName": "movies.csv",
-				"container": "hiramblob"
+				"fileSystem": "hiramblob"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

@@ -1,13 +1,17 @@
 {
 	"name": "CurrencyDatasetUSD",
 	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lakehiram",
+			"type": "LinkedServiceReference"
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobStorageLocation",
+				"type": "AzureBlobFSLocation",
 				"fileName": "Currency_USD.txt",
-				"container": "demo"
+				"fileSystem": "demo"
 			},
 			"columnDelimiter": "\t",
 			"escapeChar": "\\",

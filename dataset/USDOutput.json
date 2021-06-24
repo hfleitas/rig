@@ -1,12 +1,16 @@
 {
 	"name": "USDOutput",
 	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lakehiram",
+			"type": "LinkedServiceReference"
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobStorageLocation",
-				"container": "demo"
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "demo"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

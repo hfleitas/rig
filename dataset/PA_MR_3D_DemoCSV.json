@@ -1,6 +1,10 @@
 {
 	"name": "PA_MR_3D_DemoCSV",
 	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lakehiram",
+			"type": "LinkedServiceReference"
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {

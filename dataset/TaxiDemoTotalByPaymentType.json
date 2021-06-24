@@ -1,12 +1,16 @@
 {
 	"name": "TaxiDemoTotalByPaymentType",
 	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lakehiram",
+			"type": "LinkedServiceReference"
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobStorageLocation",
-				"container": "hiramblob"
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "hiramblob"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
