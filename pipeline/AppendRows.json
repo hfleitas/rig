@@ -26,6 +26,26 @@
 					},
 					"traceLevel": "Fine"
 				}
+			},
+			{
+				"name": "Call Refresh",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "AppendRows",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "RefreshPBIDataset",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
 			}
 		],
 		"folder": {
