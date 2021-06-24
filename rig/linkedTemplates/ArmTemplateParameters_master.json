@@ -5,35 +5,11 @@
 		"factoryName": {
 			"value": "rig"
 		},
-		"dw_connectionString": {
-			"value": ""
-		},
-		"hf0524_connectionString": {
-			"value": ""
-		},
-		"hf0524_password": {
-			"value": ""
-		},
-		"hiram_connectionString": {
-			"value": ""
-		},
-		"hiramdw_connectionString": {
-			"value": ""
-		},
-		"hiramdwmaster_connectionString": {
-			"value": ""
-		},
-		"hiscale_connectionString": {
-			"value": ""
-		},
-		"sqlva4onabrnvvfrkw_connectionString": {
-			"value": ""
-		},
 		"lakehiram_accountKey": {
 			"value": ""
 		},
-		"hf0524_properties_typeProperties_userName": {
-			"value": "UPCIC\\HFleitas"
+		"lakehiramstaging_connectionString": {
+			"value": ""
 		},
 		"lakehiram_properties_typeProperties_url": {
 			"value": "https://lakehiram.dfs.core.windows.net"

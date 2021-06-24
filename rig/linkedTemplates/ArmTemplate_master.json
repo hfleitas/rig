@@ -7,45 +7,13 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "rig"
 		},
-		"dw_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'dw'"
-		},
-		"hf0524_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'hf0524'"
-		},
-		"hf0524_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'hf0524'"
-		},
-		"hiram_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'hiram'"
-		},
-		"hiramdw_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'hiramdw'"
-		},
-		"hiramdwmaster_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'hiramdwmaster'"
-		},
-		"hiscale_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'hiscale'"
-		},
-		"sqlva4onabrnvvfrkw_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'sqlva4onabrnvvfrkw'"
-		},
 		"lakehiram_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'lakehiram'"
 		},
-		"hf0524_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "UPCIC\\HFleitas"
+		"lakehiramstaging_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'lakehiramstaging'"
 		},
 		"lakehiram_properties_typeProperties_url": {
 			"type": "string",
@@ -65,7 +33,7 @@
 	},
 	"resources": [
 		{
-			"name": "ArmTemplate_0",
+			"name": "rig_ArmTemplate_0",
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2018-02-01",
 			"properties": {
@@ -78,23 +46,11 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"dw_connectionString": {
-						"value": "[parameters('dw_connectionString')]"
-					},
-					"hiramdw_connectionString": {
-						"value": "[parameters('hiramdw_connectionString')]"
-					},
-					"hiramdwmaster_connectionString": {
-						"value": "[parameters('hiramdwmaster_connectionString')]"
-					},
-					"hiscale_connectionString": {
-						"value": "[parameters('hiscale_connectionString')]"
-					},
-					"sqlva4onabrnvvfrkw_connectionString": {
-						"value": "[parameters('sqlva4onabrnvvfrkw_connectionString')]"
-					},
 					"lakehiram_accountKey": {
 						"value": "[parameters('lakehiram_accountKey')]"
+					},
+					"lakehiramstaging_connectionString": {
+						"value": "[parameters('lakehiramstaging_connectionString')]"
 					},
 					"lakehiram_properties_typeProperties_url": {
 						"value": "[parameters('lakehiram_properties_typeProperties_url')]"
@@ -104,7 +60,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "ArmTemplate_1",
+			"name": "rig_ArmTemplate_1",
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2018-02-01",
 			"properties": {
@@ -116,23 +72,11 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
-					},
-					"hf0524_connectionString": {
-						"value": "[parameters('hf0524_connectionString')]"
-					},
-					"hf0524_password": {
-						"value": "[parameters('hf0524_password')]"
-					},
-					"hiram_connectionString": {
-						"value": "[parameters('hiram_connectionString')]"
-					},
-					"hf0524_properties_typeProperties_userName": {
-						"value": "[parameters('hf0524_properties_typeProperties_userName')]"
 					}
 				}
 			},
 			"dependsOn": [
-				"[resourceId('Microsoft.Resources/deployments', 'ArmTemplate_0')]"
+				"[resourceId('Microsoft.Resources/deployments', 'rig_ArmTemplate_0')]"
 			]
 		}
 	]

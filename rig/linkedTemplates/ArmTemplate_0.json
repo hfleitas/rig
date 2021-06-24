@@ -7,29 +7,13 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "rig"
 		},
-		"dw_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'dw'"
-		},
-		"hiramdw_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'hiramdw'"
-		},
-		"hiramdwmaster_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'hiramdwmaster'"
-		},
-		"hiscale_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'hiscale'"
-		},
-		"sqlva4onabrnvvfrkw_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'sqlva4onabrnvvfrkw'"
-		},
 		"lakehiram_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'lakehiram'"
+		},
+		"lakehiramstaging_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'lakehiramstaging'"
 		},
 		"lakehiram_properties_typeProperties_url": {
 			"type": "string",
@@ -40,6 +24,319 @@
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/RefreshPBIDataset')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "The pipeline has 3 stages:\n\n1. Grab the secrets from the Azure Key Vault.\n2. Call the AAD authentication service and get the AAD token that we need to call the Power BI REST API.\n3. Use the Power BI REST API to trigger the actual dataset refresh.\n\nRef: https://www.moderndata.ai/2019/05/powerbi-dataset-refresh-using-adf/",
+				"activities": [
+					{
+						"name": "Call dataset refresh",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Get AAD Token",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": true
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": {
+								"value": "@concat('https://api.powerbi.com/v1.0/myorg/groups/',pipeline().parameters.workspaceGuid,'/datasets/',pipeline().parameters.datasetGuid,'/refreshes')",
+								"type": "Expression"
+							},
+							"method": "POST",
+							"headers": {
+								"Authorization": {
+									"value": "@concat(string(activity('Get AAD Token').output.token_type),' ',string(activity('Get AAD Token').output.access_token))",
+									"type": "Expression"
+								},
+								"Content-Type": "application/json"
+							},
+							"body": {
+								"notifyOption": "NoNotification"
+							}
+						}
+					},
+					{
+						"name": "Until dataset refresh completion",
+						"type": "Until",
+						"dependsOn": [
+							{
+								"activity": "Call dataset refresh",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@not(equals(first(json(string(activity('Get dataset refresh status').output)).value).status,'Unknown'))",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Wait 15 seconds",
+									"type": "Wait",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"waitTimeInSeconds": 15
+									}
+								},
+								{
+									"name": "Get dataset refresh status",
+									"type": "WebActivity",
+									"dependsOn": [
+										{
+											"activity": "Wait 15 seconds",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": true
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": {
+											"value": "@concat('https://api.powerbi.com/v1.0/myorg/groups/',pipeline().parameters.workspaceGuid,'/datasets/',pipeline().parameters.datasetGuid,'/refreshes?$top=1')",
+											"type": "Expression"
+										},
+										"method": "GET",
+										"headers": {
+											"Authorization": {
+												"value": "@concat(string(activity('Get AAD Token').output.token_type),' ',string(activity('Get AAD Token').output.access_token))",
+												"type": "Expression"
+											},
+											"Content-Type": "application/json"
+										}
+									}
+								}
+							],
+							"timeout": "0.03:00:00"
+						}
+					},
+					{
+						"name": "If dataset refresh failed",
+						"type": "IfCondition",
+						"dependsOn": [
+							{
+								"activity": "Until dataset refresh completion",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@equals(first(json(string(activity('Get dataset refresh status').output)).value).status,'Failed')",
+								"type": "Expression"
+							},
+							"ifTrueActivities": [
+								{
+									"name": "SaveErrorMessages",
+									"description": "In case of an error in processing of the dataset, the actual messages are saved in the pipeline variable \"ProcessingErrors\".",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "ProcessingErrors",
+										"value": {
+											"value": "@string(json(first(json(string(activity('Get dataset refresh status').output)).value).serviceExceptionJson))",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "Get AAD Token",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Get Secret from AKV",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "Get ClientId from AKV",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "Get TenantId from AKV",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": true,
+							"secureInput": true
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": {
+								"value": "@concat('https://login.microsoftonline.com/',activity('Get TenantId from AKV').output.value,'/oauth2/token')",
+								"type": "Expression"
+							},
+							"method": "POST",
+							"headers": {
+								"Content-Type": "application/x-www-form-urlencoded"
+							},
+							"body": {
+								"value": "@concat('grant_type=client_credentials&resource=https://analysis.windows.net/powerbi/api&client_id=',activity('Get ClientId from AKV').output.value,'&client_secret=',encodeUriComponent(activity('Get Secret from AKV').output.value))",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Get TenantId from AKV",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": true,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": {
+								"value": "@concat(pipeline().parameters.KeyVaultDNSName,'secrets/',pipeline().parameters.SecretName_TenantId,'/?api-version=7.0')",
+								"type": "Expression"
+							},
+							"method": "GET",
+							"headers": {},
+							"body": {
+								"simple": "body"
+							},
+							"authentication": {
+								"type": "MSI",
+								"resource": "https://vault.azure.net"
+							}
+						}
+					},
+					{
+						"name": "Get ClientId from AKV",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": true,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": {
+								"value": "@concat(pipeline().parameters.KeyVaultDNSName,'secrets/',pipeline().parameters.SecretName_SPClientId,'/?api-version=7.0')",
+								"type": "Expression"
+							},
+							"method": "GET",
+							"headers": {},
+							"body": {
+								"simple": "body"
+							},
+							"authentication": {
+								"type": "MSI",
+								"resource": "https://vault.azure.net"
+							}
+						}
+					},
+					{
+						"name": "Get Secret from AKV",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": true,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": {
+								"value": "@concat(pipeline().parameters.KeyVaultDNSName,'secrets/',pipeline().parameters.SecretName_SPSecret,'/?api-version=7.0')",
+								"type": "Expression"
+							},
+							"method": "GET",
+							"headers": {},
+							"body": {
+								"simple": "body"
+							},
+							"authentication": {
+								"type": "MSI",
+								"resource": "https://vault.azure.net"
+							}
+						}
+					}
+				],
+				"parameters": {
+					"SecretName_TenantId": {
+						"type": "String",
+						"defaultValue": "TenantId"
+					},
+					"SecretName_SPClientId": {
+						"type": "String",
+						"defaultValue": "ClientId"
+					},
+					"SecretName_SPSecret": {
+						"type": "String",
+						"defaultValue": "ClientSecret"
+					},
+					"KeyVaultDNSName": {
+						"type": "string",
+						"defaultValue": "https://keyvaultformyrig.vault.azure.net/"
+					},
+					"workspaceGuid": {
+						"type": "string",
+						"defaultValue": "632eaee3-ed58-4902-a71b-21e946c89e4d"
+					},
+					"datasetGuid": {
+						"type": "string",
+						"defaultValue": "505761ec-7ad0-46d8-b10f-db8a43b02cf7"
+					}
+				},
+				"variables": {
+					"ProcessingErrors": {
+						"type": "Boolean"
+					}
+				},
+				"folder": {
+					"name": "50-powerbi"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Scale')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
@@ -165,6 +462,27 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Trollhunters')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": " ",
+				"activities": [
+					{
+						"name": "Wait1",
+						"type": "Wait",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 1
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/notify')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -184,7 +502,7 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"url": "https://prod-23.eastus2.logic.azure.com:443/workflows/a3b71278fcd74578912de49da8f0cc41/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=hDohhaBVFqS07vlHEOhum2ZLvhUnvyi1u9oqKBO5fRc",
+							"url": "https://rig-notify.azurewebsites.net:443/api/notify/triggers/manual/invoke?api-version=2020-05-01-preview&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BVSyNiQ5uBTzX3TWbS2M7Esk7KXdrjn-Z_78sjEWXKc",
 							"method": "POST",
 							"headers": {
 								"Content-type": "application/json"
@@ -196,73 +514,13 @@
 						}
 					}
 				],
+				"parameters": {
+					"Notify": {
+						"type": "string",
+						"defaultValue": "hiram@fleitasarts.com"
+					}
+				},
 				"annotations": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dw')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "hiramdw.database.windows.net",
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"connectionString": "[parameters('dw_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hiramdw')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDW",
-				"typeProperties": {
-					"connectionString": "[parameters('hiramdw_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hiramdwmaster')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDW",
-				"typeProperties": {
-					"connectionString": "[parameters('hiramdwmaster_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hiscale')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"connectionString": "[parameters('hiscale_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/sqlva4onabrnvvfrkw')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('sqlva4onabrnvvfrkw_connectionString')]"
-				}
 			},
 			"dependsOn": []
 		},
@@ -277,8 +535,8 @@
 				"typeProperties": {
 					"frequency": "Minute",
 					"interval": 15,
-					"startTime": "2019-06-27T22:28:00.000Z",
-					"endTime": "2019-06-28T01:00:00.000Z",
+					"startTime": "2019-06-27T22:28:00Z",
+					"endTime": "2019-06-28T01:00:00Z",
 					"delay": "00:00:00",
 					"maxConcurrency": 50,
 					"retryPolicy": {
@@ -286,37 +544,6 @@
 					},
 					"dependsOn": []
 				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hf0524')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hiram')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"typeProperties": {}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/laptop')]",
-			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "SelfHosted",
-				"description": "R90GTU6N",
-				"typeProperties": {}
 			},
 			"dependsOn": []
 		},
@@ -338,395 +565,729 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/dwCharacter')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
+			"name": "[concat(parameters('factoryName'), '/lakehiramstaging')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"linkedServiceName": {
-					"referenceName": "hiramdw",
-					"type": "LinkedServiceReference"
-				},
 				"annotations": [],
-				"type": "AzureSqlDWTable",
-				"schema": [
-					{
-						"name": "CharacterId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "FullName",
-						"type": "varchar"
-					},
-					{
-						"name": "Affiliation",
-						"type": "varchar"
-					},
-					{
-						"name": "Category",
-						"type": "varchar"
-					},
-					{
-						"name": "Aka",
-						"type": "varchar"
-					},
-					{
-						"name": "Status",
-						"type": "varchar"
-					},
-					{
-						"name": "Race",
-						"type": "varchar"
-					},
-					{
-						"name": "Age",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Home",
-						"type": "varchar"
-					},
-					{
-						"name": "Relatives",
-						"type": "varchar"
-					},
-					{
-						"name": "Weapons",
-						"type": "varchar"
-					},
-					{
-						"name": "EyeColor",
-						"type": "varchar"
-					},
-					{
-						"name": "HairColor",
-						"type": "varchar"
-					},
-					{
-						"name": "Minions",
-						"type": "varchar"
-					},
-					{
-						"name": "VoicedBy",
-						"type": "varchar"
-					}
-				],
+				"type": "AzureBlobStorage",
 				"typeProperties": {
-					"schema": "dbo",
-					"table": "Character"
+					"connectionString": "[parameters('lakehiramstaging_connectionString')]"
 				}
 			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Primer')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "IfPausedThenOnline",
+						"type": "IfCondition",
+						"dependsOn": [
+							{
+								"activity": "GetStatus",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@not(equals('Online',string(activity('GetStatus').output.properties.status)))",
+								"type": "Expression"
+							},
+							"ifTrueActivities": [
+								{
+									"name": "Resume",
+									"description": "Start",
+									"type": "WebActivity",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": {
+											"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'/resume?api-version=2018-06-01-preview')",
+											"type": "Expression"
+										},
+										"method": "POST",
+										"headers": {},
+										"body": {
+											"value": "@string('')",
+											"type": "Expression"
+										},
+										"authentication": {
+											"type": "MSI",
+											"resource": "https://management.core.windows.net/"
+										}
+									}
+								},
+								{
+									"name": "ScaleAPI",
+									"type": "WebActivity",
+									"dependsOn": [
+										{
+											"activity": "Resume",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": {
+											"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'?api-version=2018-06-01-preview')",
+											"type": "Expression"
+										},
+										"method": "PUT",
+										"headers": {
+											"Content-Type": "application/json"
+										},
+										"body": {
+											"value": "@concat('{\"location\":\"eastus2\",\"sku\":{\"name\": \"',pipeline().parameters.SLO,'\"}}')",
+											"type": "Expression"
+										},
+										"authentication": {
+											"type": "MSI",
+											"resource": "https://management.core.windows.net/"
+										}
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "GetStatus",
+						"description": "Start",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": {
+								"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'?api-version=2018-06-01-preview')",
+								"type": "Expression"
+							},
+							"method": "GET",
+							"headers": {},
+							"body": {
+								"value": "@string('')",
+								"type": "Expression"
+							},
+							"authentication": {
+								"type": "MSI",
+								"resource": "https://management.core.windows.net/"
+							}
+						}
+					},
+					{
+						"name": "UntilOnline",
+						"type": "Until",
+						"dependsOn": [
+							{
+								"activity": "IfPausedThenOnline",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@equals('Online',string(activity('GetStatusOnline').output.properties.status))\n",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "GetStatusOnline",
+									"description": "Start",
+									"type": "WebActivity",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": {
+											"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'?api-version=2018-06-01-preview')",
+											"type": "Expression"
+										},
+										"method": "GET",
+										"headers": {},
+										"body": {
+											"value": "@string('')",
+											"type": "Expression"
+										},
+										"authentication": {
+											"type": "MSI",
+											"resource": "https://management.core.windows.net/"
+										}
+									}
+								}
+							],
+							"timeout": "7.00:00:00"
+						}
+					},
+					{
+						"name": "execTrollhunters",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "UntilOnline",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "Trollhunters",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "IfOnlinePause",
+						"description": "Sacle down and Pause",
+						"type": "IfCondition",
+						"dependsOn": [
+							{
+								"activity": "GetStatusEnd",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@equals('Online',string(activity('GetStatusEnd').output.properties.status))",
+								"type": "Expression"
+							},
+							"ifTrueActivities": [
+								{
+									"name": "ScaleWebhook",
+									"description": "",
+									"type": "WebHook",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"url": "https://s1events.azure-automation.net/webhooks?token=EnUcmPAqjmhXx7uKcLIj%2bN%2fNkzod6WPU6CaGc%2bhaPQI%3d",
+										"method": "POST",
+										"headers": {},
+										"body": {
+											"WebhookName": "scaledw"
+										},
+										"timeout": "00:10:00"
+									}
+								},
+								{
+									"name": "Pause",
+									"description": "Pause",
+									"type": "WebActivity",
+									"dependsOn": [
+										{
+											"activity": "ScaleWebhook",
+											"dependencyConditions": [
+												"Completed"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"url": {
+											"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'/pause?api-version=2018-06-01-preview')",
+											"type": "Expression"
+										},
+										"method": "POST",
+										"headers": {},
+										"body": {
+											"value": "@string('')",
+											"type": "Expression"
+										},
+										"authentication": {
+											"type": "MSI",
+											"resource": "https://management.core.windows.net/"
+										}
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "GetStatusEnd",
+						"description": "Start",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "execTrollhunters",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": {
+								"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'?api-version=2018-06-01-preview')",
+								"type": "Expression"
+							},
+							"method": "GET",
+							"headers": {},
+							"body": {
+								"value": "@string('')",
+								"type": "Expression"
+							},
+							"authentication": {
+								"type": "MSI",
+								"resource": "https://management.core.windows.net/"
+							}
+						}
+					},
+					{
+						"name": "Notify",
+						"description": "",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "execTrollhunters",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-23.eastus2.logic.azure.com:443/workflows/a3b71278fcd74578912de49da8f0cc41/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=hDohhaBVFqS07vlHEOhum2ZLvhUnvyi1u9oqKBO5fRc",
+							"method": "POST",
+							"headers": {
+								"Content-type": "application/json"
+							},
+							"body": {
+								"value": "@concat('{\n   \"DataFactoryName\": \"',pipeline().DataFactory,'\",\n   \"PipelineName\": \"',pipeline().Pipeline,'\",\n   \"Subject\": \"An error has occurred!\",\n   \"ErrorMessage\": \"The ADF pipeline failed. Please check the activity log.\",\n   \"EmailTo\": \"',pipeline().parameters.Notify,'\"\n}')",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"parameters": {
+					"SubscriptionID": {
+						"type": "string",
+						"defaultValue": "eaab21d5-8ecd-4ef0-a0c4-92fac2e22875"
+					},
+					"ResourceGroup": {
+						"type": "string",
+						"defaultValue": "dw"
+					},
+					"Server": {
+						"type": "string",
+						"defaultValue": "hiramdw"
+					},
+					"DW": {
+						"type": "string",
+						"defaultValue": "dw"
+					},
+					"SLO": {
+						"type": "string",
+						"defaultValue": "DW1000c"
+					},
+					"Notify": {
+						"type": "string",
+						"defaultValue": "azure@fleitasarts.com"
+					}
+				},
+				"annotations": []
+			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiramdw')]"
+				"[concat(variables('factoryId'), '/pipelines/Trollhunters')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/dwCustomer')]",
+			"name": "[concat(parameters('factoryName'), '/CADOutput')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "hiramdw",
+					"referenceName": "lakehiram",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
-				"type": "AzureSqlDWTable",
-				"schema": [
-					{
-						"name": "CustomerId",
-						"type": "int",
-						"precision": 10
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "demo"
 					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": false,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CurrencyDatasetCAD')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "lakehiram",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Currency_CAD.txt",
+						"fileSystem": "demo"
+					},
+					"columnDelimiter": "\t",
+					"escapeChar": "\\",
+					"firstRowAsHeader": false,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CurrencyDatasetUSD')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "lakehiram",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Currency_USD.txt",
+						"fileSystem": "demo"
+					},
+					"columnDelimiter": "\t",
+					"escapeChar": "\\",
+					"firstRowAsHeader": false,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PA_MR_3D_Demo')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "lakehiram",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "PA3DModel",
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "PA_MR_3D_Demo.xlsx",
+						"fileSystem": "lakehiram"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
 					{
 						"name": "Name",
-						"type": "nvarchar"
+						"type": "String"
 					},
 					{
-						"name": "Email",
-						"type": "varchar"
+						"name": "3DModel [image]",
+						"type": "String"
 					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "Customer"
-				}
+				]
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiramdw')]"
+				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/dwCustomerAccount')]",
+			"name": "[concat(parameters('factoryName'), '/PA_MR_3D_DemoCSV')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "hiramdw",
+					"referenceName": "lakehiram",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
-				"type": "AzureSqlDWTable",
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "lakehiram"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
 				"schema": [
 					{
-						"name": "CustomerAccountId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "CustomerId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "AcctNumEnding",
-						"type": "int",
-						"precision": 10
+						"name": "PK\u0003\u0004\u0014\u0000\u0006\u0000\b\u0000\u0000\u0000!\u0000�w${�\u0001\u0000\u0000\u0019\u0007\u0000\u0000\u0013\u0000\b\u0002[Content_Types].xml �\u0004\u0002(�\u0000\u0002\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000��MK\u00031\u0010���a�U�i+�H�=�qԂ",
+						"type": "String"
 					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "CustomerAccount"
-				}
+				]
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiramdw')]"
+				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/dwQuotes')]",
+			"name": "[concat(parameters('factoryName'), '/TaxiDemoDayStatsSink')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "hiramdw",
+					"referenceName": "lakehiram",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
-				"type": "AzureSqlDWTable",
-				"schema": [
-					{
-						"name": "quoteid",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "character",
-						"type": "varchar"
-					},
-					{
-						"name": "quote",
-						"type": "nvarchar"
-					},
-					{
-						"name": "sentiment",
-						"type": "float",
-						"precision": 15
-					}
-				],
+				"type": "DelimitedText",
 				"typeProperties": {
-					"schema": "dbo",
-					"table": "quotes"
-				}
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "hiramblob"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiramdw')]"
+				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/hsCharacter')]",
+			"name": "[concat(parameters('factoryName'), '/TaxiDemoTotalByPaymentType')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "hiscale",
+					"referenceName": "lakehiram",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "CharacterId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "FullName",
-						"type": "varchar"
-					},
-					{
-						"name": "Affiliation",
-						"type": "varchar"
-					},
-					{
-						"name": "Category",
-						"type": "varchar"
-					},
-					{
-						"name": "Aka",
-						"type": "varchar"
-					},
-					{
-						"name": "Status",
-						"type": "varchar"
-					},
-					{
-						"name": "Race",
-						"type": "varchar"
-					},
-					{
-						"name": "Age",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Home",
-						"type": "varchar"
-					},
-					{
-						"name": "Relatives",
-						"type": "varchar"
-					},
-					{
-						"name": "Weapons",
-						"type": "varchar"
-					},
-					{
-						"name": "EyeColor",
-						"type": "varchar"
-					},
-					{
-						"name": "HairColor",
-						"type": "varchar"
-					},
-					{
-						"name": "Minions",
-						"type": "varchar"
-					},
-					{
-						"name": "VoicedBy",
-						"type": "varchar"
-					}
-				],
+				"type": "DelimitedText",
 				"typeProperties": {
-					"schema": "dbo",
-					"table": "Character"
-				}
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "hiramblob"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": false,
+					"quoteChar": "\""
+				},
+				"schema": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiscale')]"
+				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/hsCustomer')]",
+			"name": "[concat(parameters('factoryName'), '/TaxiDemoVendorStatsSink')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "hiscale",
+					"referenceName": "lakehiram",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "CustomerId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Name",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Email",
-						"type": "varchar"
-					}
-				],
+				"type": "DelimitedText",
 				"typeProperties": {
-					"schema": "dbo",
-					"table": "Customer"
-				}
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "hiramblob"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": false,
+					"quoteChar": "\""
+				},
+				"schema": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiscale')]"
+				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/hsCustomerAccount')]",
+			"name": "[concat(parameters('factoryName'), '/USDOutput')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "hiscale",
+					"referenceName": "lakehiram",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "CustomerAccountId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "CustomerId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "AcctNumEnding",
-						"type": "int",
-						"precision": 10
-					}
-				],
+				"type": "DelimitedText",
 				"typeProperties": {
-					"schema": "dbo",
-					"table": "CustomerAccount"
-				}
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "demo"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": false,
+					"quoteChar": "\""
+				},
+				"schema": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiscale')]"
+				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/hsQuotes')]",
+			"name": "[concat(parameters('factoryName'), '/lakeCharacters')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "hiscale",
+					"referenceName": "lakehiram",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "quoteid",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "character",
-						"type": "varchar"
-					},
-					{
-						"name": "quote",
-						"type": "nvarchar"
-					},
-					{
-						"name": "sentiment",
-						"type": "float",
-						"precision": 15
-					}
-				],
+				"type": "Parquet",
 				"typeProperties": {
-					"schema": "dbo",
-					"table": "quotes"
-				}
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "trollhunters/2019/12",
+						"fileSystem": "raw"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hiscale')]"
+				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/movie_dataflow_sink')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "lakehiram",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "hiramblob"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": false,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/movie_dataflow_source')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "lakehiram",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "movies.csv",
+						"fileSystem": "hiramblob"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
 			]
 		}
 	]

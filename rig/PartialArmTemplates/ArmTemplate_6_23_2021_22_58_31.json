@@ -6,18 +6,6 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "rig"
-		},
-		"lakehiram_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'lakehiram'"
-		},
-		"lakehiramstaging_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'lakehiramstaging'"
-		},
-		"lakehiram_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://lakehiram.dfs.core.windows.net"
 		}
 	},
 	"variables": {
@@ -46,15 +34,8 @@
 						"typeProperties": {
 							"dataflow": {
 								"referenceName": "AppendRows",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"source1": {},
-									"source2": {},
-									"sink1": {}
-								}
+								"type": "DataFlowReference"
 							},
-							"staging": {},
 							"compute": {
 								"coreCount": 8,
 								"computeType": "General"
@@ -79,8 +60,7 @@
 								"referenceName": "RefreshPBIDataset",
 								"type": "PipelineReference"
 							},
-							"waitOnCompletion": true,
-							"parameters": {}
+							"waitOnCompletion": true
 						}
 					}
 				],
@@ -137,7 +117,6 @@
 											"type": "Expression"
 										},
 										"method": "POST",
-										"headers": {},
 										"body": {
 											"value": "@string('')",
 											"type": "Expression"
@@ -208,7 +187,6 @@
 								"type": "Expression"
 							},
 							"method": "GET",
-							"headers": {},
 							"body": {
 								"value": "@string('')",
 								"type": "Expression"
@@ -256,7 +234,6 @@
 											"type": "Expression"
 										},
 										"method": "GET",
-										"headers": {},
 										"body": {
 											"value": "@string('')",
 											"type": "Expression"
@@ -288,8 +265,7 @@
 								"referenceName": "Trollhunters",
 								"type": "PipelineReference"
 							},
-							"waitOnCompletion": true,
-							"parameters": {}
+							"waitOnCompletion": true
 						}
 					},
 					{
@@ -320,7 +296,6 @@
 									"typeProperties": {
 										"url": "https://s1events.azure-automation.net/webhooks?token=EnUcmPAqjmhXx7uKcLIj%2bN%2fNkzod6WPU6CaGc%2bhaPQI%3d",
 										"method": "POST",
-										"headers": {},
 										"body": {
 											"WebhookName": "scaledw"
 										},
@@ -353,7 +328,6 @@
 											"type": "Expression"
 										},
 										"method": "POST",
-										"headers": {},
 										"body": {
 											"value": "@string('')",
 											"type": "Expression"
@@ -393,7 +367,6 @@
 								"type": "Expression"
 							},
 							"method": "GET",
-							"headers": {},
 							"body": {
 								"value": "@string('')",
 								"type": "Expression"
@@ -677,7 +650,6 @@
 								"type": "Expression"
 							},
 							"method": "GET",
-							"headers": {},
 							"body": {
 								"simple": "body"
 							},
@@ -705,7 +677,6 @@
 								"type": "Expression"
 							},
 							"method": "GET",
-							"headers": {},
 							"body": {
 								"simple": "body"
 							},
@@ -733,7 +704,6 @@
 								"type": "Expression"
 							},
 							"method": "GET",
-							"headers": {},
 							"body": {
 								"simple": "body"
 							},
@@ -807,7 +777,6 @@
 								"type": "Expression"
 							},
 							"method": "GET",
-							"headers": {},
 							"body": {
 								"value": "@string('')",
 								"type": "Expression"
@@ -872,7 +841,6 @@
 						"typeProperties": {
 							"url": "https://s1events.azure-automation.net/webhooks?token=gedxRKHcZ2FWzWTJx5wGavBsu8kBmk3LYMTWDzyjCDs%3d",
 							"method": "POST",
-							"headers": {},
 							"body": {
 								"WebhookName": "scaledw"
 							},
@@ -926,17 +894,8 @@
 						"typeProperties": {
 							"dataflow": {
 								"referenceName": "TaxiDemo",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"TripData": {},
-									"TripFare": {},
-									"VendorStatsSink": {},
-									"DayStatsSink": {},
-									"TotalPaymentByPaymentType2": {}
-								}
+								"type": "DataFlowReference"
 							},
-							"staging": {},
 							"compute": {
 								"coreCount": 8,
 								"computeType": "General"
@@ -1660,8 +1619,7 @@
 						"pipelineReference": {
 							"referenceName": "AppendRows",
 							"type": "PipelineReference"
-						},
-						"parameters": {}
+						}
 					}
 				],
 				"type": "ScheduleTrigger",
@@ -1687,24 +1645,11 @@
 				"annotations": [],
 				"type": "AzureBlobFS",
 				"typeProperties": {
-					"url": "[parameters('lakehiram_properties_typeProperties_url')]",
+					"url": "https://lakehiram.dfs.core.windows.net",
 					"accountKey": {
 						"type": "SecureString",
-						"value": "[parameters('lakehiram_accountKey')]"
+						"value": "**********"
 					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/lakehiramstaging')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('lakehiramstaging_connectionString')]"
 				}
 			},
 			"dependsOn": []

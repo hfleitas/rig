@@ -6,22 +6,6 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "rig"
-		},
-		"hf0524_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'hf0524'"
-		},
-		"hf0524_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'hf0524'"
-		},
-		"hiram_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'hiram'"
-		},
-		"hf0524_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "UPCIC\\HFleitas"
 		}
 	},
 	"variables": {
@@ -29,48 +13,7 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/hf0524')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "desktop",
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"connectionString": "[parameters('hf0524_connectionString')]",
-					"userName": "[parameters('hf0524_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('hf0524_password')]"
-					}
-				},
-				"connectVia": {
-					"referenceName": "hf0524",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hiram')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": "localhost",
-				"annotations": [],
-				"type": "SqlServer",
-				"typeProperties": {
-					"connectionString": "[parameters('hiram_connectionString')]"
-				},
-				"connectVia": {
-					"referenceName": "hiram",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/lakeCharacters')]",
+			"name": "[concat(parameters('factoryName'), '/taxi_trip_data_input')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -79,141 +22,103 @@
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
-				"type": "Parquet",
+				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"folderPath": "trollhunters/2019/12",
-						"fileSystem": "raw"
+						"fileName": "trip_data_1.csv",
+						"fileSystem": "hiramblob"
 					},
-					"compressionCodec": "snappy"
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
 				},
 				"schema": []
 			},
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/sqlCharacter')]",
+			"name": "[concat(parameters('factoryName'), '/taxi_trip_fare_input')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"description": "hf0524.",
 				"linkedServiceName": {
-					"referenceName": "hf0524",
+					"referenceName": "lakehiram",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
-				"type": "SqlServerTable",
-				"structure": [
-					{
-						"name": "quoteid",
-						"type": "Int32"
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "trip_fare_1.csv",
+						"fileSystem": "hiramblob"
 					},
-					{
-						"name": "character",
-						"type": "String"
-					},
-					{
-						"name": "quote",
-						"type": "String"
-					},
-					{
-						"name": "sentiment",
-						"type": "Double"
-					}
-				],
-				"typeProperties": {}
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
-			]
+			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/sqlCustomer')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
+			"name": "[concat(parameters('factoryName'), '/AppendRows')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"linkedServiceName": {
-					"referenceName": "hf0524",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "SqlServerTable",
-				"schema": [
-					{
-						"name": "CustomerId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Name",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Email",
-						"type": "varchar"
-					}
-				],
+				"type": "MappingDataFlow",
 				"typeProperties": {
-					"schema": "dbo",
-					"table": "Customer"
+					"sources": [
+						{
+							"linkedService": {
+								"referenceName": "lakehiram",
+								"type": "LinkedServiceReference"
+							},
+							"name": "source1"
+						},
+						{
+							"linkedService": {
+								"referenceName": "lakehiram",
+								"type": "LinkedServiceReference"
+							},
+							"name": "source2"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "lakehiram",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Union1"
+						}
+					],
+					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tignoreNoFilesFound: false,\n\tformat: 'excel',\n\tfileSystem: 'lakehiram',\n\tfileName: 'PA_MR_3D_Demo.xlsx',\n\tsheetName: 'PA3DModel',\n\tfirstRowAsHeader: true) ~> source1\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tignoreNoFilesFound: false,\n\tformat: 'excel',\n\tfileSystem: 'lakehiram',\n\tfileName: 'PA_MR_3D_Demo.xlsx',\n\tsheetName: 'PA3DModel',\n\tfirstRowAsHeader: true) ~> source2\nsource1, source2 union(byName: true)~> Union1\nUnion1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tfileSystem: 'lakehiram',\n\tcolumnDelimiter: ',',\n\tescapeChar: '\\\\',\n\tqutoChar: '\\\"',\n\tcolumnNamesAsHeader: false,\n\tumask: 0022,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1) ~> sink1"
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
-			]
+			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/sqlCustomerAccount')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "hf0524",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "SqlServerTable",
-				"schema": [
-					{
-						"name": "CustomerAccountId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "CustomerId",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "AcctNumEnding",
-						"type": "int",
-						"precision": 10
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "CustomerAccount"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hf0524')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Leads')]",
+			"name": "[concat(parameters('factoryName'), '/AppendRows')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"description": "hf0524 to dw ",
+				"description": "Duplicate / Grow dataset",
 				"activities": [
 					{
-						"name": "dwCustomer",
-						"description": "copy",
-						"type": "Copy",
+						"name": "AppendRows",
+						"type": "ExecuteDataFlow",
 						"dependsOn": [],
 						"policy": {
-							"timeout": "7.00:00:00",
+							"timeout": "1.00:00:00",
 							"retry": 0,
 							"retryIntervalInSeconds": 30,
 							"secureOutput": false,
@@ -221,865 +126,30 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"source": {
-								"type": "SqlServerSource"
-							},
-							"sink": {
-								"type": "SqlDWSink",
-								"allowPolyBase": true,
-								"polyBaseSettings": {
-									"rejectValue": 0,
-									"rejectType": "value",
-									"useTypeDefault": true
+							"dataflow": {
+								"referenceName": "AppendRows",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"source2": {},
+									"sink1": {}
 								}
 							},
-							"enableStaging": true,
-							"stagingSettings": {
-								"linkedServiceName": {
-									"referenceName": "sqlva4onabrnvvfrkw",
-									"type": "LinkedServiceReference"
-								},
-								"path": "adfstaging"
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
 							},
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"name": "CustomerId",
-											"type": "Int32"
-										},
-										"sink": {
-											"name": "CustomerId",
-											"type": "Int32"
-										}
-									},
-									{
-										"source": {
-											"name": "Name",
-											"type": "String"
-										},
-										"sink": {
-											"name": "Name",
-											"type": "String"
-										}
-									},
-									{
-										"source": {
-											"name": "Email",
-											"type": "String"
-										},
-										"sink": {
-											"name": "Email",
-											"type": "String"
-										}
-									}
-								]
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "sqlCustomer",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "dwCustomer",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "dwCustomerAccount",
-						"description": "copy",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "dwCustomer",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlServerSource"
-							},
-							"sink": {
-								"type": "SqlDWSink",
-								"allowPolyBase": true,
-								"polyBaseSettings": {
-									"rejectValue": 0,
-									"rejectType": "value",
-									"useTypeDefault": true
-								}
-							},
-							"enableStaging": true,
-							"stagingSettings": {
-								"linkedServiceName": {
-									"referenceName": "sqlva4onabrnvvfrkw",
-									"type": "LinkedServiceReference"
-								},
-								"path": "adfstaging"
-							},
-							"dataIntegrationUnits": 0,
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"name": "CustomerAccountId",
-											"type": "Int32"
-										},
-										"sink": {
-											"name": "CustomerAccountId",
-											"type": "Int32"
-										}
-									},
-									{
-										"source": {
-											"name": "CustomerId",
-											"type": "Int32"
-										},
-										"sink": {
-											"name": "CustomerId",
-											"type": "Int32"
-										}
-									},
-									{
-										"source": {
-											"name": "AcctNumEnding",
-											"type": "Int32"
-										},
-										"sink": {
-											"name": "AcctNumEnding",
-											"type": "Int32"
-										}
-									}
-								]
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "sqlCustomerAccount",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "dwCustomerAccount",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "hsCustomer",
-						"description": "copy",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlServerSource"
-							},
-							"sink": {
-								"type": "AzureSqlSink"
-							},
-							"enableStaging": true,
-							"stagingSettings": {
-								"linkedServiceName": {
-									"referenceName": "sqlva4onabrnvvfrkw",
-									"type": "LinkedServiceReference"
-								},
-								"path": "adfstaging"
-							},
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"name": "CustomerId",
-											"type": "Int32"
-										},
-										"sink": {
-											"name": "CustomerId",
-											"type": "Int32"
-										}
-									},
-									{
-										"source": {
-											"name": "Name",
-											"type": "String"
-										},
-										"sink": {
-											"name": "Name",
-											"type": "String"
-										}
-									},
-									{
-										"source": {
-											"name": "Email",
-											"type": "String"
-										},
-										"sink": {
-											"name": "Email",
-											"type": "String"
-										}
-									}
-								]
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "sqlCustomer",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "hsCustomer",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "hsCustomerAccount",
-						"description": "copy",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "hsCustomer",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlServerSource"
-							},
-							"sink": {
-								"type": "AzureSqlSink"
-							},
-							"enableStaging": true,
-							"stagingSettings": {
-								"linkedServiceName": {
-									"referenceName": "sqlva4onabrnvvfrkw",
-									"type": "LinkedServiceReference"
-								},
-								"path": "adfstaging"
-							},
-							"dataIntegrationUnits": 0,
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"name": "CustomerAccountId",
-											"type": "Int32"
-										},
-										"sink": {
-											"name": "CustomerAccountId",
-											"type": "Int32"
-										}
-									},
-									{
-										"source": {
-											"name": "CustomerId",
-											"type": "Int32"
-										},
-										"sink": {
-											"name": "CustomerId",
-											"type": "Int32"
-										}
-									},
-									{
-										"source": {
-											"name": "AcctNumEnding",
-											"type": "Int32"
-										},
-										"sink": {
-											"name": "AcctNumEnding",
-											"type": "Int32"
-										}
-									}
-								]
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "sqlCustomerAccount",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "hsCustomerAccount",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"concurrency": 1,
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/sqlCustomer')]",
-				"[concat(variables('factoryId'), '/datasets/sqlCustomerAccount')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Trollhunters')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"description": " ",
-				"activities": [
-					{
-						"name": "dwCharacters",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlServerSource",
-								"sqlReaderQuery": "select * from [ᕙ༼,இܫஇ,༽ᕗ].dbo.Character"
-							},
-							"sink": {
-								"type": "SqlDWSink",
-								"allowPolyBase": true,
-								"polyBaseSettings": {
-									"rejectValue": 0,
-									"rejectType": "value",
-									"useTypeDefault": true
-								}
-							},
-							"enableStaging": true,
-							"stagingSettings": {
-								"linkedServiceName": {
-									"referenceName": "sqlva4onabrnvvfrkw",
-									"type": "LinkedServiceReference"
-								},
-								"path": "adfstaging"
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "sqlCharacter",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "dwCharacter",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "dwQuotes",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "dwCharacters",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlServerSource",
-								"sqlReaderQuery": "select * from [tpcxbb_1gb].[dbo].[Quotes]"
-							},
-							"sink": {
-								"type": "SqlDWSink",
-								"allowPolyBase": true,
-								"polyBaseSettings": {
-									"rejectValue": 0,
-									"rejectType": "value",
-									"useTypeDefault": true
-								}
-							},
-							"enableStaging": true,
-							"stagingSettings": {
-								"linkedServiceName": {
-									"referenceName": "sqlva4onabrnvvfrkw",
-									"type": "LinkedServiceReference"
-								},
-								"path": "adfstaging"
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "sqlCharacter",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "dwQuotes",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "hsCharacaters",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlServerSource",
-								"sqlReaderQuery": "select * from [ᕙ༼,இܫஇ,༽ᕗ].dbo.Character"
-							},
-							"sink": {
-								"type": "AzureSqlSink"
-							},
-							"enableStaging": true,
-							"stagingSettings": {
-								"linkedServiceName": {
-									"referenceName": "sqlva4onabrnvvfrkw",
-									"type": "LinkedServiceReference"
-								},
-								"path": "adfstaging"
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "sqlCharacter",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "hsCharacter",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "hsQuotes",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "hsCharacaters",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlServerSource",
-								"sqlReaderQuery": "select * from [tpcxbb_1gb].[dbo].[Quotes]"
-							},
-							"sink": {
-								"type": "AzureSqlSink"
-							},
-							"enableStaging": true,
-							"stagingSettings": {
-								"linkedServiceName": {
-									"referenceName": "sqlva4onabrnvvfrkw",
-									"type": "LinkedServiceReference"
-								},
-								"path": "adfstaging"
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "sqlCharacter",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "hsQuotes",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/sqlCharacter')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LakeHiram')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "lakeCharacters",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlServerSource",
-								"sqlReaderQuery": "select * from [ᕙ༼,இܫஇ,༽ᕗ].dbo.Character"
-							},
-							"sink": {
-								"type": "ParquetSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								}
-							},
-							"enableStaging": false
-						},
-						"inputs": [
-							{
-								"referenceName": "sqlCharacter",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "lakeCharacters",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					},
-					{
-						"name": "lakeTrollhunters",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlServerSource",
-								"sqlReaderQuery": "select * from [ᕙ༼,இܫஇ,༽ᕗ].dbo.Character"
-							},
-							"sink": {
-								"type": "ParquetSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								}
-							},
-							"enableStaging": false
-						},
-						"inputs": [
-							{
-								"referenceName": "sqlCharacter",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "lakeCharacters",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/sqlCharacter')]",
-				"[concat(variables('factoryId'), '/datasets/lakeCharacters')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Primer')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "IfPausedThenOnline",
-						"type": "IfCondition",
-						"dependsOn": [
-							{
-								"activity": "GetStatus",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"expression": {
-								"value": "@not(equals('Online',string(activity('GetStatus').output.properties.status)))",
-								"type": "Expression"
-							},
-							"ifTrueActivities": [
-								{
-									"name": "Resume",
-									"description": "Start",
-									"type": "WebActivity",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "7.00:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"url": {
-											"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'/resume?api-version=2018-06-01-preview')",
-											"type": "Expression"
-										},
-										"method": "POST",
-										"headers": {},
-										"body": {
-											"value": "@string('')",
-											"type": "Expression"
-										},
-										"authentication": {
-											"type": "MSI",
-											"resource": "https://management.core.windows.net/"
-										}
-									}
-								},
-								{
-									"name": "ScaleAPI",
-									"type": "WebActivity",
-									"dependsOn": [
-										{
-											"activity": "Resume",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"policy": {
-										"timeout": "7.00:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"url": {
-											"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'?api-version=2018-06-01-preview')",
-											"type": "Expression"
-										},
-										"method": "PUT",
-										"headers": {
-											"Content-Type": "application/json"
-										},
-										"body": {
-											"value": "@concat('{\"location\":\"eastus2\",\"sku\":{\"name\": \"',pipeline().parameters.SLO,'\"}}')",
-											"type": "Expression"
-										},
-										"authentication": {
-											"type": "MSI",
-											"resource": "https://management.core.windows.net/"
-										}
-									}
-								}
-							]
+							"traceLevel": "Fine"
 						}
 					},
 					{
-						"name": "GetStatus",
-						"description": "Start",
-						"type": "WebActivity",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": {
-								"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'?api-version=2018-06-01-preview')",
-								"type": "Expression"
-							},
-							"method": "GET",
-							"headers": {},
-							"body": {
-								"value": "@string('')",
-								"type": "Expression"
-							},
-							"authentication": {
-								"type": "MSI",
-								"resource": "https://management.core.windows.net/"
-							}
-						}
-					},
-					{
-						"name": "UntilOnline",
-						"type": "Until",
-						"dependsOn": [
-							{
-								"activity": "IfPausedThenOnline",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"expression": {
-								"value": "@equals('Online',string(activity('GetStatusOnline').output.properties.status))\n",
-								"type": "Expression"
-							},
-							"activities": [
-								{
-									"name": "GetStatusOnline",
-									"description": "Start",
-									"type": "WebActivity",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "7.00:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"url": {
-											"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'?api-version=2018-06-01-preview')",
-											"type": "Expression"
-										},
-										"method": "GET",
-										"headers": {},
-										"body": {
-											"value": "@string('')",
-											"type": "Expression"
-										},
-										"authentication": {
-											"type": "MSI",
-											"resource": "https://management.core.windows.net/"
-										}
-									}
-								}
-							],
-							"timeout": "7.00:00:00"
-						}
-					},
-					{
-						"name": "wipeDW",
-						"type": "SqlServerStoredProcedure",
-						"dependsOn": [
-							{
-								"activity": "UntilOnline",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"storedProcedureName": "dbo.wipe"
-						},
-						"linkedServiceName": {
-							"referenceName": "dw",
-							"type": "LinkedServiceReference"
-						}
-					},
-					{
-						"name": "execLeads",
+						"name": "Call Refresh",
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
-								"activity": "wipeHS",
+								"activity": "AppendRows",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -1088,244 +158,259 @@
 						"userProperties": [],
 						"typeProperties": {
 							"pipeline": {
-								"referenceName": "Leads",
+								"referenceName": "RefreshPBIDataset",
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
 							"parameters": {}
-						}
-					},
-					{
-						"name": "wipeHS",
-						"description": " ",
-						"type": "SqlServerStoredProcedure",
-						"dependsOn": [
-							{
-								"activity": "wipeDW",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"storedProcedureName": "[[dbo].[wipe]"
-						},
-						"linkedServiceName": {
-							"referenceName": "hiscale",
-							"type": "LinkedServiceReference"
-						}
-					},
-					{
-						"name": "execTrollhunters",
-						"type": "ExecutePipeline",
-						"dependsOn": [
-							{
-								"activity": "wipeHS",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"pipeline": {
-								"referenceName": "Trollhunters",
-								"type": "PipelineReference"
-							},
-							"waitOnCompletion": true,
-							"parameters": {}
-						}
-					},
-					{
-						"name": "IfOnlinePause",
-						"description": "Sacle down and Pause",
-						"type": "IfCondition",
-						"dependsOn": [
-							{
-								"activity": "GetStatusEnd",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"expression": {
-								"value": "@equals('Online',string(activity('GetStatusEnd').output.properties.status))",
-								"type": "Expression"
-							},
-							"ifTrueActivities": [
-								{
-									"name": "ScaleWebhook",
-									"description": "",
-									"type": "WebHook",
-									"dependsOn": [],
-									"userProperties": [],
-									"typeProperties": {
-										"url": "https://s1events.azure-automation.net/webhooks?token=EnUcmPAqjmhXx7uKcLIj%2bN%2fNkzod6WPU6CaGc%2bhaPQI%3d",
-										"method": "POST",
-										"headers": {},
-										"body": {
-											"WebhookName": "scaledw"
-										},
-										"timeout": "00:10:00"
-									}
-								},
-								{
-									"name": "Pause",
-									"description": "Pause",
-									"type": "WebActivity",
-									"dependsOn": [
-										{
-											"activity": "ScaleWebhook",
-											"dependencyConditions": [
-												"Completed"
-											]
-										}
-									],
-									"policy": {
-										"timeout": "7.00:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"url": {
-											"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'/pause?api-version=2018-06-01-preview')",
-											"type": "Expression"
-										},
-										"method": "POST",
-										"headers": {},
-										"body": {
-											"value": "@string('')",
-											"type": "Expression"
-										},
-										"authentication": {
-											"type": "MSI",
-											"resource": "https://management.core.windows.net/"
-										}
-									}
-								}
-							]
-						}
-					},
-					{
-						"name": "GetStatusEnd",
-						"description": "Start",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "execTrollhunters",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": {
-								"value": "@concat('https://management.azure.com/subscriptions/',pipeline().parameters.SubscriptionID,'/resourceGroups/',pipeline().parameters.ResourceGroup,'/providers/Microsoft.Sql/servers/',pipeline().parameters.Server,'/databases/',pipeline().parameters.DW,'?api-version=2018-06-01-preview')",
-								"type": "Expression"
-							},
-							"method": "GET",
-							"headers": {},
-							"body": {
-								"value": "@string('')",
-								"type": "Expression"
-							},
-							"authentication": {
-								"type": "MSI",
-								"resource": "https://management.core.windows.net/"
-							}
-						}
-					},
-					{
-						"name": "Notify",
-						"description": "",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "execTrollhunters",
-								"dependencyConditions": [
-									"Failed"
-								]
-							},
-							{
-								"activity": "execLeads",
-								"dependencyConditions": [
-									"Failed"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-23.eastus2.logic.azure.com:443/workflows/a3b71278fcd74578912de49da8f0cc41/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=hDohhaBVFqS07vlHEOhum2ZLvhUnvyi1u9oqKBO5fRc",
-							"method": "POST",
-							"headers": {
-								"Content-type": "application/json"
-							},
-							"body": {
-								"value": "@concat('{\n   \"DataFactoryName\": \"',pipeline().DataFactory,'\",\n   \"PipelineName\": \"',pipeline().Pipeline,'\",\n   \"Subject\": \"An error has occurred!\",\n   \"ErrorMessage\": \"The ADF pipeline failed. Please check the activity log.\",\n   \"EmailTo\": \"',pipeline().parameters.Notify,'\"\n}')",
-								"type": "Expression"
-							}
 						}
 					}
 				],
-				"parameters": {
-					"SubscriptionID": {
-						"type": "string",
-						"defaultValue": "eaab21d5-8ecd-4ef0-a0c4-92fac2e22875"
-					},
-					"ResourceGroup": {
-						"type": "string",
-						"defaultValue": "dw"
-					},
-					"Server": {
-						"type": "string",
-						"defaultValue": "hiramdw"
-					},
-					"DW": {
-						"type": "string",
-						"defaultValue": "dw"
-					},
-					"SLO": {
-						"type": "string",
-						"defaultValue": "DW1000c"
-					},
-					"Notify": {
-						"type": "string",
-						"defaultValue": "azure@fleitasarts.com"
-					}
+				"folder": {
+					"name": "50-powerbi"
 				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/Leads')]",
-				"[concat(variables('factoryId'), '/pipelines/Trollhunters')]"
+				"[concat(variables('factoryId'), '/dataflows/AppendRows')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Currency Converter')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Sample demo data flow to convert currencies",
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "CurrencyDatasetUSD",
+								"type": "DatasetReference"
+							},
+							"name": "USDCurrency"
+						},
+						{
+							"dataset": {
+								"referenceName": "CurrencyDatasetCAD",
+								"type": "DatasetReference"
+							},
+							"name": "CADSource"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "USDOutput",
+								"type": "DatasetReference"
+							},
+							"name": "USDSink"
+						},
+						{
+							"dataset": {
+								"referenceName": "CADOutput",
+								"type": "DatasetReference"
+							},
+							"name": "CADSink"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Union",
+							"description": "The Union combines 2 streams together"
+						},
+						{
+							"name": "NewCurrencyColumn",
+							"description": "Create a new calculated column from currency rate"
+						},
+						{
+							"name": "ConditionalSplit1",
+							"description": "Split the data on state to create 2 streams"
+						}
+					],
+					"script": "source(output(\n\t\tPreviousConversionRate as double,\n\t\tCountry as string,\n\t\tDateTime1 as string,\n\t\tCurrentConversionRate as double\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> USDCurrency\nsource(output(\n\t\tPreviousConversionRate as double,\n\t\tCountry as string,\n\t\tDateTime1 as string,\n\t\tCurrentConversionRate as double\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> CADSource\nUSDCurrency, CADSource union(byName: true)~> Union\nUnion derive(NewCurrencyRate = round(CurrentConversionRate*1.25)) ~> NewCurrencyColumn\nNewCurrencyColumn split(Country == 'USD',\n\tCountry == 'CAD',\n\tdisjoint: false) ~> ConditionalSplit1@(USD, CAD)\nConditionalSplit1@USD sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tumask: 0022) ~> USDSink\nConditionalSplit1@CAD sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tumask: 0022) ~> CADSink"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MovieDemo')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "movie_dataflow_source",
+								"type": "DatasetReference"
+							},
+							"name": "Movies"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "movie_dataflow_sink",
+								"type": "DatasetReference"
+							},
+							"name": "Output"
+						}
+					],
+					"transformations": [
+						{
+							"name": "MoviesYear"
+						}
+					],
+					"script": "source(output(\n\t\tmovieId as string,\n\t\ttitle as string,\n\t\tgenres as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Movies\nMovies derive(year = toInteger(trim(right(title, 6), '()')),\n\t\ttitle = toString(left(title, length(title)-6))) ~> MoviesYear\nMoviesYear sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tumask: 0022) ~> Output"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TaxiDemo')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "taxi_trip_data_input",
+								"type": "DatasetReference"
+							},
+							"name": "TripData"
+						},
+						{
+							"dataset": {
+								"referenceName": "taxi_trip_fare_input",
+								"type": "DatasetReference"
+							},
+							"name": "TripFare"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "TaxiDemoVendorStatsSink",
+								"type": "DatasetReference"
+							},
+							"name": "VendorStatsSink"
+						},
+						{
+							"dataset": {
+								"referenceName": "TaxiDemoDayStatsSink",
+								"type": "DatasetReference"
+							},
+							"name": "DayStatsSink"
+						},
+						{
+							"dataset": {
+								"referenceName": "TaxiDemoTotalByPaymentType",
+								"type": "DatasetReference"
+							},
+							"name": "TotalPaymentByPaymentType2"
+						}
+					],
+					"transformations": [
+						{
+							"name": "JoinMatchedData"
+						},
+						{
+							"name": "AggregateVendorStats"
+						},
+						{
+							"name": "AggregateDayStats"
+						},
+						{
+							"name": "AggregateByPaymentType"
+						}
+					],
+					"script": "source(output(\n\t\tmedallion as string,\n\t\thack_license as string,\n\t\tvendor_id as string,\n\t\trate_code as string,\n\t\tstore_and_fwd_flag as string,\n\t\tpickup_datetime as string,\n\t\tdropoff_datetime as string,\n\t\tpassenger_count as short,\n\t\ttrip_time_in_secs as long,\n\t\ttrip_distance as double,\n\t\tpickup_longitude as double,\n\t\tpickup_latitude as double,\n\t\tdropoff_longitude as double,\n\t\tdropoff_latitude as double\n\t),\n\tallowSchemaDrift: false,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> TripData\nsource(output(\n\t\tmedallion as string,\n\t\t{ hack_license} as string,\n\t\t{ vendor_id} as string,\n\t\t{ pickup_datetime} as string,\n\t\t{ payment_type} as string,\n\t\t{ fare_amount} as double,\n\t\t{ surcharge} as double,\n\t\t{ mta_tax} as double,\n\t\t{ tip_amount} as double,\n\t\t{ tolls_amount} as double,\n\t\t{ total_amount} as double\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> TripFare\nTripData, TripFare join(hack_license == { hack_license}\n\t&& TripData@medallion == TripFare@medallion\n\t&& vendor_id == { vendor_id}\n\t&& pickup_datetime == { pickup_datetime},\n\tjoinType:'inner',\n\tbroadcast: 'auto')~> JoinMatchedData\nJoinMatchedData aggregate(groupBy(vendor_id),\n\tpassenger_count = round(sum(passenger_count), 2),\n\t\ttrip_time_in_secs = round(sum(trip_time_in_secs)/60, 2),\n\t\ttrip_distance = round(sum(trip_distance), 2),\n\t\tTotalTripFare = round(sum({ total_amount}), 2)) ~> AggregateVendorStats\nJoinMatchedData aggregate(groupBy(DayOfTheWeek = dayOfWeek(toDate(pickup_datetime,'yyyy-mm-dd hh:mm:ss'))),\n\ttrip_distance = round(avg(trip_distance), 2),\n\t\tpassenger_count = round(avg(passenger_count), 2),\n\t\ttrip_time_in_secs = round(avg(trip_time_in_secs)/60, 2),\n\t\taverage_fare = round(avg({ total_amount}), 2)) ~> AggregateDayStats\nTripFare aggregate(each(match(type=='double'), concat($$, '_total') = round(sum ($$)))) ~> AggregateByPaymentType\nAggregateVendorStats sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tumask: 0022) ~> VendorStatsSink\nAggregateDayStats sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tumask: 0022) ~> DayStatsSink\nAggregateByPaymentType sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tumask: 0022,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> TotalPaymentByPaymentType2"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/taxi_trip_data_input')]",
+				"[concat(variables('factoryId'), '/datasets/taxi_trip_fare_input')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TaxiDemo')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "TaxiDemoDataflow",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "TaxiDemo",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"TripData": {},
+									"TripFare": {},
+									"VendorStatsSink": {},
+									"DayStatsSink": {},
+									"TotalPaymentByPaymentType2": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/TaxiDemo')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hourly')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "AppendRows",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Hour",
+						"interval": 1,
+						"startTime": "2021-06-24T02:03:00Z",
+						"endTime": "2021-08-31T02:03:00Z",
+						"timeZone": "UTC"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/AppendRows')]"
 			]
 		}
 	]
