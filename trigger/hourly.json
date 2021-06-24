@@ -1,0 +1,25 @@
+{
+	"name": "hourly",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "AppendRows",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Hour",
+				"interval": 1,
+				"startTime": "2021-06-24T02:03:00Z",
+				"endTime": "2021-08-31T02:03:00Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}
