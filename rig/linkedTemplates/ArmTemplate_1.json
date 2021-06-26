@@ -145,7 +145,7 @@
 						}
 					},
 					{
-						"name": "Call Refresh",
+						"name": "Execute Pipeline1",
 						"type": "ExecutePipeline",
 						"dependsOn": [
 							{
