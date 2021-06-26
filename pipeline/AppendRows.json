@@ -41,7 +41,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"pipeline": {
-						"referenceName": "Trollhunters",
+						"referenceName": "RefreshPBIDataset",
 						"type": "PipelineReference"
 					},
 					"waitOnCompletion": true
