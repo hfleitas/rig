@@ -2,15 +2,15 @@
 	"name": "TaxiDemoVendorStatsSink",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "sqlva4onabrnvvfrkw",
+			"referenceName": "lakehiram",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobStorageLocation",
-				"container": "hiramblob"
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "hiramblob"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

@@ -2,16 +2,16 @@
 	"name": "taxi_trip_data_input",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "sqlva4onabrnvvfrkw",
+			"referenceName": "lakehiram",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobStorageLocation",
+				"type": "AzureBlobFSLocation",
 				"fileName": "trip_data_1.csv",
-				"container": "hiramblob"
+				"fileSystem": "hiramblob"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

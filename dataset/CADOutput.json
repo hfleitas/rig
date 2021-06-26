@@ -2,15 +2,15 @@
 	"name": "CADOutput",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "sqlva4onabrnvvfrkw",
+			"referenceName": "lakehiram",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobStorageLocation",
-				"container": "demo"
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "demo"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

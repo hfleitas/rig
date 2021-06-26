@@ -1,0 +1,30 @@
+{
+	"name": "PA_MR_3D_Demo",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lakehiram",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "PA3DModel",
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "PA_MR_3D_Demo.xlsx",
+				"fileSystem": "lakehiram"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "Name",
+				"type": "String"
+			},
+			{
+				"name": "3DModel [image]",
+				"type": "String"
+			}
+		]
+	}
+}

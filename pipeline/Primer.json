@@ -171,86 +171,11 @@
 				}
 			},
 			{
-				"name": "wipeDW",
-				"type": "SqlServerStoredProcedure",
-				"dependsOn": [
-					{
-						"activity": "UntilOnline",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"storedProcedureName": "dbo.wipe"
-				},
-				"linkedServiceName": {
-					"referenceName": "dw",
-					"type": "LinkedServiceReference"
-				}
-			},
-			{
-				"name": "execLeads",
-				"type": "ExecutePipeline",
-				"dependsOn": [
-					{
-						"activity": "wipeHS",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"pipeline": {
-						"referenceName": "Leads",
-						"type": "PipelineReference"
-					},
-					"waitOnCompletion": true
-				}
-			},
-			{
-				"name": "wipeHS",
-				"description": " ",
-				"type": "SqlServerStoredProcedure",
-				"dependsOn": [
-					{
-						"activity": "wipeDW",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"storedProcedureName": "[dbo].[wipe]"
-				},
-				"linkedServiceName": {
-					"referenceName": "hiscale",
-					"type": "LinkedServiceReference"
-				}
-			},
-			{
 				"name": "execTrollhunters",
 				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
-						"activity": "wipeHS",
+						"activity": "UntilOnline",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -381,12 +306,6 @@
 				"dependsOn": [
 					{
 						"activity": "execTrollhunters",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
-						"activity": "execLeads",
 						"dependencyConditions": [
 							"Failed"
 						]

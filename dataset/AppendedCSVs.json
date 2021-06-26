@@ -1,5 +1,5 @@
 {
-	"name": "TaxiDemoTotalByPaymentType",
+	"name": "AppendedCSVs",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "lakehiram",
@@ -10,13 +10,23 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileSystem": "hiramblob"
+				"folderPath": "Sink",
+				"fileSystem": "lakehiram"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
 			"firstRowAsHeader": false,
 			"quoteChar": "\""
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "Name",
+				"type": "String"
+			},
+			{
+				"name": "3DModel [image]",
+				"type": "String"
+			}
+		]
 	}
 }
