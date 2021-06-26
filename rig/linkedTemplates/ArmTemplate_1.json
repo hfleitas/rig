@@ -13,6 +13,32 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/movie_dataflow_source')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "lakehiram",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "movies.csv",
+						"fileSystem": "hiramblob"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/taxi_trip_data_input')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -65,41 +91,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/AppendedCSVs')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "lakehiram",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"folderPath": "Sink",
-						"fileSystem": "lakehiram"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": false,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "Name",
-						"type": "String"
-					},
-					{
-						"name": "3DModel [image]",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/AppendRows')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -139,9 +130,7 @@
 					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tignoreNoFilesFound: false,\n\tformat: 'excel',\n\tfileSystem: 'lakehiram',\n\tfileName: 'PA_MR_3D_Demo.xlsx',\n\tsheetName: 'PA3DModel',\n\tfirstRowAsHeader: true) ~> XLSX\nsource(output(\n\t\tName as string,\n\t\t{3DModel [image]} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tignoreNoFilesFound: false) ~> AppendedCSVs\nXLSX, AppendedCSVs union(byName: true)~> Union1\nUnion1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tfileSystem: 'lakehiram',\n\tfolderPath: 'Sink',\n\tcolumnDelimiter: ',',\n\tescapeChar: '\\\\',\n\tqutoChar: '\\\"',\n\tcolumnNamesAsHeader: false,\n\tumask: 0022,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1) ~> sink1"
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/AppendedCSVs')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Currency Converter')]",
@@ -235,7 +224,9 @@
 					"script": "source(output(\n\t\tmovieId as string,\n\t\ttitle as string,\n\t\tgenres as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Movies\nMovies derive(year = toInteger(trim(right(title, 6), '()')),\n\t\ttitle = toString(left(title, length(title)-6))) ~> MoviesYear\nMoviesYear sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tumask: 0022) ~> Output"
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/movie_dataflow_source')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/TaxiDemo')]",

@@ -1017,6 +1017,43 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/AppendedCSVs')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "lakehiram",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Sink",
+						"fileSystem": "lakehiram"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": false,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Name",
+						"type": "String"
+					},
+					{
+						"name": "3DModel [image]",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/CADOutput')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1318,34 +1355,6 @@
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
 					"firstRowAsHeader": false,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/movie_dataflow_source')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "lakehiram",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "movies.csv",
-						"fileSystem": "hiramblob"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
 				"schema": []
