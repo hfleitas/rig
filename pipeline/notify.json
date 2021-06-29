@@ -31,7 +31,7 @@
 		"parameters": {
 			"Notify": {
 				"type": "string",
-				"defaultValue": "theirname@fleitasarts.com"
+				"defaultValue": "hiram@fleitasarts.com"
 			}
 		},
 		"annotations": []
