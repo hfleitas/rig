@@ -1,0 +1,13 @@
+{
+	"name": "AzureMLService1",
+	"properties": {
+		"annotations": [],
+		"type": "AzureMLService",
+		"typeProperties": {
+			"subscriptionId": "eaab21d5-8ecd-4ef0-a0c4-92fac2e22875",
+			"resourceGroupName": "hfml",
+			"mlWorkspaceName": "hfml",
+			"authentication": "MSI"
+		}
+	}
+}
