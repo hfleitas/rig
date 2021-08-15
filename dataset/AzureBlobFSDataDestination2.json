@@ -3,7 +3,7 @@
 	"properties": {
 		"description": "Connection to your data destination store.",
 		"linkedServiceName": {
-			"referenceName": "hlramerica",
+			"referenceName": "lakehiram",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
