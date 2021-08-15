@@ -15,9 +15,65 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'lakehiramstaging'"
 		},
+		"hiramdw_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'hiramdw'"
+		},
+		"asdw_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'asdw'"
+		},
+		"AzureMLService1_properties_typeProperties_subscriptionId": {
+			"type": "string",
+			"defaultValue": "eaab21d5-8ecd-4ef0-a0c4-92fac2e22875"
+		},
+		"AzureMLService1_properties_typeProperties_resourceGroupName": {
+			"type": "string",
+			"defaultValue": "hfml"
+		},
 		"lakehiram_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://lakehiram.dfs.core.windows.net"
+		},
+		"AzureBlobFSDataDestination_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": "@dataset().filename"
+		},
+		"AzureBlobFSDataDestination_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "@dataset().path"
+		},
+		"AzureBlobFSDataDestination1_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": "@dataset().filename"
+		},
+		"AzureBlobFSDataDestination1_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "@dataset().path"
+		},
+		"AzureBlobFSDataDestination2_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": "@dataset().FileName"
+		},
+		"AzureBlobFSDataDestination2_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "@dataset().FolderPath"
+		},
+		"AzureBlobFSDataSource_File_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": "@dataset().filename"
+		},
+		"AzureBlobFSDataSource_File_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "@dataset().path"
+		},
+		"AzureBlobFSDataSource_Folder_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"AzureBlobFSDataSource_Folder_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "@dataset().FolderPath"
 		}
 	},
 	"variables": {
@@ -47,7 +103,7 @@
 							"retry": 0,
 							"retryIntervalInSeconds": 30,
 							"secureOutput": false,
-							"secureInput": true
+							"secureInput": false
 						},
 						"userProperties": [],
 						"typeProperties": {
@@ -589,6 +645,22 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/AzureMLService1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureMLService",
+				"typeProperties": {
+					"subscriptionId": "[parameters('AzureMLService1_properties_typeProperties_subscriptionId')]",
+					"resourceGroupName": "[parameters('AzureMLService1_properties_typeProperties_resourceGroupName')]",
+					"mlWorkspaceName": "hfml",
+					"authentication": "MSI"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/lakehiram')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -678,6 +750,32 @@
 							"cleanup": false
 						}
 					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hiramdw')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('hiramdw_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/asdw')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('asdw_connectionString')]"
 				}
 			},
 			"dependsOn": []
@@ -1095,238 +1193,193 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobFSDataDestination')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "It describes the destination store.",
+				"linkedServiceName": {
+					"referenceName": "lakehiram",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"path": {
+						"type": "String"
+					},
+					"filename": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureBlobFSFile",
+				"typeProperties": {
+					"fileName": {
+						"value": "[parameters('AzureBlobFSDataDestination_properties_typeProperties_fileName')]",
+						"type": "Expression"
+					},
+					"folderPath": {
+						"value": "[parameters('AzureBlobFSDataDestination_properties_typeProperties_folderPath')]",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobFSDataDestination1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "It describes the destination store.",
+				"linkedServiceName": {
+					"referenceName": "lakehiram",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"path": {
+						"type": "String"
+					},
+					"filename": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureBlobFSFile",
+				"typeProperties": {
+					"fileName": {
+						"value": "[parameters('AzureBlobFSDataDestination1_properties_typeProperties_fileName')]",
+						"type": "Expression"
+					},
+					"folderPath": {
+						"value": "[parameters('AzureBlobFSDataDestination1_properties_typeProperties_folderPath')]",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobFSDataDestination2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Connection to your data destination store.",
+				"linkedServiceName": {
+					"referenceName": "lakehiram",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"FolderPath": {
+						"type": "String"
+					},
+					"FileName": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureBlobFSFile",
+				"typeProperties": {
+					"format": {
+						"type": "TextFormat",
+						"treatEmptyAsNull": true
+					},
+					"fileName": {
+						"value": "[parameters('AzureBlobFSDataDestination2_properties_typeProperties_fileName')]",
+						"type": "Expression"
+					},
+					"folderPath": {
+						"value": "[parameters('AzureBlobFSDataDestination2_properties_typeProperties_folderPath')]",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobFSDataSource_File')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "It describes the file in the data source store. ",
+				"linkedServiceName": {
+					"referenceName": "lakehiram",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"path": {
+						"type": "String"
+					},
+					"filename": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureBlobFSFile",
+				"typeProperties": {
+					"fileName": {
+						"value": "[parameters('AzureBlobFSDataSource_File_properties_typeProperties_fileName')]",
+						"type": "Expression"
+					},
+					"folderPath": {
+						"value": "[parameters('AzureBlobFSDataSource_File_properties_typeProperties_folderPath')]",
+						"type": "Expression"
+					},
+					"key": {
+						"value": "@dataset().filename",
+						"type": "Expression"
+					},
+					"bucketName": {
+						"value": "@dataset().path",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobFSDataSource_Folder')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "It describes the folder in the data source store.",
+				"linkedServiceName": {
+					"referenceName": "lakehiram",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"FolderPath": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureBlobFSFile",
+				"typeProperties": {
+					"fileName": "[parameters('AzureBlobFSDataSource_Folder_properties_typeProperties_fileName')]",
+					"folderPath": {
+						"value": "[parameters('AzureBlobFSDataSource_Folder_properties_typeProperties_folderPath')]",
+						"type": "Expression"
+					},
+					"key": "",
+					"bucketName": {
+						"value": "@dataset().FolderPath",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/CADOutput')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "lakehiram",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileSystem": "demo"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": false,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/CurrencyDatasetCAD')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "lakehiram",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "Currency_CAD.txt",
-						"fileSystem": "demo"
-					},
-					"columnDelimiter": "\t",
-					"escapeChar": "\\",
-					"firstRowAsHeader": false,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/CurrencyDatasetUSD')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "lakehiram",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "Currency_USD.txt",
-						"fileSystem": "demo"
-					},
-					"columnDelimiter": "\t",
-					"escapeChar": "\\",
-					"firstRowAsHeader": false,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PA_MR_3D_Demo')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "lakehiram",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Excel",
-				"typeProperties": {
-					"sheetName": "PA3DModel",
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "PA_MR_3D_Demo.xlsx",
-						"fileSystem": "lakehiram"
-					},
-					"firstRowAsHeader": true
-				},
-				"schema": [
-					{
-						"name": "Name",
-						"type": "String"
-					},
-					{
-						"name": "3DModel [image]",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PA_MR_3D_DemoCSV')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "lakehiram",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileSystem": "lakehiram"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "PK\u0003\u0004\u0014\u0000\u0006\u0000\b\u0000\u0000\u0000!\u0000�w${�\u0001\u0000\u0000\u0019\u0007\u0000\u0000\u0013\u0000\b\u0002[Content_Types].xml �\u0004\u0002(�\u0000\u0002\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000��MK\u00031\u0010���a�U�i+�H�=�qԂ",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TaxiDemoDayStatsSink')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "lakehiram",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileSystem": "hiramblob"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TaxiDemoTotalByPaymentType')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "lakehiram",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileSystem": "hiramblob"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": false,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/TaxiDemoVendorStatsSink')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "lakehiram",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileSystem": "hiramblob"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": false,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/USDOutput')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {

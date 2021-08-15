@@ -15,6 +15,62 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'lakehiramstaging'"
 		},
+		"hiramdw_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'hiramdw'"
+		},
+		"asdw_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'asdw'"
+		},
+		"AzureBlobFSDataDestination_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": "@dataset().filename"
+		},
+		"AzureBlobFSDataDestination_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "@dataset().path"
+		},
+		"AzureBlobFSDataDestination1_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": "@dataset().filename"
+		},
+		"AzureBlobFSDataDestination1_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "@dataset().path"
+		},
+		"AzureBlobFSDataDestination2_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": "@dataset().FileName"
+		},
+		"AzureBlobFSDataDestination2_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "@dataset().FolderPath"
+		},
+		"AzureBlobFSDataSource_File_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": "@dataset().filename"
+		},
+		"AzureBlobFSDataSource_File_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "@dataset().path"
+		},
+		"AzureBlobFSDataSource_Folder_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"AzureBlobFSDataSource_Folder_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "@dataset().FolderPath"
+		},
+		"AzureMLService1_properties_typeProperties_subscriptionId": {
+			"type": "string",
+			"defaultValue": "eaab21d5-8ecd-4ef0-a0c4-92fac2e22875"
+		},
+		"AzureMLService1_properties_typeProperties_resourceGroupName": {
+			"type": "string",
+			"defaultValue": "hfml"
+		},
 		"lakehiram_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://lakehiram.dfs.core.windows.net"
@@ -52,8 +108,50 @@
 					"lakehiramstaging_connectionString": {
 						"value": "[parameters('lakehiramstaging_connectionString')]"
 					},
+					"hiramdw_connectionString": {
+						"value": "[parameters('hiramdw_connectionString')]"
+					},
+					"asdw_connectionString": {
+						"value": "[parameters('asdw_connectionString')]"
+					},
+					"AzureMLService1_properties_typeProperties_subscriptionId": {
+						"value": "[parameters('AzureMLService1_properties_typeProperties_subscriptionId')]"
+					},
+					"AzureMLService1_properties_typeProperties_resourceGroupName": {
+						"value": "[parameters('AzureMLService1_properties_typeProperties_resourceGroupName')]"
+					},
 					"lakehiram_properties_typeProperties_url": {
 						"value": "[parameters('lakehiram_properties_typeProperties_url')]"
+					},
+					"AzureBlobFSDataDestination_properties_typeProperties_fileName": {
+						"value": "[parameters('AzureBlobFSDataDestination_properties_typeProperties_fileName')]"
+					},
+					"AzureBlobFSDataDestination_properties_typeProperties_folderPath": {
+						"value": "[parameters('AzureBlobFSDataDestination_properties_typeProperties_folderPath')]"
+					},
+					"AzureBlobFSDataDestination1_properties_typeProperties_fileName": {
+						"value": "[parameters('AzureBlobFSDataDestination1_properties_typeProperties_fileName')]"
+					},
+					"AzureBlobFSDataDestination1_properties_typeProperties_folderPath": {
+						"value": "[parameters('AzureBlobFSDataDestination1_properties_typeProperties_folderPath')]"
+					},
+					"AzureBlobFSDataDestination2_properties_typeProperties_fileName": {
+						"value": "[parameters('AzureBlobFSDataDestination2_properties_typeProperties_fileName')]"
+					},
+					"AzureBlobFSDataDestination2_properties_typeProperties_folderPath": {
+						"value": "[parameters('AzureBlobFSDataDestination2_properties_typeProperties_folderPath')]"
+					},
+					"AzureBlobFSDataSource_File_properties_typeProperties_fileName": {
+						"value": "[parameters('AzureBlobFSDataSource_File_properties_typeProperties_fileName')]"
+					},
+					"AzureBlobFSDataSource_File_properties_typeProperties_folderPath": {
+						"value": "[parameters('AzureBlobFSDataSource_File_properties_typeProperties_folderPath')]"
+					},
+					"AzureBlobFSDataSource_Folder_properties_typeProperties_fileName": {
+						"value": "[parameters('AzureBlobFSDataSource_Folder_properties_typeProperties_fileName')]"
+					},
+					"AzureBlobFSDataSource_Folder_properties_typeProperties_folderPath": {
+						"value": "[parameters('AzureBlobFSDataSource_Folder_properties_typeProperties_folderPath')]"
 					}
 				}
 			},
@@ -77,6 +175,26 @@
 			},
 			"dependsOn": [
 				"[resourceId('Microsoft.Resources/deployments', 'rig_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "rig_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'rig_ArmTemplate_1')]"
 			]
 		}
 	]

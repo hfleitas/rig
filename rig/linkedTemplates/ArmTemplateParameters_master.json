@@ -11,6 +11,48 @@
 		"lakehiramstaging_connectionString": {
 			"value": ""
 		},
+		"hiramdw_connectionString": {
+			"value": ""
+		},
+		"asdw_connectionString": {
+			"value": ""
+		},
+		"AzureBlobFSDataDestination_properties_typeProperties_fileName": {
+			"value": "@dataset().filename"
+		},
+		"AzureBlobFSDataDestination_properties_typeProperties_folderPath": {
+			"value": "@dataset().path"
+		},
+		"AzureBlobFSDataDestination1_properties_typeProperties_fileName": {
+			"value": "@dataset().filename"
+		},
+		"AzureBlobFSDataDestination1_properties_typeProperties_folderPath": {
+			"value": "@dataset().path"
+		},
+		"AzureBlobFSDataDestination2_properties_typeProperties_fileName": {
+			"value": "@dataset().FileName"
+		},
+		"AzureBlobFSDataDestination2_properties_typeProperties_folderPath": {
+			"value": "@dataset().FolderPath"
+		},
+		"AzureBlobFSDataSource_File_properties_typeProperties_fileName": {
+			"value": "@dataset().filename"
+		},
+		"AzureBlobFSDataSource_File_properties_typeProperties_folderPath": {
+			"value": "@dataset().path"
+		},
+		"AzureBlobFSDataSource_Folder_properties_typeProperties_fileName": {
+			"value": ""
+		},
+		"AzureBlobFSDataSource_Folder_properties_typeProperties_folderPath": {
+			"value": "@dataset().FolderPath"
+		},
+		"AzureMLService1_properties_typeProperties_subscriptionId": {
+			"value": "eaab21d5-8ecd-4ef0-a0c4-92fac2e22875"
+		},
+		"AzureMLService1_properties_typeProperties_resourceGroupName": {
+			"value": "hfml"
+		},
 		"lakehiram_properties_typeProperties_url": {
 			"value": "https://lakehiram.dfs.core.windows.net"
 		},

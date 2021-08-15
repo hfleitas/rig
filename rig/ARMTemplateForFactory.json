@@ -15,6 +15,62 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'lakehiramstaging'"
 		},
+		"hiramdw_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'hiramdw'"
+		},
+		"asdw_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'asdw'"
+		},
+		"AzureBlobFSDataDestination_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": "@dataset().filename"
+		},
+		"AzureBlobFSDataDestination_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "@dataset().path"
+		},
+		"AzureBlobFSDataDestination1_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": "@dataset().filename"
+		},
+		"AzureBlobFSDataDestination1_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "@dataset().path"
+		},
+		"AzureBlobFSDataDestination2_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": "@dataset().FileName"
+		},
+		"AzureBlobFSDataDestination2_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "@dataset().FolderPath"
+		},
+		"AzureBlobFSDataSource_File_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": "@dataset().filename"
+		},
+		"AzureBlobFSDataSource_File_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "@dataset().path"
+		},
+		"AzureBlobFSDataSource_Folder_properties_typeProperties_fileName": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"AzureBlobFSDataSource_Folder_properties_typeProperties_folderPath": {
+			"type": "string",
+			"defaultValue": "@dataset().FolderPath"
+		},
+		"AzureMLService1_properties_typeProperties_subscriptionId": {
+			"type": "string",
+			"defaultValue": "eaab21d5-8ecd-4ef0-a0c4-92fac2e22875"
+		},
+		"AzureMLService1_properties_typeProperties_resourceGroupName": {
+			"type": "string",
+			"defaultValue": "hfml"
+		},
 		"lakehiram_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://lakehiram.dfs.core.windows.net"
@@ -124,6 +180,206 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/AppendRows')]",
 				"[concat(variables('factoryId'), '/pipelines/RefreshPBIDataset')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MoveFiles')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Move files from one folder to another folder",
+				"activities": [
+					{
+						"name": "GetFileList",
+						"description": "Get the list of file",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "AzureBlobFSDataSource_Folder",
+								"type": "DatasetReference",
+								"parameters": {
+									"FolderPath": {
+										"value": "@pipeline().parameters.FolderPath_SourceStore",
+										"type": "Expression"
+									}
+								}
+							},
+							"fieldList": [
+								"childItems"
+							]
+						}
+					},
+					{
+						"name": "ForEachFile",
+						"description": "Iterate each file, and move them one by one.",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "FilterFiles",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('FilterFiles').output.value",
+								"type": "Expression"
+							},
+							"batchCount": 20,
+							"activities": [
+								{
+									"name": "CopyAFile",
+									"description": "Copy a file from the source store to the destination store.",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "AzureBlobFSSource",
+											"recursive": false
+										},
+										"sink": {
+											"type": "AzureBlobFSSink"
+										},
+										"enableStaging": false,
+										"dataIntegrationUnits": 0
+									},
+									"inputs": [
+										{
+											"referenceName": "AzureBlobFSDataSource_File",
+											"type": "DatasetReference",
+											"parameters": {
+												"path": {
+													"value": "@pipeline().parameters.FolderPath_SourceStore",
+													"type": "Expression"
+												},
+												"filename": {
+													"value": "@item().name",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "AzureBlobFSDataDestination1",
+											"type": "DatasetReference",
+											"parameters": {
+												"path": {
+													"value": "@pipeline().parameters.FolderPath_DestinationStore",
+													"type": "Expression"
+												},
+												"filename": {
+													"value": "@item().name",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								},
+								{
+									"name": "DeleteAFile",
+									"description": "Delete a file from the source store",
+									"type": "Delete",
+									"dependsOn": [
+										{
+											"activity": "CopyAFile",
+											"dependencyConditions": [
+												"Skipped"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"dataset": {
+											"referenceName": "AzureBlobFSDataSource_File",
+											"type": "DatasetReference",
+											"parameters": {
+												"path": {
+													"value": "@pipeline().parameters.FolderPath_SourceStore",
+													"type": "Expression"
+												},
+												"filename": {
+													"value": "@item().name",
+													"type": "Expression"
+												}
+											}
+										},
+										"enableLogging": false
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "FilterFiles",
+						"description": "Only files will be selected, the sub-folders will not be selected.",
+						"type": "Filter",
+						"dependsOn": [
+							{
+								"activity": "GetFileList",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('GetFileList').output.childItems",
+								"type": "Expression"
+							},
+							"condition": {
+								"value": "@equals(item().type, 'File')",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"parameters": {
+					"FolderPath_SourceStore": {
+						"type": "String",
+						"defaultValue": "/staging/temp/2019/11"
+					},
+					"FolderPath_DestinationStore": {
+						"type": "String",
+						"defaultValue": "/staging/temp2b/2019/11"
+					}
+				},
+				"folder": {
+					"name": "Ext"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/AzureBlobFSDataSource_Folder')]",
+				"[concat(variables('factoryId'), '/datasets/AzureBlobFSDataSource_File')]",
+				"[concat(variables('factoryId'), '/datasets/AzureBlobFSDataDestination1')]"
 			]
 		},
 		{
@@ -524,7 +780,7 @@
 							"retry": 0,
 							"retryIntervalInSeconds": 30,
 							"secureOutput": false,
-							"secureInput": true
+							"secureInput": false
 						},
 						"userProperties": [],
 						"typeProperties": {
@@ -1148,6 +1404,192 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobFSDataDestination')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "It describes the destination store.",
+				"linkedServiceName": {
+					"referenceName": "lakehiram",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"path": {
+						"type": "String"
+					},
+					"filename": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureBlobFSFile",
+				"typeProperties": {
+					"fileName": {
+						"value": "[parameters('AzureBlobFSDataDestination_properties_typeProperties_fileName')]",
+						"type": "Expression"
+					},
+					"folderPath": {
+						"value": "[parameters('AzureBlobFSDataDestination_properties_typeProperties_folderPath')]",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobFSDataDestination1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "It describes the destination store.",
+				"linkedServiceName": {
+					"referenceName": "lakehiram",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"path": {
+						"type": "String"
+					},
+					"filename": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureBlobFSFile",
+				"typeProperties": {
+					"fileName": {
+						"value": "[parameters('AzureBlobFSDataDestination1_properties_typeProperties_fileName')]",
+						"type": "Expression"
+					},
+					"folderPath": {
+						"value": "[parameters('AzureBlobFSDataDestination1_properties_typeProperties_folderPath')]",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobFSDataDestination2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Connection to your data destination store.",
+				"linkedServiceName": {
+					"referenceName": "lakehiram",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"FolderPath": {
+						"type": "String"
+					},
+					"FileName": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureBlobFSFile",
+				"typeProperties": {
+					"format": {
+						"type": "TextFormat",
+						"treatEmptyAsNull": true
+					},
+					"fileName": {
+						"value": "[parameters('AzureBlobFSDataDestination2_properties_typeProperties_fileName')]",
+						"type": "Expression"
+					},
+					"folderPath": {
+						"value": "[parameters('AzureBlobFSDataDestination2_properties_typeProperties_folderPath')]",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobFSDataSource_File')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "It describes the file in the data source store. ",
+				"linkedServiceName": {
+					"referenceName": "lakehiram",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"path": {
+						"type": "String"
+					},
+					"filename": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureBlobFSFile",
+				"typeProperties": {
+					"fileName": {
+						"value": "[parameters('AzureBlobFSDataSource_File_properties_typeProperties_fileName')]",
+						"type": "Expression"
+					},
+					"folderPath": {
+						"value": "[parameters('AzureBlobFSDataSource_File_properties_typeProperties_folderPath')]",
+						"type": "Expression"
+					},
+					"key": {
+						"value": "@dataset().filename",
+						"type": "Expression"
+					},
+					"bucketName": {
+						"value": "@dataset().path",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobFSDataSource_Folder')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "It describes the folder in the data source store.",
+				"linkedServiceName": {
+					"referenceName": "lakehiram",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"FolderPath": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureBlobFSFile",
+				"typeProperties": {
+					"fileName": "[parameters('AzureBlobFSDataSource_Folder_properties_typeProperties_fileName')]",
+					"folderPath": {
+						"value": "[parameters('AzureBlobFSDataSource_Folder_properties_typeProperties_folderPath')]",
+						"type": "Expression"
+					},
+					"key": "",
+					"bucketName": {
+						"value": "@dataset().FolderPath",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/lakehiram')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/CADOutput')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1542,6 +1984,22 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/AzureMLService1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureMLService",
+				"typeProperties": {
+					"subscriptionId": "[parameters('AzureMLService1_properties_typeProperties_subscriptionId')]",
+					"resourceGroupName": "[parameters('AzureMLService1_properties_typeProperties_resourceGroupName')]",
+					"mlWorkspaceName": "hfml",
+					"authentication": "MSI"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/lakehiram')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -1672,7 +2130,7 @@
 							"name": "Union1"
 						}
 					],
-					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tignoreNoFilesFound: false,\n\tformat: 'excel',\n\tfileSystem: 'lakehiram',\n\tfileName: 'PA_MR_3D_Demo.xlsx',\n\tsheetName: 'PA3DModel',\n\tfirstRowAsHeader: true) ~> XLSX\nsource(output(\n\t\tName as string,\n\t\t{3DModel [image]} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tignoreNoFilesFound: false) ~> AppendedCSVs\nXLSX, AppendedCSVs union(byName: true)~> Union1\nUnion1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tfileSystem: 'lakehiram',\n\tfolderPath: 'Sink',\n\tcolumnDelimiter: ',',\n\tescapeChar: '\\\\',\n\tqutoChar: '\\\"',\n\tcolumnNamesAsHeader: false,\n\tumask: 0022,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1) ~> sink1"
+					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tignoreNoFilesFound: false,\n\tformat: 'excel',\n\tfileSystem: 'lakehiram',\n\tfileName: 'PA_MR_3D_Demo.xlsx',\n\tsheetName: 'PA3DModel',\n\tfirstRowAsHeader: true) ~> XLSX\nsource(output(\n\t\tName as string,\n\t\t{3DModel [image]} as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tlimit: 100,\n\tignoreNoFilesFound: false) ~> AppendedCSVs\nXLSX, AppendedCSVs union(byName: true)~> Union1\nUnion1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'delimited',\n\tfileSystem: 'lakehiram',\n\tfolderPath: 'Sink',\n\tcolumnDelimiter: ',',\n\tescapeChar: '\\\\',\n\tquoteChar: '\\\"',\n\tcolumnNamesAsHeader: false,\n\tumask: 0022,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\tsaveOrder: 1,\n\tqutoChar: '\\\"') ~> sink1"
 				}
 			},
 			"dependsOn": [
@@ -1852,6 +2310,256 @@
 				"[concat(variables('factoryId'), '/datasets/TaxiDemoDayStatsSink')]",
 				"[concat(variables('factoryId'), '/datasets/TaxiDemoTotalByPaymentType')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/hiramdw')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('hiramdw_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MoveTable')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "ext.MoveTable",
+				"activities": [
+					{
+						"name": "MoveTable",
+						"description": "exec ext.MoveTable \n    @extDestination ='Organic_4Q18_Prod_Seriatim_Projection',\n    @dboSource      ='Organic_4Q18_Prod_Seriatim_Projection',\n    @extLocation    ='/organic/seriatim/valuation/2018/12/',\n    @extDS          ='hlramerica_raw',\n    @extFF          ='parquet_ff',\n    @printonly      = 0",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[ext].[MoveTable]",
+							"storedProcedureParameters": {
+								"dboSource": {
+									"value": {
+										"value": "@pipeline().parameters.dboSource",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"extDestination": {
+									"value": {
+										"value": "@pipeline().parameters.extDestination",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"extDS": {
+									"value": {
+										"value": "@pipeline().parameters.extDS",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"extFF": {
+									"value": {
+										"value": "@pipeline().parameters.extFF",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"extLocation": {
+									"value": {
+										"value": "@pipeline().parameters.extLocation",
+										"type": "Expression"
+									},
+									"type": "String"
+								},
+								"printonly": {
+									"value": {
+										"value": "@pipeline().parameters.printonly",
+										"type": "Expression"
+									},
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "hiramdw",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"parameters": {
+					"dboSource": {
+						"type": "string",
+						"defaultValue": "Brock_4Q18_Prod_Seriatim_Projection"
+					},
+					"extDestination": {
+						"type": "string",
+						"defaultValue": "Brock_4Q18_Prod_Seriatim_Projection"
+					},
+					"extDS": {
+						"type": "string",
+						"defaultValue": "hlramerica_raw"
+					},
+					"extFF": {
+						"type": "string",
+						"defaultValue": "parquet_ff"
+					},
+					"extLocation": {
+						"type": "string",
+						"defaultValue": "/brock/seriatim/valuation/2018/12/"
+					},
+					"printonly": {
+						"type": "string",
+						"defaultValue": "1"
+					}
+				},
+				"variables": {
+					"ExtDestination": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Ext"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hiramdw')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MoveToExt')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "ext.MoveToExt",
+				"activities": [
+					{
+						"name": "MoveToExt",
+						"description": "exec ext.MoveToExt",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[ext].[MoveToExt]"
+						},
+						"linkedServiceName": {
+							"referenceName": "hiramdw",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "NotifyFailed",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "MoveToExt",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-06.eastus2.logic.azure.com:443/workflows/dead1d5517ac44f7bb4876447aa3f77d/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=g6c5KPne6u73Gi7iDIgF8R0Y6aew5UoVyfnAKB6pPOs",
+							"method": "POST",
+							"headers": {
+								"Content-type": "application/json"
+							},
+							"body": {
+								"value": "@concat('{\n   \"DataFactoryName\": \"',pipeline().DataFactory,'\",\n   \"PipelineName\": \"',pipeline().Pipeline,'\",\n   \"Subject\": \"An error has occurred!\",\n   \"ErrorMessage\": \"The ADF pipeline failed. Please check the activity log at https://adf.azure.com/monitoring/pipelineruns.\",\n   \"EmailTo\": \"',pipeline().parameters.Notify,'\"\n}')",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "NotifyCompleted",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "MoveToExt",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-06.eastus2.logic.azure.com:443/workflows/dead1d5517ac44f7bb4876447aa3f77d/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=g6c5KPne6u73Gi7iDIgF8R0Y6aew5UoVyfnAKB6pPOs",
+							"method": "POST",
+							"headers": {
+								"Content-type": "application/json"
+							},
+							"body": {
+								"value": "@concat('{\n   \"DataFactoryName\": \"',pipeline().DataFactory,'\",\n   \"PipelineName\": \"',pipeline().Pipeline,'\",\n   \"Subject\": \"Completed!\",\n   \"ErrorMessage\": \"The ADF pipeline completed.\",\n   \"EmailTo\": \"',pipeline().parameters.Notify,'\"\n}')",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"parameters": {
+					"Notify": {
+						"type": "string",
+						"defaultValue": "hiram@fleitasarts.com"
+					}
+				},
+				"variables": {
+					"ExtDestination": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Ext"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/hiramdw')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/asdw')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('asdw_connectionString')]"
+				}
+			},
+			"dependsOn": []
 		}
 	]
 }
