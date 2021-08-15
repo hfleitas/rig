@@ -3,7 +3,7 @@
 	"properties": {
 		"description": "It describes the file in the data source store. ",
 		"linkedServiceName": {
-			"referenceName": "hlramerica",
+			"referenceName": "lakehiram",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
