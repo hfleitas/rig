@@ -20,7 +20,7 @@
 					"storedProcedureName": "[ext].[MoveToExt]"
 				},
 				"linkedServiceName": {
-					"referenceName": "asdw",
+					"referenceName": "hiramdw",
 					"type": "LinkedServiceReference"
 				}
 			},
@@ -90,7 +90,7 @@
 		"parameters": {
 			"Notify": {
 				"type": "string",
-				"defaultValue": "hiram.fleitas@hlramerica.com"
+				"defaultValue": "hiram@fleitasarts.com"
 			}
 		},
 		"variables": {
