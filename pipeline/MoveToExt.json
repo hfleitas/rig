@@ -1,0 +1,106 @@
+{
+	"name": "MoveToExt",
+	"properties": {
+		"description": "ext.MoveToExt",
+		"activities": [
+			{
+				"name": "MoveToExt",
+				"description": "exec ext.MoveToExt",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[ext].[MoveToExt]"
+				},
+				"linkedServiceName": {
+					"referenceName": "asdw",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "NotifyFailed",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "MoveToExt",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-06.eastus2.logic.azure.com:443/workflows/dead1d5517ac44f7bb4876447aa3f77d/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=g6c5KPne6u73Gi7iDIgF8R0Y6aew5UoVyfnAKB6pPOs",
+					"method": "POST",
+					"headers": {
+						"Content-type": "application/json"
+					},
+					"body": {
+						"value": "@concat('{\n   \"DataFactoryName\": \"',pipeline().DataFactory,'\",\n   \"PipelineName\": \"',pipeline().Pipeline,'\",\n   \"Subject\": \"An error has occurred!\",\n   \"ErrorMessage\": \"The ADF pipeline failed. Please check the activity log at https://adf.azure.com/monitoring/pipelineruns.\",\n   \"EmailTo\": \"',pipeline().parameters.Notify,'\"\n}')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "NotifyCompleted",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "MoveToExt",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-06.eastus2.logic.azure.com:443/workflows/dead1d5517ac44f7bb4876447aa3f77d/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=g6c5KPne6u73Gi7iDIgF8R0Y6aew5UoVyfnAKB6pPOs",
+					"method": "POST",
+					"headers": {
+						"Content-type": "application/json"
+					},
+					"body": {
+						"value": "@concat('{\n   \"DataFactoryName\": \"',pipeline().DataFactory,'\",\n   \"PipelineName\": \"',pipeline().Pipeline,'\",\n   \"Subject\": \"Completed!\",\n   \"ErrorMessage\": \"The ADF pipeline completed.\",\n   \"EmailTo\": \"',pipeline().parameters.Notify,'\"\n}')",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"Notify": {
+				"type": "string",
+				"defaultValue": "hiram.fleitas@hlramerica.com"
+			}
+		},
+		"variables": {
+			"ExtDestination": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Ext"
+		},
+		"annotations": []
+	}
+}

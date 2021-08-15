@@ -1,0 +1,108 @@
+{
+	"name": "MoveTable",
+	"properties": {
+		"description": "ext.MoveTable",
+		"activities": [
+			{
+				"name": "MoveTable",
+				"description": "exec ext.MoveTable \n    @extDestination ='Organic_4Q18_Prod_Seriatim_Projection',\n    @dboSource      ='Organic_4Q18_Prod_Seriatim_Projection',\n    @extLocation    ='/organic/seriatim/valuation/2018/12/',\n    @extDS          ='hlramerica_raw',\n    @extFF          ='parquet_ff',\n    @printonly      = 0",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[ext].[MoveTable]",
+					"storedProcedureParameters": {
+						"dboSource": {
+							"value": {
+								"value": "@pipeline().parameters.dboSource",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"extDestination": {
+							"value": {
+								"value": "@pipeline().parameters.extDestination",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"extDS": {
+							"value": {
+								"value": "@pipeline().parameters.extDS",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"extFF": {
+							"value": {
+								"value": "@pipeline().parameters.extFF",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"extLocation": {
+							"value": {
+								"value": "@pipeline().parameters.extLocation",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"printonly": {
+							"value": {
+								"value": "@pipeline().parameters.printonly",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "asdw",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"dboSource": {
+				"type": "string",
+				"defaultValue": "Brock_4Q18_Prod_Seriatim_Projection"
+			},
+			"extDestination": {
+				"type": "string",
+				"defaultValue": "Brock_4Q18_Prod_Seriatim_Projection"
+			},
+			"extDS": {
+				"type": "string",
+				"defaultValue": "hlramerica_raw"
+			},
+			"extFF": {
+				"type": "string",
+				"defaultValue": "parquet_ff"
+			},
+			"extLocation": {
+				"type": "string",
+				"defaultValue": "/brock/seriatim/valuation/2018/12/"
+			},
+			"printonly": {
+				"type": "string",
+				"defaultValue": "1"
+			}
+		},
+		"variables": {
+			"ExtDestination": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Ext"
+		},
+		"annotations": []
+	}
+}
