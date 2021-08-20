@@ -1,7 +1,8 @@
 Param(
     $workspace = "synapsehiram2",
     $pipeline = "wait",
-    $rg = "rig"
+    $rg = "rig",
+    $trigger = "daily5am"
 )
 
 # login
@@ -13,3 +14,9 @@ $null = Connect-AzAccount -ServicePrincipal `
 # run pipeline
 $ws = Get-AzSynapseWorkspace -Name $workspace -ResourceGroup $rg
 $ws | Invoke-AzSynapsePipeline -PipelineName $pipeline
+
+# enable trigger
+if ($null -ne $trigger)
+{
+    $trig | Get-AzSynapseTrigger -WorkspaceName $workspace -name 'test'
+}
