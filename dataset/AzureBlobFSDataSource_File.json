@@ -1,0 +1,38 @@
+{
+	"name": "AzureBlobFSDataSource_File",
+	"properties": {
+		"description": "It describes the file in the data source store. ",
+		"linkedServiceName": {
+			"referenceName": "lakehiram",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"path": {
+				"type": "String"
+			},
+			"filename": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"type": "AzureBlobFSFile",
+		"typeProperties": {
+			"fileName": {
+				"value": "@dataset().filename",
+				"type": "Expression"
+			},
+			"folderPath": {
+				"value": "@dataset().path",
+				"type": "Expression"
+			},
+			"key": {
+				"value": "@dataset().filename",
+				"type": "Expression"
+			},
+			"bucketName": {
+				"value": "@dataset().path",
+				"type": "Expression"
+			}
+		}
+	}
+}
