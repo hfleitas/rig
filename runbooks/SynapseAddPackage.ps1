@@ -13,4 +13,4 @@ $null = Connect-AzAccount -ServicePrincipal `
 
 #pkg
 $newpkg = New-AzSynapseWorkspacePackage -WorkspaceName $workspace -Package $pkg
-Update-AzSynapseSparkPool -WorkspaceName $workspace -Name $pool -PackageAction Add -Package $package
+Update-AzSynapseSparkPool -WorkspaceName $workspace -Name $pool -PackageAction Add -Package $newpkg
