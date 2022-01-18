@@ -6,9 +6,9 @@ param(
 
 # login
 $null = Connect-AzAccount -ServicePrincipal `
-    -Tenant '72f988bf-86f1-41af-91ab-2d7cd011db47' `
-    -ApplicationId '796b542e-3a3e-4ae0-b481-78f24a867c50' `
-    -CertificateThumbprint '87F88B7B37DB22E8A52031BD6ABD751D579A3664'
+    -Tenant 'aaaaa' `
+    -ApplicationId 'bbbbb' `
+    -CertificateThumbprint 'cccccc'
 
 # enable
 if ($status -eq "Start"){
@@ -33,3 +33,5 @@ if ($status -eq "Stop"){
         $trigger | Stop-AzSynapseTrigger
     }
 }
+
+#ref: https://docs.microsoft.com/en-us/rest/api/synapse/data-plane/trigger/get-triggers-by-workspace
