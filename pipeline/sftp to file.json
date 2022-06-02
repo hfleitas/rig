@@ -20,14 +20,6 @@
 						"storeSettings": {
 							"type": "SftpReadSettings",
 							"recursive": true,
-							"modifiedDatetimeStart": {
-								"value": "@addMinutes(pipeline().TriggerTime,-30)",
-								"type": "Expression"
-							},
-							"modifiedDatetimeEnd": {
-								"value": "@pipeline().TriggerTime",
-								"type": "Expression"
-							},
 							"deleteFilesAfterCompletion": false,
 							"disableChunking": false
 						},
