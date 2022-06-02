@@ -1,0 +1,31 @@
+{
+	"name": "set_ControlBlank",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ControlDB",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"DSControlServerName": {
+				"type": "string"
+			},
+			"DSControlDatabase": {
+				"type": "string"
+			},
+			"DSControlUserName": {
+				"type": "string"
+			},
+			"DSControlPassword": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "null"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

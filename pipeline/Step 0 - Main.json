@@ -1,0 +1,116 @@
+{
+	"name": "Step 0 - Main",
+	"properties": {
+		"activities": [
+			{
+				"name": "1",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Step 1 - Check and Create SQL Server for backup purposes",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"infra_BackupSqlServerName": "bkwplussynapsedw",
+						"infra_SubscriptionId": "e4e06275-58d1-4081-8f1b-be12462eb701",
+						"infra_BackupResourceGroup": "wplushiramsynapse",
+						"infra_Region": "West US 2",
+						"security_AdfAppId": "b5e9bc24-5a8c-44e0-a1bb-c3a3ca322fe3",
+						"security_AKVBackupUserNameUri": "https://synapseakv.vault.azure.net/",
+						"security_AKVBackupUserPasswordUri": "https://synapseakv.vault.azure.net/",
+						"security_TenantId": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+					}
+				}
+			},
+			{
+				"name": "3",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "2",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Step 3 - Create External Resources",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "4",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "3",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Step 4 - Capture database info and backup",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "5",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "4",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Step 5 - Delete the backup database",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "2",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Step 2 - Restore database to backup server",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "Backup DW"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-11-03T17:05:34Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

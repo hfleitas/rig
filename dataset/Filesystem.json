@@ -1,0 +1,17 @@
+{
+	"name": "Filesystem",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "MyDriveLetter",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "FileServerLocation"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

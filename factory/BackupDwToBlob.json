@@ -1,0 +1,9 @@
+{
+	"name": "BackupDwToBlob",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "d2a3f582-0113-4542-8874-2d1cb1bf6168",
+		"tenantId": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+	}
+}

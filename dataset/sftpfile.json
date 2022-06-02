@@ -1,0 +1,17 @@
+{
+	"name": "sftpfile",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "sftppublicdemo",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "SftpLocation"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

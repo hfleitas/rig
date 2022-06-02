@@ -1,0 +1,55 @@
+{
+	"name": "Step 5 - Delete the backup database",
+	"properties": {
+		"description": "This pipeline will drop the backup database.",
+		"activities": [
+			{
+				"name": "Delete the backup database",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": true,
+					"secureInput": true
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "https://management.azure.com/subscriptions/@{pipeline().parameters.infra_SubscriptionId}/resourceGroups/@{pipeline().parameters.infra_BackupResourceGroup}/providers/Microsoft.Sql/servers/@{pipeline().parameters.infra_BackupSqlServerName}/databases/@{pipeline().parameters.synapse_DatabaseBackupName}?api-version=2019-06-01-preview",
+						"type": "Expression"
+					},
+					"method": "DELETE",
+					"headers": {
+						"Content-Type": "application/json"
+					},
+					"authentication": {
+						"type": "MSI",
+						"resource": "https://management.azure.com/"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"infra_BackupSqlServerName": {
+				"type": "securestring"
+			},
+			"synapse_DatabaseBackupName": {
+				"type": "securestring"
+			},
+			"infra_SubscriptionId": {
+				"type": "securestring"
+			},
+			"infra_BackupResourceGroup": {
+				"type": "securestring"
+			}
+		},
+		"folder": {
+			"name": "Backup DW"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-11-02T18:32:17Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
