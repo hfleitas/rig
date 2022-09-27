@@ -1,9 +1,6 @@
 # rig
 [![cover](https://github.com/hfleitas/rig/blob/master/PASSInsights201908-DBA/cover.png)](https://github.com/hfleitas/rig/blob/master/PASSInsights201908-DBA/%5BDBA%5D_HiramFleitas_AzureDataFactory.pptx?raw=true)
 
-[![Alt text](https://assets.digitalocean.com/articles/alligator/boo.svg)](https://digitalocean.com)
-
-
 ## Resources
 
 * [fleitasarts.com](http://fleitasarts.com)
